@@ -3,7 +3,7 @@ import originDog from "@/assets/origin-dog.png";
 
 const OriginSection = () => {
   return (
-    <section className="section-padding bg-background">
+    <section className="section-padding bg-background/60 backdrop-blur-sm">
       <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
         {/* Image */}
         <motion.div

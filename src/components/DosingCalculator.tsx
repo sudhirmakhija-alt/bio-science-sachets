@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useScrollState } from "./ScrollContext";
 
 const DOSING_DATA = [
   { weight: 4, sachets: 0.5, cost: 23 },
@@ -16,14 +17,14 @@ const DOSING_DATA = [
 const DosingCalculator = () => {
   const [index, setIndex] = useState(3);
   const data = DOSING_DATA[index];
+  const { setDosingCount } = useScrollState();
+
+  useEffect(() => {
+    setDosingCount(data.sachets);
+  }, [data.sachets, setDosingCount]);
 
   return (
-    <section id="dosing" className="section-padding bg-background-subtle relative overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-[0.02]" style={{
-        backgroundImage: 'radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 0)',
-        backgroundSize: '40px 40px'
-      }} />
+    <section id="dosing" className="section-padding relative overflow-hidden">
 
       <div className="max-w-[1000px] mx-auto relative z-10">
         <motion.div

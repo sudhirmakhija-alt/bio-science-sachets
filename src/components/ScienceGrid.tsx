@@ -42,7 +42,7 @@ const scienceItems = [
 
 const ScienceGrid = () => {
   return (
-    <section id="science" className="section-padding bg-background">
+    <section id="science" className="section-padding bg-background/65 backdrop-blur-sm">
       <div className="max-w-[1400px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

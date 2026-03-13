@@ -1,3 +1,6 @@
+import { ScrollProvider } from "@/components/ScrollContext";
+import BioBackground from "@/components/BioBackground";
+import ScrollGradientOverlay from "@/components/ScrollGradientOverlay";
 import HeroSection from "@/components/HeroSection";
 import XRaySection from "@/components/XRaySection";
 import OriginSection from "@/components/OriginSection";
@@ -8,15 +11,22 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <main>
-      <HeroSection />
-      <XRaySection />
-      <OriginSection />
-      <DosingCalculator />
-      <ScienceGrid />
-      <ProductCatalog />
-      <Footer />
-    </main>
+    <ScrollProvider>
+      {/* Fixed 3D particle background */}
+      <BioBackground />
+      <ScrollGradientOverlay />
+
+      {/* Page content above background */}
+      <main className="relative z-[2]">
+        <HeroSection />
+        <XRaySection />
+        <OriginSection />
+        <DosingCalculator />
+        <ScienceGrid />
+        <ProductCatalog />
+        <Footer />
+      </main>
+    </ScrollProvider>
   );
 };
 
