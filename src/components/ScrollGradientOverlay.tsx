@@ -1,25 +1,30 @@
 import { useScrollState } from "./ScrollContext";
-import { useMemo } from "react";
 
-/** Maps scroll stage to background gradient colors */
-const stageGradients: Record<string, { from: string; to: string }> = {
-  hero: { from: "rgba(255,255,255,0.92)", to: "rgba(245,248,252,0.88)" },
-  xray: { from: "rgba(248,248,248,0.94)", to: "rgba(240,240,242,0.92)" },
-  origin: { from: "rgba(255,252,245,0.90)", to: "rgba(250,245,235,0.88)" },
-  dosing: { from: "rgba(245,250,255,0.90)", to: "rgba(240,248,255,0.88)" },
-  science: { from: "rgba(248,255,248,0.92)", to: "rgba(245,252,245,0.90)" },
-  products: { from: "rgba(250,250,250,0.94)", to: "rgba(245,245,245,0.92)" },
+/**
+ * Stage-driven gradient overlay with Gaussian blur for "origin" (The Legacy).
+ * Surgical White → Laboratory Grey base, tinted per stage.
+ */
+const stageGradients: Record<string, { from: string; to: string; blur: number }> = {
+  hero:     { from: "rgba(255,255,255,0.90)", to: "rgba(245,248,252,0.85)", blur: 0 },
+  xray:     { from: "rgba(248,248,248,0.92)", to: "rgba(238,238,240,0.90)", blur: 0 },
+  origin:   { from: "rgba(255,250,240,0.88)", to: "rgba(248,240,225,0.85)", blur: 12 },
+  dosing:   { from: "rgba(242,248,255,0.88)", to: "rgba(238,246,255,0.85)", blur: 0 },
+  science:  { from: "rgba(245,252,245,0.90)", to: "rgba(240,250,240,0.88)", blur: 0 },
+  products: { from: "rgba(250,250,250,0.92)", to: "rgba(244,244,244,0.90)", blur: 0 },
 };
 
 const ScrollGradientOverlay = () => {
   const { stage } = useScrollState();
-  const gradient = stageGradients[stage] || stageGradients.hero;
+  const g = stageGradients[stage] ?? stageGradients.hero;
 
   return (
     <div
-      className="fixed inset-0 z-[1] pointer-events-none transition-all duration-1000 ease-out"
+      className="fixed inset-0 z-[1] pointer-events-none"
       style={{
-        background: `linear-gradient(180deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+        background: `linear-gradient(180deg, ${g.from} 0%, ${g.to} 100%)`,
+        backdropFilter: g.blur > 0 ? `blur(${g.blur}px)` : "none",
+        WebkitBackdropFilter: g.blur > 0 ? `blur(${g.blur}px)` : "none",
+        transition: "background 1.2s ease-out, backdrop-filter 1.2s ease-out",
       }}
     />
   );
