@@ -3,7 +3,7 @@ import originDog from "@/assets/origin-dog.png";
 
 const OriginSection = () => {
   return (
-    <section className="section-padding bg-background/60 backdrop-blur-sm">
+    <section id="origin" className="section-padding bg-background/60 backdrop-blur-sm">
       <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
         {/* Image */}
         <motion.div
@@ -15,7 +15,7 @@ const OriginSection = () => {
         >
           <img
             src={originDog}
-            alt="Cat, the dog who inspired BioLogica veterinary nutrition"
+            alt="Cat, the dog who inspired BioLogica Pets veterinary nutrition"
             className="w-full grayscale"
             style={{ filter: 'grayscale(100%) contrast(1.1)' }}
           />
@@ -45,17 +45,18 @@ const OriginSection = () => {
 
           <div className="space-y-6 text-muted-foreground leading-relaxed">
             <p className="text-lg font-light">
-              We replaced industry frustration with clinical discipline. When our founder's 
-              dog—ironically named Cat—needed consistent, vet-grade nutrition, every product 
-              on the market failed the same test.
+              What started as "Bone-A-Petreat" — a treat brand — pivoted to clinical discipline
+              when our founder's dog, ironically named Cat, needed consistent, vet-grade nutrition
+              that no product on the market could deliver.
             </p>
             <p>
-              Open bottles that oxidized within weeks. Pump dispensers that delivered 
+              Open bottles that oxidized within weeks. Pump dispensers that delivered
               inconsistent doses. "Natural" labels that masked industrial shortcuts.
             </p>
             <p>
-              BioLogica was built from a single premise: if pharmaceutical-grade human 
+              BioLogica Pets was built from a single premise: if pharmaceutical-grade human
               supplements come in individually sealed doses, why don't veterinary ones?
+              India's first sachet-based canine nutrition system was born.
             </p>
           </div>
 
@@ -64,7 +65,7 @@ const OriginSection = () => {
               {[
                 { value: '30', label: 'Precision Sachets' },
                 { value: '<25°C', label: 'Storage Standard' },
-                { value: '0%', label: 'Oxidation Risk' },
+                { value: 'v5.2', label: 'Formulation' },
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-2xl font-black text-foreground">{stat.value}</div>

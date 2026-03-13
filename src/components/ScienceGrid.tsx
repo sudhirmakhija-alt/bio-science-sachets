@@ -5,31 +5,31 @@ const scienceItems = [
   {
     icon: Layers,
     title: "Microencapsulation",
-    description: "Active compounds are individually coated to survive stomach acid and deliver at the intestinal absorption site.",
+    description: "Active compounds individually coated to survive stomach acid and deliver at the intestinal absorption site. No nitrogen flushing needed — stability through microencapsulation.",
     span: "md:col-span-2",
   },
   {
     icon: Thermometer,
-    title: "<25°C Storage",
+    title: "Store <25°C",
     description: "Every batch stored and shipped below 25°C. Cold-chain integrity from production to your door.",
     span: "",
   },
   {
     icon: Lock,
-    title: "Nitrogen-Flushed Sachets",
-    description: "Oxygen displaced at packaging. Zero oxidation from seal to serve.",
+    title: "Aluminium Sachet Barrier",
+    description: "Multi-layer aluminium laminate blocks light, moisture, and oxygen — the three enemies of potency. 2g precision dose per sachet.",
     span: "",
   },
   {
     icon: FlaskConical,
-    title: "Pharmaceutical-Grade Sourcing",
-    description: "Raw materials from certified pharmaceutical suppliers — not feed-grade commodity markets.",
+    title: "Formulation v5.2",
+    description: "Current formulation iteration refined through extensive testing. Pharmaceutical-grade raw materials from certified suppliers.",
     span: "md:col-span-2",
   },
   {
     icon: ShieldCheck,
-    title: "Airtight Barrier",
-    description: "Multi-layer aluminium laminate blocks light, moisture, and oxygen — the three enemies of potency.",
+    title: "No Nitrogen Flushing Needed",
+    description: "Stability through microencapsulation eliminates the need for nitrogen flushing — a fundamental advantage over conventional packaging.",
     span: "",
   },
   {
@@ -51,7 +51,7 @@ const ScienceGrid = () => {
           className="mb-16"
         >
           <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
-            Technical Specifications
+            Manufacturing Standards
           </span>
           <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground max-w-2xl">
             The Science Grid v5.2
