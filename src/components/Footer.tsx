@@ -4,10 +4,13 @@ const Footer = () => {
       <div className="max-w-[1400px] mx-auto">
         <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-black tracking-tight mb-4">BioLogica</h3>
+            <h3 className="text-2xl font-black tracking-tight mb-4">BioLogica Pets</h3>
             <p className="text-background/60 text-sm leading-relaxed max-w-sm">
-              Veterinary-grade canine nutrition. Precision sachets. 
+              India's first sachet-based canine nutrition system. Precision sachets.
               No oxidation. No blind dosing. Built from clinical discipline.
+            </p>
+            <p className="text-background/40 text-xs mt-4">
+              BioLogica Pets LLP, Bangalore
             </p>
           </div>
           <div>
@@ -23,16 +26,17 @@ const Footer = () => {
             <ul className="space-y-2 text-sm text-background/60">
               <li><a href="#science" className="hover:text-background transition-colors">Microencapsulation</a></li>
               <li><a href="#dosing" className="hover:text-background transition-colors">Dosing Protocol</a></li>
+              <li><a href="#science" className="hover:text-background transition-colors">Formulation v5.2</a></li>
               <li><a href="#" className="hover:text-background transition-colors">Certificate of Analysis</a></li>
             </ul>
           </div>
         </div>
         <div className="pt-8 border-t border-background/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <span className="text-xs text-background/40">
-            © 2026 BioLogica. Complementary Feed for Dogs. Not for human consumption.
+            © 2026 BioLogica Pets LLP, Bangalore. Complementary feed only. No therapeutic claims. Not for human consumption.
           </span>
           <span className="text-xs text-background/40">
-            Veterinary consultation recommended before use.
+            Veterinary consultation recommended before use. Store below 25°C.
           </span>
         </div>
       </div>

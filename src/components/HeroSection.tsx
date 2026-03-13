@@ -25,13 +25,13 @@ const HeroSection = () => {
             <br />
             Science.
             <br />
-            <span className="text-muted-foreground">Measured</span>
+            <span className="text-muted-foreground">Identified</span>
             <br />
             <span className="text-muted-foreground">Results.</span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed mb-10 font-light">
-            The first sachet-dosed veterinary nutrition system for dogs.
+            Mathematically precise sachet dosing.
             No oxidation. No blind dosing.
           </p>
 
@@ -61,7 +61,7 @@ const HeroSection = () => {
           {/* Main packaging */}
           <motion.img
             src={heroPackaging}
-            alt="BioLogica 30-sachet veterinary nutrition box with individual precision sachets"
+            alt="BioLogica 2g aluminium precision sachet for veterinary canine nutrition"
             className="w-full max-w-lg animate-float relative z-10"
             style={{ filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.12))' }}
           />

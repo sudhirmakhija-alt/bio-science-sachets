@@ -3,15 +3,16 @@ import { motion } from "framer-motion";
 import { useScrollState } from "./ScrollContext";
 
 const DOSING_DATA = [
-  { weight: 4, sachets: 0.5, cost: 23 },
-  { weight: 8, sachets: 1, cost: 47 },
-  { weight: 12, sachets: 1, cost: 47 },
-  { weight: 16, sachets: 1.5, cost: 70 },
-  { weight: 20, sachets: 1.5, cost: 70 },
-  { weight: 25, sachets: 2, cost: 93 },
-  { weight: 30, sachets: 2, cost: 93 },
-  { weight: 35, sachets: 2.5, cost: 117 },
-  { weight: 40, sachets: 3, cost: 140 },
+  { weight: 3, sachets: 0.5, protocol: "The Toy Breed Protocol", cost: 23 },
+  { weight: 5, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
+  { weight: 8, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
+  { weight: 10, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
+  { weight: 15, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
+  { weight: 20, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
+  { weight: 25, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
+  { weight: 30, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
+  { weight: 35, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
+  { weight: 40, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
 ];
 
 const DosingCalculator = () => {
@@ -34,7 +35,7 @@ const DosingCalculator = () => {
           className="text-center mb-16"
         >
           <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
-            Dosing Protocol
+            Weight-Based Dosing Engine
           </span>
           <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground">
             Precision Dosing Calculator
@@ -72,9 +73,17 @@ const DosingCalculator = () => {
             />
 
             <div className="flex justify-between mt-2">
-              <span className="text-xs text-muted-foreground">4kg</span>
+              <span className="text-xs text-muted-foreground">3kg</span>
               <span className="text-xs text-muted-foreground">40kg</span>
             </div>
+          </div>
+
+          {/* Protocol Label */}
+          <div className="text-center mb-8">
+            <span className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-sm">
+              <span className="w-2 h-2 rounded-full bg-omega" />
+              <span className="text-sm font-semibold tracking-wide text-foreground">{data.protocol}</span>
+            </span>
           </div>
 
           {/* Results Grid */}

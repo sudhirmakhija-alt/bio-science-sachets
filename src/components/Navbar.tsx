@@ -35,7 +35,7 @@ const Navbar = () => {
         <a href="#" className="flex items-center">
           <img
             src={biologicaLogo}
-            alt="BioLogica"
+            alt="BioLogica Pets"
             className="h-7 w-auto"
           />
         </a>
@@ -55,7 +55,7 @@ const Navbar = () => {
             href="#products"
             className="inline-flex items-center justify-center px-5 py-2 bg-foreground text-background text-xs font-semibold tracking-wide hover:opacity-90 transition-opacity"
           >
-            SHOP NOW
+            BUY ON AMAZON
           </a>
         </div>
 
@@ -97,7 +97,7 @@ const Navbar = () => {
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex items-center justify-center px-5 py-3 bg-foreground text-background text-xs font-semibold tracking-wide mt-2"
               >
-                SHOP NOW
+                BUY ON AMAZON
               </a>
             </div>
           </motion.div>
