@@ -17,6 +17,11 @@ const DOSING_DATA = [
 const DosingCalculator = () => {
   const [index, setIndex] = useState(3);
   const data = DOSING_DATA[index];
+  const { setDosingCount } = useScrollState();
+
+  useEffect(() => {
+    setDosingCount(data.sachets);
+  }, [data.sachets, setDosingCount]);
 
   return (
     <section id="dosing" className="section-padding bg-background-subtle relative overflow-hidden">
