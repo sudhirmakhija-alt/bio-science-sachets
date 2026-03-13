@@ -76,7 +76,7 @@ const XRayCard = ({
 
 const XRaySection = () => {
   return (
-    <section className="section-padding bg-background-subtle">
+    <section className="section-padding bg-background/70 backdrop-blur-sm">
       <div className="max-w-[1400px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
