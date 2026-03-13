@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useScrollState } from "./ScrollContext";
 
 const DOSING_DATA = [
   { weight: 4, sachets: 0.5, cost: 23 },
