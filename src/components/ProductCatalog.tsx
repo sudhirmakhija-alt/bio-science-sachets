@@ -21,7 +21,7 @@ const products = [
     amazonUrl: "#",
   },
   {
-    name: "Gut Balance+",
+    name: "Gut \nBalance+",
     subtitle: "Digestive Microbiome Support",
     description: "6 Billion CFU/kg + Whey Hydrolysate. Heat-stable probiotic strains with postbiotics for digestive resilience and immune modulation.",
     color: "gut" as const,
