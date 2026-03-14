@@ -12,7 +12,7 @@ const products = [
     amazonUrl: "#",
   },
   {
-    name: "Organ Balance+",
+    name: "Organ  \nBalance+",
     subtitle: "Ancestral Organ Matrix",
     description: "Ancestral Chicken Organ Matrix — Liver & Heart. Freeze-dried from grass-fed, pasture-raised sources with mathematically controlled Vitamin A levels.",
     color: "organ" as const,
