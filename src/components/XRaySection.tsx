@@ -61,14 +61,15 @@ const XRayCard = ({
 
   return (
     <div
-      className="relative border border-border p-6 md:p-8 cursor-crosshair overflow-hidden group"
+      className={`relative border border-border p-6 md:p-8 cursor-crosshair overflow-hidden group ${
+        !isGood ? "bg-destructive/[0.04]" : "bg-background"}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}>
       
       <div
         className={`absolute inset-0 transition-opacity duration-500 ${
         hovered ? "opacity-100" : "opacity-0"} ${
-        isGood ? "bg-gut/5" : "bg-destructive/5"}`} />
+        isGood ? "bg-gut/5" : "bg-destructive/8"}`} />
       
 
       <div className="relative z-10">
@@ -78,7 +79,7 @@ const XRayCard = ({
           </span>
           <div className={`transition-all duration-300 ${hovered ? "scale-110" : "scale-100"}`}>
             {isGood ?
-            <ShieldCheck className="w-5 h-5 text-gut" /> :
+            <ShieldCheck className="w-6 h-6 text-gut" /> :
 
             <ShieldAlert className="w-5 h-5 text-destructive" />
             }
