@@ -12,7 +12,7 @@ const products = [
     amazonUrl: "#",
   },
   {
-    name: "Organ Balance+",
+    name: "Organ  \nBalance+",
     subtitle: "Ancestral Organ Matrix",
     description: "Ancestral Chicken Organ Matrix — Liver & Heart. Freeze-dried from grass-fed, pasture-raised sources with mathematically controlled Vitamin A levels.",
     color: "organ" as const,
@@ -21,7 +21,7 @@ const products = [
     amazonUrl: "#",
   },
   {
-    name: "Gut Balance+",
+    name: "Gut \nBalance+",
     subtitle: "Digestive Microbiome Support",
     description: "6 Billion CFU/kg + Whey Hydrolysate. Heat-stable probiotic strains with postbiotics for digestive resilience and immune modulation.",
     color: "gut" as const,
@@ -89,7 +89,7 @@ const ProductCatalog = () => {
                   <div className={`text-xs font-semibold tracking-[0.2em] uppercase ${cls.text} mb-3`}>
                     {product.subtitle}
                   </div>
-                  <h3 className="text-2xl font-black tracking-tight text-foreground mb-4">
+                  <h3 className="text-2xl font-black tracking-tight text-foreground mb-4 whitespace-pre-line">
                     {product.name}
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">
