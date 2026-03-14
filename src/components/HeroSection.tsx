@@ -1,11 +1,31 @@
-import { motion } from "framer-motion";
-import heroPackaging from "@/assets/hero-packaging.png";
-import sachetSingle from "@/assets/sachet-single.png";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import omegaPack from "@/assets/omega-pack.png";
+import organPack from "@/assets/organ-pack.png";
+import gutPack from "@/assets/gut-pack.png";
 
 const HeroSection = () => {
-  return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
 
+  // Each pack gets unique scroll-driven transforms
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -180]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -260]);
+
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, -8]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, 5]);
+  const rotate3 = useTransform(scrollYProgress, [0, 1], [0, -12]);
+
+  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
+  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 0.88]);
+  const scale3 = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+
+  return (
+    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       <div className="section-padding w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
@@ -51,38 +71,60 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Right - 3D Parallax Product */}
-        <motion.div
-          className="relative flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {/* Main packaging */}
+        {/* Right - Three product packs with scroll-driven parallax */}
+        <div className="relative flex items-center justify-center min-h-[500px] lg:min-h-[600px]">
+          {/* Omega - left, slightly back */}
           <motion.img
-            src={heroPackaging}
-            alt="BioLogica 2g aluminium precision sachet for veterinary canine nutrition"
-            className="w-full max-w-lg animate-float relative z-10"
-            style={{ filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.12))' }}
+            src={omegaPack}
+            alt="BioLogica Omega Balance+ packaging"
+            className="absolute w-40 md:w-48 lg:w-56 z-10 drop-shadow-2xl"
+            style={{
+              y: y1,
+              rotate: rotate1,
+              scale: scale1,
+              left: '5%',
+              top: '15%',
+            }}
+            initial={{ opacity: 0, x: -60, y: 40 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           />
 
-          {/* Floating sachet accents */}
+          {/* Organ - center, foreground */}
           <motion.img
-            src={sachetSingle}
-            alt=""
-            className="absolute top-8 right-4 w-20 animate-float-slow opacity-60"
-            style={{ animationDelay: '1s' }}
-          />
-          <motion.img
-            src={sachetSingle}
-            alt=""
-            className="absolute bottom-16 left-4 w-16 animate-float-slow opacity-40"
-            style={{ animationDelay: '2.5s', transform: 'rotate(-15deg)' }}
+            src={organPack}
+            alt="BioLogica Organ Balance+ packaging"
+            className="relative w-48 md:w-56 lg:w-64 z-20 drop-shadow-2xl"
+            style={{
+              y: y2,
+              rotate: rotate2,
+              scale: scale2,
+            }}
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
           />
 
-          {/* Subtle radial glow */}
+          {/* Gut - right, slightly back */}
+          <motion.img
+            src={gutPack}
+            alt="BioLogica Gut Balance+ packaging"
+            className="absolute w-40 md:w-48 lg:w-56 z-10 drop-shadow-2xl"
+            style={{
+              y: y3,
+              rotate: rotate3,
+              scale: scale3,
+              right: '5%',
+              top: '10%',
+            }}
+            initial={{ opacity: 0, x: 60, y: 40 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          />
+
+          {/* Subtle radial glow behind packs */}
           <div className="absolute inset-0 bg-gradient-radial from-omega/5 to-transparent rounded-full blur-3xl" />
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
