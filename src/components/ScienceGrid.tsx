@@ -29,7 +29,7 @@ const scienceItems = [
   {
     icon: ShieldCheck,
     title: "No Nitrogen Flushing Needed",
-    description: "Stability through microencapsulation eliminates the need for nitrogen flushing — a fundamental advantage over conventional packaging.",
+    description: "Stability through microencapsulation eliminates the need for nitrogen flushing - a fundamental advantage over conventional packaging.",
     span: "",
   },
   {
