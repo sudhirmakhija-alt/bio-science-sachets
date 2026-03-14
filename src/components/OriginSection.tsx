@@ -17,7 +17,7 @@ const OriginSection = () => {
 
             alt="Cat, the dog who inspired BioLogica Pets veterinary nutrition"
             className="w-full grayscale"
-            style={{ filter: 'grayscale(100%) contrast(1.1)' }} src="/lovable-uploads/8b4a660d-9231-475d-80ad-142fdf9e7e45.png" />
+            style={{ filter: 'grayscale(100%) contrast(1.1)' }} src="/lovable-uploads/ffb50a4d-5e4f-47f9-86ae-ad14cf157fd3.png" />
           
           <div className="absolute bottom-6 left-6 bg-background/90 backdrop-blur-sm px-4 py-2">
             <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground font-medium">
