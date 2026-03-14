@@ -80,12 +80,12 @@ const ProductCatalog = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className={`border border-border ${cls.border} transition-all duration-300 bg-background group`}
+                className={`border border-border ${cls.border} transition-all duration-300 bg-background group flex flex-col`}
               >
                 {/* Color accent bar */}
                 <div className={`h-1 ${cls.accent}`} />
 
-                <div className="p-8 md:p-10">
+                <div className="p-8 md:p-10 flex flex-col flex-1">
                   <div className={`text-xs font-semibold tracking-[0.2em] uppercase ${cls.text} mb-3`}>
                     {product.subtitle}
                   </div>
@@ -96,7 +96,7 @@ const ProductCatalog = () => {
                     {product.description}
                   </p>
 
-                  <ul className="space-y-2 mb-8">
+                  <ul className="space-y-2 mb-8 flex-1">
                     {product.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-2 text-sm text-foreground">
                         <div className={`w-1 h-1 ${cls.accent}`} />
@@ -105,7 +105,7 @@ const ProductCatalog = () => {
                     ))}
                   </ul>
 
-                  <div className="flex items-center justify-between pt-6 border-t border-border">
+                  <div className="flex items-center justify-between pt-6 border-t border-border mt-auto">
                     <span className="text-2xl font-black text-foreground">{product.price}</span>
                     <a
                       href={product.amazonUrl}
