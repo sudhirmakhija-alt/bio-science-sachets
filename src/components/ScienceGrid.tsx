@@ -5,7 +5,7 @@ const scienceItems = [
   {
     icon: Layers,
     title: "Microencapsulation",
-    description: "Active compounds individually coated to survive stomach acid and deliver at the intestinal absorption site. No nitrogen flushing needed — stability through microencapsulation.",
+    description: "Active compounds individually coated to survive stomach acid and deliver at the intestinal absorption site. No nitrogen flushing needed - stability through microencapsulation.",
     span: "md:col-span-2",
   },
   {
