@@ -21,7 +21,7 @@ const OriginSection = () => {
           
           <div className="absolute bottom-6 left-6 bg-background/90 backdrop-blur-sm px-4 py-2">
             <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground font-medium">
-              "Cat" — Est. 2019
+              Hi! my name is cat        
             </span>
           </div>
         </motion.div>
