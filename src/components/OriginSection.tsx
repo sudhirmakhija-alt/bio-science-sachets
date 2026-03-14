@@ -49,7 +49,7 @@ const OriginSection = () => {
 
 
             </p>
-            <p>Open bottles oxidised within weeks. Pump dispensers delivered inconsistent doses. "Natural" labels masked industrial shortcuts. And efficacy was masked with labels that had zero transparency and dosing was not precise.
+            <p>Opened bottles oxidised within weeks. Pump dispensers delivered inconsistent doses. "Natural" labels covered up industrial shortcuts. And efficacy was masked with labels that had zero transparency and dosing was nowhere close to being precise.
 
 
             </p>
