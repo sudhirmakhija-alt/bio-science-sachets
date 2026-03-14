@@ -79,7 +79,7 @@ const XRayCard = ({
           </span>
           <div className={`transition-all duration-300 ${hovered ? "scale-110" : "scale-100"}`}>
             {isGood ?
-            <ShieldCheck className="w-5 h-5 text-gut" /> :
+            <ShieldCheck className="w-6 h-6 text-gut" /> :
 
             <ShieldAlert className="w-5 h-5 text-destructive" />
             }
