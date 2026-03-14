@@ -89,7 +89,7 @@ const ProductCatalog = () => {
                   <div className={`text-xs font-semibold tracking-[0.2em] uppercase ${cls.text} mb-3`}>
                     {product.subtitle}
                   </div>
-                  <h3 className="text-2xl font-black tracking-tight text-foreground mb-4">
+                  <h3 className="text-2xl font-black tracking-tight text-foreground mb-4 whitespace-pre-line">
                     {product.name}
                   </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">
