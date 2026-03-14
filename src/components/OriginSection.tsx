@@ -14,10 +14,10 @@ const OriginSection = () => {
           className="relative">
           
           <img
-            src={originDog}
+
             alt="Cat, the dog who inspired BioLogica Pets veterinary nutrition"
             className="w-full grayscale"
-            style={{ filter: 'grayscale(100%) contrast(1.1)' }} />
+            style={{ filter: 'grayscale(100%) contrast(1.1)' }} src="/lovable-uploads/8b4a660d-9231-475d-80ad-142fdf9e7e45.png" />
           
           <div className="absolute bottom-6 left-6 bg-background/90 backdrop-blur-sm px-4 py-2">
             <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground font-medium">
