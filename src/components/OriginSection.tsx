@@ -20,7 +20,7 @@ const OriginSection = () => {
             style={{ filter: 'grayscale(100%) contrast(1.1)' }} src="/lovable-uploads/ffb50a4d-5e4f-47f9-86ae-ad14cf157fd3.png" />
           
           <div className="absolute bottom-6 left-6 bg-background/90 backdrop-blur-sm px-4 py-2">
-            <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground font-medium">WOOF MY NAME IS CAT</span>
+            <span className="text-xs tracking-[0.2em] uppercase text-muted-foreground font-medium">WOOF woof!  MY NAME IS CAT</span>
           </div>
         </motion.div>
 
