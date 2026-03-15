@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="max-w-[1400px] mx-auto">
         <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-black tracking-tight mb-4">BioLogica Pets</h3>
+            <h3 className="text-2xl font-black tracking-tight mb-4">BioLogica</h3>
             <p className="text-background/60 text-sm leading-relaxed max-w-sm">
               India's first sachet-based canine nutrition system. Precision sachets.
               No oxidation. No blind dosing. Built from clinical discipline.
@@ -40,8 +40,8 @@ const Footer = () => {
           </span>
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
+
 };
 
 export default Footer;
