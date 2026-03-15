@@ -17,12 +17,24 @@ const Index = () => {
       <ScrollGradientOverlay />
       <Navbar />
       <main className="relative z-[2]">
+        {/* HERO - Clinical-grade focus */}
         <HeroSection />
-        <XRaySection />
+
+        {/* WHY - Indian context */}
         <OriginSection />
-        <DosingCalculator />
-        <ScienceGrid />
+
+        {/* DIFFERENTIATION */}
+        <XRaySection />
+
+        {/* PRODUCT CATALOG */}
         <ProductCatalog />
+
+        {/* DOSING CALCULATOR - Keep existing */}
+        <DosingCalculator />
+
+        {/* EVIDENCE */}
+        <ScienceGrid />
+
         <Footer />
       </main>
     </ScrollProvider>
