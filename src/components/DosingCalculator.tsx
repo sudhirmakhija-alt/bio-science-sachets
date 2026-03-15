@@ -3,17 +3,17 @@ import { motion } from "framer-motion";
 import { useScrollState } from "./ScrollContext";
 
 const DOSING_DATA = [
-  { weight: 3, sachets: 0.5, protocol: "The Toy Breed Protocol", cost: 23 },
-  { weight: 5, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
-  { weight: 8, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
-  { weight: 10, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
-  { weight: 15, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
-  { weight: 20, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
-  { weight: 25, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
-  { weight: 30, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
-  { weight: 35, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
-  { weight: 40, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
-];
+{ weight: 3, sachets: 0.5, protocol: "The Toy Breed Protocol", cost: 23 },
+{ weight: 5, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
+{ weight: 8, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
+{ weight: 10, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
+{ weight: 15, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
+{ weight: 20, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
+{ weight: 25, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
+{ weight: 30, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
+{ weight: 35, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
+{ weight: 40, sachets: 3, protocol: "3 Sachets Daily", cost: 140 }];
+
 
 const DosingCalculator = () => {
   const [index, setIndex] = useState(3);
@@ -32,8 +32,8 @@ const DosingCalculator = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+          className="text-center mb-16">
+          
           <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
             Weight-Based Dosing Engine
           </span>
@@ -46,13 +46,13 @@ const DosingCalculator = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-card rounded-sm p-8 md:p-12"
-        >
+          className="glass-card rounded-sm p-8 md:p-12">
+          
           {/* Weight Slider */}
           <div className="mb-12">
             <div className="flex justify-between items-baseline mb-6">
               <span className="text-sm font-medium tracking-wide uppercase text-muted-foreground">
-                Dog Weight
+                slide to adjust Dog Weight
               </span>
               <span className="text-4xl font-black text-foreground">
                 {data.weight}<span className="text-lg font-medium text-muted-foreground ml-1">kg</span>
@@ -69,8 +69,8 @@ const DosingCalculator = () => {
                 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 
                 [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:cursor-pointer
                 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:bg-foreground 
-                [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
-            />
+                [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer" />
+            
 
             <div className="flex justify-between mt-2">
               <span className="text-xs text-muted-foreground">3kg</span>
@@ -115,8 +115,8 @@ const DosingCalculator = () => {
           </p>
         </motion.div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default DosingCalculator;
