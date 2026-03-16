@@ -33,7 +33,7 @@ const AboutSection = () => {
               Our formulations are built on established canine nutrition science, referencing AAFCO and FEDIAF guidelines, and are produced in WHO-GMP+ and FAMI-QS certified facilities that follow strict quality and traceability systems.
             </p>
             <p className="text-base text-muted-foreground leading-relaxed">
-              Each product targets a specific area — stool consistency, joint comfort, skin and coat health or overall vitality — so you can choose exactly what your dog needs rather than relying on generic multivitamins.
+              Each product targets a specific area - stool consistency, joint comfort, skin and coat health or overall vitality - so you can choose exactly what your dog needs rather than relying on generic multivitamins.
             </p>
           </motion.div>
 
