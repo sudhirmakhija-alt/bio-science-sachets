@@ -1,11 +1,17 @@
 import { motion } from "framer-motion";
+import { ShieldCheck, Factory, Sun } from "lucide-react";
 import heroPackaging from "@/assets/hero-packaging.png";
 import sachetSingle from "@/assets/sachet-single.png";
+
+const badges = [
+  { icon: ShieldCheck, label: "Vet-formulated" },
+  { icon: Factory, label: "WHO-GMP+ & FAMI-QS facilities" },
+  { icon: Sun, label: "Designed for Indian diets & climate" },
+];
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-
       <div className="section-padding w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
@@ -13,45 +19,68 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
+          {/* Pill */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-8">
             <span className="w-2 h-2 rounded-full bg-gut" />
             <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground">
-              Veterinary-Grade Nutrition
+              Vet-formulated daily toppers for Indian dogs
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[0.92] tracking-[-0.04em] text-foreground mb-6">
-            Precision
+          {/* Headline - black & grey style preserved */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95] tracking-[-0.04em] text-foreground mb-6">
+            Clinical-grade
             <br />
-            Science.
+            daily nutrition
             <br />
-            <span className="text-muted-foreground">Identified</span>
+            <span className="text-muted-foreground">support for</span>
             <br />
-            <span className="text-muted-foreground">Results.</span>
+            <span className="text-muted-foreground">Indian dogs.</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed mb-10 font-light">
-            Mathematically precise sachet dosing.
-            No oxidation. No blind dosing.
+          {/* Subheadline */}
+          <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed mb-6 font-light">
+            Vet-formulated toppers that support joints, digestion, immunity, skin & coat and overall vitality in dogs living in Indian homes and climates.
           </p>
 
-          <div className="flex gap-4">
+          {/* Trust line */}
+          <p className="text-xs text-muted-foreground/70 max-w-md leading-relaxed mb-10">
+            Developed by veterinarians and animal nutrition experts, referencing AAFCO and FEDIAF dog nutrition guidelines and manufactured in WHO-GMP+ and FAMI-QS certified facilities.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-wrap gap-4 mb-10">
             <a
-              href="#products"
+              href="https://amazon.in/biologica"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-8 py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
             >
-              EXPLORE PRODUCTS
+              SHOP ON AMAZON INDIA
             </a>
             <a
               href="#science"
               className="inline-flex items-center justify-center px-8 py-4 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
             >
-              THE SCIENCE
+              HOW BIOLOGICA HELPS YOUR DOG
             </a>
+          </div>
+
+          {/* Badges */}
+          <div className="flex flex-wrap gap-3">
+            {badges.map((badge) => (
+              <div
+                key={badge.label}
+                className="inline-flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-sm"
+              >
+                <badge.icon className="w-3.5 h-3.5 text-gut" />
+                <span className="text-xs font-medium text-muted-foreground">{badge.label}</span>
+              </div>
+            ))}
           </div>
         </motion.div>
 
-        {/* Right - 3D Parallax Product */}
+        {/* Right - Product visuals */}
         <motion.div
           className="relative flex items-center justify-center"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -61,9 +90,9 @@ const HeroSection = () => {
           {/* Main packaging */}
           <motion.img
             src={heroPackaging}
-            alt="BioLogica 2g aluminium precision sachet for veterinary canine nutrition"
+            alt="BioLogica product range — Organ, Gut, Omega Balance precision sachets for Indian dogs"
             className="w-full max-w-lg animate-float relative z-10"
-            style={{ filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.12))' }}
+            style={{ filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.12))" }}
           />
 
           {/* Floating sachet accents */}
@@ -71,13 +100,13 @@ const HeroSection = () => {
             src={sachetSingle}
             alt=""
             className="absolute top-8 right-4 w-20 animate-float-slow opacity-60"
-            style={{ animationDelay: '1s' }}
+            style={{ animationDelay: "1s" }}
           />
           <motion.img
             src={sachetSingle}
             alt=""
             className="absolute bottom-16 left-4 w-16 animate-float-slow opacity-40"
-            style={{ animationDelay: '2.5s', transform: 'rotate(-15deg)' }}
+            style={{ animationDelay: "2.5s", transform: "rotate(-15deg)" }}
           />
 
           {/* Subtle radial glow */}
