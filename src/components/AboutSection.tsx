@@ -8,8 +8,8 @@ const AboutSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-16"
-        >
+          className="mb-16">
+          
           <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
             Brand overview
           </span>
@@ -24,10 +24,10 @@ const AboutSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <p className="text-base text-muted-foreground leading-relaxed">
-              BioLogica is a premium pet nutrition brand from Bengaluru focused on advanced daily nutrition support for Indian dogs. We design organ-based, gut-support and omega-rich toppers that integrate smoothly into everyday home-cooked and kibble diets.
+            className="space-y-6">
+            
+            <p className="text-base text-muted-foreground leading-relaxed">BioLogica is a premium pet nutrition brand focused on advanced daily nutrition support for Indian dogs. We design organ-based, gut-support and omega-rich toppers that integrate smoothly into everyday home-cooked and kibble diets.
+
             </p>
             <p className="text-base text-muted-foreground leading-relaxed">
               Our formulations are built on established canine nutrition science, referencing AAFCO and FEDIAF guidelines, and are produced in WHO-GMP+ and FAMI-QS certified facilities that follow strict quality and traceability systems.
@@ -42,8 +42,8 @@ const AboutSection = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
+            transition={{ delay: 0.1 }}>
+            
             <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-8">
               <span className="w-2 h-2 rounded-full bg-omega" />
               <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground">
@@ -67,20 +67,20 @@ const AboutSection = () => {
             </ul>
 
             <div className="flex flex-wrap gap-2">
-              {["Vet-formulated", "AAFCO & FEDIAF referenced", "WHO-GMP+ & FAMI-QS"].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1.5 bg-secondary text-xs font-medium text-muted-foreground rounded-sm"
-                >
+              {["Vet-formulated", "AAFCO & FEDIAF referenced", "WHO-GMP+ & FAMI-QS"].map((tag) =>
+              <span
+                key={tag}
+                className="px-3 py-1.5 bg-secondary text-xs font-medium text-muted-foreground rounded-sm">
+                
                   {tag}
                 </span>
-              ))}
+              )}
             </div>
           </motion.div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default AboutSection;
