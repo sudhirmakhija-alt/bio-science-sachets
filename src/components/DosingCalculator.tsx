@@ -1,122 +1,143 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { useScrollState } from "./ScrollContext";
 
-const DOSING_DATA = [
-{ weight: 3, sachets: 0.5, protocol: "The Toy Breed Protocol", cost: 23 },
-{ weight: 5, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
-{ weight: 8, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
-{ weight: 10, sachets: 1, protocol: "1 Sachet Daily", cost: 47 },
-{ weight: 15, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
-{ weight: 20, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
-{ weight: 25, sachets: 2, protocol: "2 Sachets Daily", cost: 93 },
-{ weight: 30, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
-{ weight: 35, sachets: 3, protocol: "3 Sachets Daily", cost: 140 },
-{ weight: 40, sachets: 3, protocol: "3 Sachets Daily", cost: 140 }];
+const WEIGHT_RANGES = [
+  { min: 1, max: 5, sachets: 0.5 },
+  { min: 6, max: 10, sachets: 1 },
+  { min: 11, max: 20, sachets: 1.5 },
+  { min: 21, max: 30, sachets: 2 },
+  { min: 31, max: 40, sachets: 2.5 },
+  { min: 41, max: 60, sachets: 3 },
+];
 
+const LIFE_STAGES = ["Adult", "Senior", "Puppy (only under vet guidance)"];
+const GOALS = [
+  "Gut support and stool consistency",
+  "Overall vitality and natural micronutrients",
+  "Joints, skin and coat",
+];
 
 const DosingCalculator = () => {
-  const [index, setIndex] = useState(3);
-  const data = DOSING_DATA[index];
-  const { setDosingCount } = useScrollState();
+  const [weight, setWeight] = useState("");
+  const [lifeStage, setLifeStage] = useState("");
+  const [goal, setGoal] = useState("");
+  const [result, setResult] = useState<number | null>(null);
 
-  useEffect(() => {
-    setDosingCount(data.sachets);
-  }, [data.sachets, setDosingCount]);
+  const handleCalculate = () => {
+    const w = parseFloat(weight);
+    if (!w || w <= 0) return;
+    const range = WEIGHT_RANGES.find((r) => w >= r.min && w <= r.max);
+    setResult(range ? range.sachets : WEIGHT_RANGES[WEIGHT_RANGES.length - 1].sachets);
+  };
 
   return (
     <section id="dosing" className="section-padding relative overflow-hidden">
-
       <div className="max-w-[1000px] mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16">
-          
+          className="text-center mb-16"
+        >
           <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
-            Weight-Based Dosing Engine
+            Daily routine
           </span>
-          <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground">
-            Precision Dosing Calculator
+          <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground mb-6">
+            Dosing helper
           </h2>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
+            Use this simple helper to estimate how many sachets per day may be appropriate for your dog. This is not a substitute for veterinary advice. Always follow the product label and your vet's specific guidance.
+          </p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-card rounded-sm p-8 md:p-12">
-          
-          {/* Weight Slider */}
-          <div className="mb-12">
-            <div className="flex justify-between items-baseline mb-6">
-              <span className="text-sm font-medium tracking-wide uppercase text-muted-foreground">
-                slide to adjust Dog Weight
-              </span>
-              <span className="text-4xl font-black text-foreground">
-                {data.weight}<span className="text-lg font-medium text-muted-foreground ml-1">kg</span>
-              </span>
+          className="glass-card rounded-sm p-8 md:p-12"
+        >
+          <div className="space-y-6 mb-8">
+            {/* Weight */}
+            <div>
+              <label className="text-sm font-medium tracking-wide text-foreground block mb-2">
+                Dog weight in kg
+              </label>
+              <input
+                type="number"
+                placeholder="e.g. 12"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                className="w-full h-12 px-4 border border-border bg-background text-foreground text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-foreground"
+              />
             </div>
 
-            <input
-              type="range"
-              min={0}
-              max={DOSING_DATA.length - 1}
-              value={index}
-              onChange={(e) => setIndex(Number(e.target.value))}
-              className="w-full h-1 bg-border rounded-none appearance-none cursor-pointer
-                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 
-                [&::-webkit-slider-thumb]:bg-foreground [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:cursor-pointer
-                [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:bg-foreground 
-                [&::-moz-range-thumb]:rounded-none [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer" />
-            
+            {/* Life Stage */}
+            <div>
+              <label className="text-sm font-medium tracking-wide text-foreground block mb-2">
+                Life stage
+              </label>
+              <select
+                value={lifeStage}
+                onChange={(e) => setLifeStage(e.target.value)}
+                className="w-full h-12 px-4 border border-border bg-background text-foreground text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-foreground appearance-none"
+              >
+                <option value="">Select life stage</option>
+                {LIFE_STAGES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
 
-            <div className="flex justify-between mt-2">
-              <span className="text-xs text-muted-foreground">3kg</span>
-              <span className="text-xs text-muted-foreground">40kg</span>
+            {/* Goal */}
+            <div>
+              <label className="text-sm font-medium tracking-wide text-foreground block mb-2">
+                Primary goal
+              </label>
+              <select
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+                className="w-full h-12 px-4 border border-border bg-background text-foreground text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-foreground appearance-none"
+              >
+                <option value="">Select primary goal</option>
+                {GOALS.map((g) => (
+                  <option key={g} value={g}>{g}</option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* Protocol Label */}
-          <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-sm">
-              <span className="w-2 h-2 rounded-full bg-omega" />
-              <span className="text-sm font-semibold tracking-wide text-foreground">{data.protocol}</span>
-            </span>
-          </div>
+          <button
+            onClick={handleCalculate}
+            className="w-full py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity mb-8"
+          >
+            Calculate suggested daily sachets
+          </button>
 
-          {/* Results Grid */}
-          <div className="grid grid-cols-3 gap-px bg-border">
-            <div className="bg-background p-6 md:p-8 text-center">
-              <div className="text-3xl md:text-4xl font-black text-foreground">{data.sachets}</div>
-              <div className="text-xs text-muted-foreground mt-2 tracking-wide uppercase">
-                Sachets / Day
+          {result !== null && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center border border-border p-8"
+            >
+              <div className="text-4xl font-black text-foreground mb-2">{result}</div>
+              <div className="text-xs text-muted-foreground tracking-wide uppercase mb-4">
+                Suggested sachets per day
               </div>
-            </div>
-            <div className="bg-background p-6 md:p-8 text-center">
-              <div className="text-3xl md:text-4xl font-black text-omega">₹{data.cost}</div>
-              <div className="text-xs text-muted-foreground mt-2 tracking-wide uppercase">
-                Cost / Day
-              </div>
-            </div>
-            <div className="bg-background p-6 md:p-8 text-center">
-              <div className="text-3xl md:text-4xl font-black text-foreground">
-                ₹{(data.cost * 30).toLocaleString()}
-              </div>
-              <div className="text-xs text-muted-foreground mt-2 tracking-wide uppercase">
-                Cost / Month
-              </div>
-            </div>
-          </div>
+              {goal && (
+                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-sm text-xs text-muted-foreground">
+                  {goal}
+                </span>
+              )}
+            </motion.div>
+          )}
 
           <p className="text-xs text-muted-foreground mt-6 text-center">
-            Based on Omega Balance+ pricing. Complementary feed — consult your veterinarian for specific protocols.
+            Always follow the product label and your vet's specific advice, especially for puppies, seniors or dogs on medication.
           </p>
         </motion.div>
       </div>
-    </section>);
-
+    </section>
+  );
 };
 
 export default DosingCalculator;
