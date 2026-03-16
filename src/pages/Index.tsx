@@ -3,11 +3,14 @@ import BioBackground from "@/components/BioBackground";
 import ScrollGradientOverlay from "@/components/ScrollGradientOverlay";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import XRaySection from "@/components/XRaySection";
 import OriginSection from "@/components/OriginSection";
+import AboutSection from "@/components/AboutSection";
+import WhyNutritionSection from "@/components/WhyNutritionSection";
+import DifferentiatorSection from "@/components/DifferentiatorSection";
+import ProductCatalog from "@/components/ProductCatalog";
 import DosingCalculator from "@/components/DosingCalculator";
 import ScienceGrid from "@/components/ScienceGrid";
-import ProductCatalog from "@/components/ProductCatalog";
+import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -17,24 +20,34 @@ const Index = () => {
       <ScrollGradientOverlay />
       <Navbar />
       <main className="relative z-[2]">
-        {/* HERO - Clinical-grade focus */}
+        {/* HERO */}
         <HeroSection />
 
-        {/* WHY - Indian context */}
+        {/* ORIGIN — kept as-is */}
         <OriginSection />
 
-        {/* DIFFERENTIATION */}
-        <XRaySection />
+        {/* ABOUT */}
+        <AboutSection />
 
-        {/* PRODUCT CATALOG */}
+        {/* WHY TARGETED NUTRITION */}
+        <WhyNutritionSection />
+
+        {/* DIFFERENTIATOR */}
+        <DifferentiatorSection />
+
+        {/* PRODUCTS */}
         <ProductCatalog />
 
-        {/* DOSING CALCULATOR - Keep existing */}
+        {/* DOSING */}
         <DosingCalculator />
 
-        {/* EVIDENCE */}
+        {/* EVIDENCE & SAFETY */}
         <ScienceGrid />
 
+        {/* FAQ */}
+        <FAQSection />
+
+        {/* FOOTER */}
         <Footer />
       </main>
     </ScrollProvider>
