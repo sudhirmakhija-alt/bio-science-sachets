@@ -49,23 +49,32 @@ const DifferentiatorSection = () => {
             </ul>
           </motion.div>
 
-          {/* Right — pill + text */}
+          {/* Right — 2x2 stat cards */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
+            className="grid grid-cols-2 gap-4"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-8">
-              <span className="w-2 h-2 rounded-full bg-gut" />
-              <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground">
-                From clinic insight to daily routine
-              </span>
-            </div>
-
-            <p className="text-base text-muted-foreground leading-relaxed">
-              BioLogica translates real-world cases seen by veterinarians into practical, measurable nutrition support that fits into what you already feed at home.
-            </p>
+            {[
+              { stat: "100%", label: "Vet-led formulation process" },
+              { stat: "30", label: "Precision sachets per pack" },
+              { stat: "2", label: "Global quality certifications — WHO-GMP+ and FAMI-QS" },
+              { stat: "0", label: "Artificial colours, flavours or unnecessary fillers" },
+            ].map((card) => (
+              <div
+                key={card.stat + card.label}
+                className="border border-border rounded-md p-5 flex flex-col gap-2"
+              >
+                <span className="text-3xl md:text-4xl font-black tracking-tight text-foreground">
+                  {card.stat}
+                </span>
+                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground leading-snug">
+                  {card.label}
+                </span>
+              </div>
+            ))}
           </motion.div>
         </div>
       </div>
