@@ -12,6 +12,36 @@ const badges = [
   { icon: Sun, label: "Designed for Indian diets & climate" },
 ];
 
+const floatingCards = [
+  {
+    icon: ShieldCheck,
+    stat: "WHO-GMP+",
+    label: "Certified manufacturing",
+    border: "#e8d5dc",
+    position: "top-4 left-4 lg:top-8 lg:left-0",
+    bobDuration: 3.2,
+    delay: 0.6,
+  },
+  {
+    icon: Microscope,
+    stat: "AAFCO & FEDIAF",
+    label: "Referenced formulations",
+    border: "#d5e8dc",
+    position: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+    bobDuration: 3.8,
+    delay: 0.8,
+  },
+  {
+    icon: Dog,
+    stat: "India-specific",
+    label: "Formulated for Indian dogs & climates",
+    border: "#d5dce8",
+    position: "bottom-4 right-4 lg:bottom-8 lg:right-0",
+    bobDuration: 3.5,
+    delay: 1.0,
+  },
+];
+
 const products = [
   { src: organBalance, alt: "Organ Balance+ packaging", delay: 0, ringColor: "#f2c4b8", ringSpeed: 0.3 },
   { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15, ringColor: "#b8e8c0", ringSpeed: 0.22 },
