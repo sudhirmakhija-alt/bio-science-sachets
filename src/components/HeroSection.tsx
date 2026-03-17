@@ -124,7 +124,7 @@ const HeroSection = () => {
                   alt={product.alt}
                   className={`w-56 md:w-72 lg:w-[22rem] object-contain ${i === 1 ? "scale-110" : ""}`}
                   style={{
-                    filter: "drop-shadow(0 60px 100px rgba(0,0,0,0.3)) drop-shadow(0 25px 50px rgba(0,0,0,0.2)) drop-shadow(0 8px 16px rgba(0,0,0,0.15))",
+                    filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
                   }}
                 />
               </motion.div>
