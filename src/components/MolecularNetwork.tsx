@@ -287,7 +287,10 @@ const MolecularNetwork = () => {
         let r = n.radius;
 
         if (n.isGlow) {
-          const pulse = 1 + 0.2 * Math.sin(time * (Math.PI * 2 / 3) + n.pulsePhase);
+          // Pulse scale 1 → 1.2 → 1 over PULSE_PERIOD seconds, ease-in-out
+          const phase = ((time + n.pulsePhase) % PULSE_PERIOD) / PULSE_PERIOD;
+          const ease = 0.5 - 0.5 * Math.cos(phase * Math.PI * 2);
+          const pulse = 1 + 0.2 * ease;
           r *= pulse;
 
           const gradient = ctx.createRadialGradient(n.x, n.y, r * 0.5, n.x, n.y, r * 3);
@@ -297,6 +300,14 @@ const MolecularNetwork = () => {
           ctx.arc(n.x, n.y, r * 3, 0, Math.PI * 2);
           ctx.fillStyle = gradient;
           ctx.fill();
+        }
+
+        // Draw label for labeled glow nodes
+        if (n.label && n.isGlow) {
+          ctx.font = "bold 9px sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillStyle = `rgba(${nodeColor.r},${nodeColor.g},${nodeColor.b},${0.2 * n.opacity})`;
+          ctx.fillText(n.label, n.x, n.y - r - 6);
         }
 
         ctx.beginPath();
