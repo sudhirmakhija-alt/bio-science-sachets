@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ShieldCheck, Factory, Sun, Microscope, Dog } from "lucide-react";
+import { ShieldCheck, Factory, Sun } from "lucide-react";
 import { useRef } from "react";
 import organBalance from "@/assets/organ-balance-new.png";
 import gutBalance from "@/assets/gut-balance-new.png";
@@ -10,36 +10,6 @@ const badges = [
   { icon: ShieldCheck, label: "Vet-formulated" },
   { icon: Factory, label: "WHO-GMP+ & FAMI-QS facilities" },
   { icon: Sun, label: "Designed for Indian diets & climate" },
-];
-
-const floatingCards = [
-  {
-    icon: ShieldCheck,
-    stat: "WHO-GMP+",
-    label: "Certified manufacturing",
-    border: "#e8d5dc",
-    position: "top-4 left-4 lg:top-8 lg:left-0",
-    bobDuration: 3.2,
-    delay: 0.6,
-  },
-  {
-    icon: Microscope,
-    stat: "AAFCO & FEDIAF",
-    label: "Referenced formulations",
-    border: "#d5e8dc",
-    position: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-    bobDuration: 3.8,
-    delay: 0.8,
-  },
-  {
-    icon: Dog,
-    stat: "India-specific",
-    label: "Formulated for Indian dogs & climates",
-    border: "#d5dce8",
-    position: "bottom-4 right-4 lg:bottom-8 lg:right-0",
-    bobDuration: 3.5,
-    delay: 1.0,
-  },
 ];
 
 const products = [
@@ -138,9 +108,9 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Product visuals with floating cards */}
-        <div className="lg:col-span-2 relative mt-8" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
-          <div className="flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
+        {/* Product visuals — centered below */}
+        <div className="lg:col-span-2 flex items-center justify-center mt-8" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
+          <div className="relative flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
             {products.map((product, i) => (
               <motion.div
                 key={product.alt}
@@ -164,41 +134,6 @@ const HeroSection = () => {
               </motion.div>
             ))}
           </div>
-
-          {/* Floating stat cards */}
-          {floatingCards.map((card) => (
-            <motion.div
-              key={card.stat}
-              className={`absolute z-20 ${card.position}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: card.delay, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <motion.div
-                className="flex items-center gap-3 bg-background/95 backdrop-blur-sm"
-                style={{
-                  width: 180,
-                  height: 80,
-                  borderRadius: 16,
-                  border: `1px solid ${card.border}`,
-                  padding: 14,
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)",
-                }}
-                animate={{ y: [0, -6, 0] }}
-                transition={{
-                  duration: card.bobDuration,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <card.icon className="w-5 h-5 shrink-0 text-muted-foreground" />
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-foreground leading-tight truncate">{card.stat}</p>
-                  <p className="text-[10px] text-muted-foreground leading-tight mt-0.5 line-clamp-2">{card.label}</p>
-                </div>
-              </motion.div>
-            </motion.div>
-          ))}
         </div>
       </div>
 
