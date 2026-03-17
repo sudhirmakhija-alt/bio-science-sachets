@@ -80,7 +80,7 @@ const DosingCalculator = () => {
               <select
                 value={lifeStage}
                 onChange={(e) => setLifeStage(e.target.value)}
-                className="w-full h-12 px-4 border border-border bg-background text-foreground text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-foreground appearance-none"
+                className="w-full h-12 px-5 border border-border/80 bg-background text-foreground text-sm rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-gut appearance-none"
               >
                 <option value="">Select life stage</option>
                 {LIFE_STAGES.map((s) => (
