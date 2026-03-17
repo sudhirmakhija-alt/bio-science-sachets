@@ -222,15 +222,27 @@ const MolecularNetwork = () => {
           depthWrite={false}
         />
       </instancedMesh>
-      {/* Dynamic bonds */}
+      {/* Dynamic bonds - main */}
       <instancedMesh ref={bondRef} args={[undefined, undefined, MAX_BONDS]}>
-        <cylinderGeometry args={[1, 1, 1, 4]} />
+        <cylinderGeometry args={[1, 1, 1, 8]} />
         <meshStandardMaterial
           transparent
-          opacity={0.4}
-          roughness={0.5}
-          metalness={0.05}
+          opacity={0.5}
+          roughness={0.3}
+          metalness={0.15}
           depthWrite={false}
+          emissive={new THREE.Color(0.01, 0.52, 0.78)}
+          emissiveIntensity={0.35}
+        />
+      </instancedMesh>
+      {/* Bond glow layer */}
+      <instancedMesh ref={glowRef} args={[undefined, undefined, MAX_BONDS]}>
+        <cylinderGeometry args={[1, 1, 1, 6]} />
+        <meshBasicMaterial
+          transparent
+          opacity={0.12}
+          depthWrite={false}
+          color={new THREE.Color(0.01, 0.52, 0.78)}
         />
       </instancedMesh>
     </>
