@@ -26,7 +26,7 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
       
-      <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-12 lg:px-24 h-16">
+      <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-12 lg:px-16 h-16">
         {/* Logo */}
         <a href="#" className="flex items-center">
           <img
