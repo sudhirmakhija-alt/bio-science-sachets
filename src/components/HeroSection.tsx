@@ -118,7 +118,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
-              style={{ y: yValues[i], rotate: rotateValues[i] }}
+              style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
             >
               <img
                 src={product.src}
