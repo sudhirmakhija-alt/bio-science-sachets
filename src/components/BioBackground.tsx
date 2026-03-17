@@ -181,8 +181,8 @@ const MolecularNetwork = () => {
       }
     }
 
-    // Hide unused bonds
-    for (let i = bIdx; i < bondCount.current; i++) {
+    // Hide ALL unused bonds (not just previous count)
+    for (let i = bIdx; i < MAX_BONDS; i++) {
       dummy.position.set(0, 100, 0);
       dummy.scale.setScalar(0);
       dummy.updateMatrix();
