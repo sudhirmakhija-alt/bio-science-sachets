@@ -13,15 +13,15 @@ interface StageColors {
 }
 
 const STAGE_COLORS: Record<string, StageColors> = {
-  hero:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.6,  lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.25 },
-  xray:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5,  lineOpacity: 0.12, glowNode: "#c0c4cc", glowOpacity: 0.20 },
-  origin:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.4,  lineOpacity: 0.10, glowNode: "#c0c4cc", glowOpacity: 0.15 },
-  organ:    { node: "#f2c4b8", line: "#f2c4b8", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#e8a090", glowOpacity: 0.30 },
-  gut:      { node: "#b8e8c0", line: "#b8e8c0", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#80d090", glowOpacity: 0.30 },
-  omega:    { node: "#b8d4f2", line: "#b8d4f2", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#90b8e0", glowOpacity: 0.30 },
-  dosing:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5,  lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.20 },
-  science:  { node: "#7ec8a0", line: "#7ec8a0", nodeOpacity: 0.7,  lineOpacity: 0.30, glowNode: "#5cb880", glowOpacity: 0.40 },
-  products: { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5,  lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.20 },
+  hero:     { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.9,  lineOpacity: 0.35, glowNode: "#8090a0", glowOpacity: 0.5  },
+  xray:     { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.8,  lineOpacity: 0.30, glowNode: "#8090a0", glowOpacity: 0.45 },
+  origin:   { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.7,  lineOpacity: 0.25, glowNode: "#8090a0", glowOpacity: 0.35 },
+  organ:    { node: "#e8a090", line: "#e8a090", nodeOpacity: 0.85, lineOpacity: 0.35, glowNode: "#d08070", glowOpacity: 0.5  },
+  gut:      { node: "#70c880", line: "#70c880", nodeOpacity: 0.85, lineOpacity: 0.35, glowNode: "#50b060", glowOpacity: 0.5  },
+  omega:    { node: "#80b8e0", line: "#80b8e0", nodeOpacity: 0.85, lineOpacity: 0.35, glowNode: "#6098c8", glowOpacity: 0.5  },
+  dosing:   { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.8,  lineOpacity: 0.30, glowNode: "#8090a0", glowOpacity: 0.45 },
+  science:  { node: "#50b878", line: "#50b878", nodeOpacity: 0.95, lineOpacity: 0.45, glowNode: "#40a068", glowOpacity: 0.6  },
+  products: { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.8,  lineOpacity: 0.30, glowNode: "#8090a0", glowOpacity: 0.45 },
 };
 
 // ─── Node interface ────────────────────────────────────────────────────────────
