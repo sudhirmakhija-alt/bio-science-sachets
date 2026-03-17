@@ -52,16 +52,13 @@ const AboutSection = () => {
             </div>
 
             <ul className="space-y-4 mb-8">
-              <li className="flex items-start gap-3 text-sm text-foreground">
-                <div className="w-1 h-1 bg-foreground mt-2 shrink-0" />
+              <li className="border-l-[3px] border-gut pl-4 text-sm text-foreground">
                 Vet-led formulations built specifically for dogs
               </li>
-              <li className="flex items-start gap-3 text-sm text-foreground">
-                <div className="w-1 h-1 bg-foreground mt-2 shrink-0" />
+              <li className="border-l-[3px] border-gut pl-4 text-sm text-foreground">
                 Designed for Indian diets, lifestyles and climates
               </li>
-              <li className="flex items-start gap-3 text-sm text-foreground">
-                <div className="w-1 h-1 bg-foreground mt-2 shrink-0" />
+              <li className="border-l-[3px] border-gut pl-4 text-sm text-foreground">
                 Clean-label, focused on meaningful functional ingredients
               </li>
             </ul>
