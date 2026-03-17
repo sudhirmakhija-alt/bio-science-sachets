@@ -12,6 +12,12 @@ const badges = [
   { icon: Sun, label: "Designed for Indian diets & climate" },
 ];
 
+const heroProducts = [
+  { src: organBalance, alt: "Organ Balance+", xOffset: "-55%", rotate: -8, scale: 0.75, zIndex: 1, shadow: "drop-shadow(0 12px 24px rgba(232,130,154,0.35))" },
+  { src: gutBalance, alt: "Gut Balance+", xOffset: "0%", rotate: 0, scale: 1, zIndex: 3, shadow: "drop-shadow(0 12px 24px rgba(93,184,122,0.35))" },
+  { src: omegaBalance, alt: "Omega Balance+", xOffset: "55%", rotate: 8, scale: 0.75, zIndex: 1, shadow: "drop-shadow(0 12px 24px rgba(106,174,214,0.35))" },
+];
+
 const products = [
   { src: organBalance, alt: "Organ Balance+ packaging", delay: 0, ringColor: "#f2c4b8", ringSpeed: 0.3 },
   { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15, ringColor: "#b8e8c0", ringSpeed: 0.22 },
