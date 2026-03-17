@@ -46,7 +46,7 @@ const products = [
   subtitle: "Marine-derived omega topper",
   description:
   "Omega Balance+ is a marine-derived topper with green-lipped mussel (GLM) and omega fatty acids to support joint comfort, skin and coat health and overall cardiovascular and brain function in dogs.",
-  color: "omega" as const,
+  image: omegaProduct,
   bullets: [
   "Designed for dogs with emerging joint stiffness or reduced willingness to jump or climb stairs",
   "Supplies EPA and DHA omega-3 fatty acids that help support normal inflammatory balance in joints and tissues",
