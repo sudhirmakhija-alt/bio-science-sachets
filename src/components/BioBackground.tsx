@@ -88,6 +88,9 @@ const MolecularNetwork = () => {
     (ringMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current;
     (coreMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.4;
     (bondMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.7;
+    (bondMesh.material as THREE.MeshStandardMaterial).emissive.copy(currentColor.current);
+    (glowMesh.material as THREE.MeshBasicMaterial).opacity = currentOpacity.current * 0.15;
+    (glowMesh.material as THREE.MeshBasicMaterial).color.copy(currentColor.current);
 
     // Convert mouse to world-ish coords
     const cursorX = mouseX * 8;
