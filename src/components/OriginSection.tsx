@@ -65,9 +65,9 @@ const OriginSection = () => {
               { value: '<25°C', label: 'Storage Standard' },
               { value: 'v5.2', label: 'Formulation' }].
               map((stat) =>
-              <div key={stat.label}>
-                  <div className="text-2xl font-black text-foreground">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground mt-1 tracking-wide uppercase">
+              <div key={stat.label} className="border-t border-border pt-4">
+                  <div className="font-black text-foreground" style={{ fontSize: '48px', lineHeight: 1 }}>{stat.value}</div>
+                  <div className="text-muted-foreground mt-2 tracking-widest uppercase" style={{ fontSize: '11px' }}>
                     {stat.label}
                   </div>
                 </div>
