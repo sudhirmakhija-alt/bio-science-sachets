@@ -76,7 +76,7 @@ const lerpColor = (a: string, b: string, t: number) => {
 
 const createNode = (w: number, h: number, isPermanent: boolean, labelIdx: number): MolNode => {
   const isGlow = Math.random() < 1 / 6;
-  const radius = isGlow ? rand(5, 6) : rand(2, 4);
+  const radius = isGlow ? rand(6, 8) : rand(3, 5);
 
   if (isPermanent) {
     return {
