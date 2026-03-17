@@ -109,8 +109,9 @@ const DosingCalculator = () => {
 
           <button
             onClick={handleCalculate}
-            className="w-full py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity mb-8"
+            className="w-full py-4 rounded-full bg-gradient-to-r from-gut to-omega text-white font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity mb-8 inline-flex items-center justify-center gap-2"
           >
+            <PawPrint className="w-4 h-4" />
             Calculate suggested daily sachets
           </button>
 
