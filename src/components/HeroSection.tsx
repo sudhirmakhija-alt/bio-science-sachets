@@ -40,7 +40,7 @@ const HeroSection = () => {
 
   return (
     <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)' }}>
-      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
+      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -109,7 +109,7 @@ const HeroSection = () => {
         </motion.div>
 
         {/* Product visuals — centered below */}
-        <div className="lg:col-span-2 flex items-center justify-center mt-8" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
+        <div className="flex items-center justify-center" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
           <div className="relative flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
             {products.map((product, i) => (
               <motion.div
