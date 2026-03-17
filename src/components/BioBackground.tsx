@@ -6,12 +6,12 @@ import * as THREE from "three";
 // ─── Color palette from reference (navy, medium blue, light blue, grey) ────────
 
 const nodeColors = [
-  new THREE.Color(0.08, 0.12, 0.22),  // dark navy
-  new THREE.Color(0.10, 0.18, 0.32),  // navy
-  new THREE.Color(0.25, 0.45, 0.62),  // medium blue
-  new THREE.Color(0.42, 0.65, 0.78),  // light blue
-  new THREE.Color(0.68, 0.82, 0.90),  // pale blue
-  new THREE.Color(0.55, 0.58, 0.60),  // grey
+  new THREE.Color(0.05, 0.08, 0.20),  // dark navy
+  new THREE.Color(0.08, 0.15, 0.30),  // navy
+  new THREE.Color(0.20, 0.42, 0.60),  // medium blue
+  new THREE.Color(0.38, 0.62, 0.78),  // light blue
+  new THREE.Color(0.65, 0.82, 0.92),  // pale blue
+  new THREE.Color(0.50, 0.52, 0.55),  // grey
 ];
 
 const bondColors = [
@@ -105,19 +105,19 @@ interface MolInstance {
 }
 
 const MOLECULE_INSTANCES: MolInstance[] = [
-  // Large ones
-  { cx: 2.5, cy: 1.5, cz: -1, scale: 2.8, templateIdx: 0, phase: 0, orbitSpeed: 0.04, orbitRadius: 0.3, rotSpeed: 0.02 },
-  { cx: -4, cy: -2, cz: -2, scale: 2.0, templateIdx: 0, phase: 2.1, orbitSpeed: 0.05, orbitRadius: 0.25, rotSpeed: -0.015 },
+  // Large ones (scale reduced 80%)
+  { cx: 2.5, cy: 1.5, cz: -1, scale: 0.56, templateIdx: 0, phase: 0, orbitSpeed: 0.04, orbitRadius: 0.3, rotSpeed: 0.02 },
+  { cx: -4, cy: -2, cz: -2, scale: 0.40, templateIdx: 0, phase: 2.1, orbitSpeed: 0.05, orbitRadius: 0.25, rotSpeed: -0.015 },
   // Medium
-  { cx: -2, cy: 3.5, cz: -1.5, scale: 1.8, templateIdx: 1, phase: 1.2, orbitSpeed: 0.06, orbitRadius: 0.35, rotSpeed: 0.025 },
-  { cx: 5, cy: -1, cz: -0.5, scale: 1.6, templateIdx: 1, phase: 3.5, orbitSpeed: 0.05, orbitRadius: 0.3, rotSpeed: -0.02 },
-  { cx: -5.5, cy: 1, cz: -2, scale: 1.4, templateIdx: 2, phase: 0.8, orbitSpeed: 0.07, orbitRadius: 0.2, rotSpeed: 0.03 },
+  { cx: -2, cy: 3.5, cz: -1.5, scale: 0.36, templateIdx: 1, phase: 1.2, orbitSpeed: 0.06, orbitRadius: 0.35, rotSpeed: 0.025 },
+  { cx: 5, cy: -1, cz: -0.5, scale: 0.32, templateIdx: 1, phase: 3.5, orbitSpeed: 0.05, orbitRadius: 0.3, rotSpeed: -0.02 },
+  { cx: -5.5, cy: 1, cz: -2, scale: 0.28, templateIdx: 2, phase: 0.8, orbitSpeed: 0.07, orbitRadius: 0.2, rotSpeed: 0.03 },
   // Small
-  { cx: 6, cy: 3, cz: -1, scale: 1.0, templateIdx: 2, phase: 4.2, orbitSpeed: 0.08, orbitRadius: 0.4, rotSpeed: -0.03 },
-  { cx: -6, cy: -3.5, cz: -1, scale: 0.9, templateIdx: 3, phase: 1.8, orbitSpeed: 0.09, orbitRadius: 0.35, rotSpeed: 0.04 },
-  { cx: 3, cy: -4, cz: -2, scale: 1.1, templateIdx: 3, phase: 5.0, orbitSpeed: 0.07, orbitRadius: 0.3, rotSpeed: -0.025 },
-  { cx: -3, cy: -5, cz: -1.5, scale: 0.8, templateIdx: 3, phase: 2.5, orbitSpeed: 0.1, orbitRadius: 0.25, rotSpeed: 0.035 },
-  { cx: 7, cy: 0, cz: -2, scale: 0.7, templateIdx: 3, phase: 3.8, orbitSpeed: 0.08, orbitRadius: 0.3, rotSpeed: -0.04 },
+  { cx: 6, cy: 3, cz: -1, scale: 0.20, templateIdx: 2, phase: 4.2, orbitSpeed: 0.08, orbitRadius: 0.4, rotSpeed: -0.03 },
+  { cx: -6, cy: -3.5, cz: -1, scale: 0.18, templateIdx: 3, phase: 1.8, orbitSpeed: 0.09, orbitRadius: 0.35, rotSpeed: 0.04 },
+  { cx: 3, cy: -4, cz: -2, scale: 0.22, templateIdx: 3, phase: 5.0, orbitSpeed: 0.07, orbitRadius: 0.3, rotSpeed: -0.025 },
+  { cx: -3, cy: -5, cz: -1.5, scale: 0.16, templateIdx: 3, phase: 2.5, orbitSpeed: 0.1, orbitRadius: 0.25, rotSpeed: 0.035 },
+  { cx: 7, cy: 0, cz: -2, scale: 0.14, templateIdx: 3, phase: 3.8, orbitSpeed: 0.08, orbitRadius: 0.3, rotSpeed: -0.04 },
 ];
 
 // Count total atoms and bonds
@@ -239,7 +239,7 @@ const MolecularClusters = () => {
         const mz = (p0.z + p1.z) / 2;
         const len = p0.distanceTo(p1);
 
-        const thickness = 0.035 * inst.scale;
+        const thickness = 0.06 * inst.scale;
         dummy.position.set(mx, my, mz);
         dummy.scale.set(thickness, len, thickness);
         dummy.lookAt(p1.x, p1.y, p1.z);
@@ -274,9 +274,9 @@ const MolecularClusters = () => {
         <sphereGeometry args={[1, 24, 24]} />
         <meshStandardMaterial
           transparent
-          opacity={0.7}
-          roughness={0.35}
-          metalness={0.1}
+          opacity={0.85}
+          roughness={0.25}
+          metalness={0.05}
           depthWrite={false}
         />
       </instancedMesh>
