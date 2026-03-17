@@ -38,7 +38,7 @@ const HeroSection = () => {
   const scaleValues = [scale0, scale1, scale2];
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
+    <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-12">
       <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
