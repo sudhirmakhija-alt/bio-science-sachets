@@ -34,7 +34,7 @@ const products = [
   bullets: [
   "Suited for dogs with soft stool, variable stool quality or occasional digestive upsets",
   "Combines functional fibres, prebiotics and selected actives to support beneficial gut bacteria and comfortable digestion",
-  "Helps promote firmer, more consistent stools and may reduce mild nausea or discomfort associated with diet changes",
+  "Helps promote firmer, more consistent stools and reduces mild nausea or discomfort associated with diet changes",
   "Gentle enough for long-term daily use alongside regular food and veterinary care"],
 
   usage:
@@ -53,7 +53,7 @@ const products = [
   bullets: [
   "Designed for dogs with emerging joint stiffness or reduced willingness to jump or climb stairs",
   "Supplies EPA and DHA omega-3 fatty acids that help support normal inflammatory balance in joints and tissues",
-  "Green-lipped mussel adds bioactive compounds that may help maintain mobility in active and ageing dogs",
+  "Green-lipped mussel adds bioactive compounds that help maintain mobility in active and ageing dogs",
   "Omega-3s also support healthy skin and coat, and normal heart and brain function with consistent use"],
 
   usage:
