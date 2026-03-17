@@ -266,7 +266,7 @@ const MolecularNetwork = () => {
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
               ctx.strokeStyle = `rgba(${lineColor.r},${lineColor.g},${lineColor.b},${alpha})`;
-              ctx.lineWidth = 0.7;
+              ctx.lineWidth = 1;
               ctx.stroke();
             }
           }
