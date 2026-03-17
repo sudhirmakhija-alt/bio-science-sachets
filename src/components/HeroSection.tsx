@@ -35,6 +35,7 @@ const HeroSection = () => {
   const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
+  const scaleValues = [scale0, scale1, scale2];
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
