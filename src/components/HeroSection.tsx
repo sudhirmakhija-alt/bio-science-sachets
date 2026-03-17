@@ -1,9 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ShieldCheck, Factory, Sun } from "lucide-react";
 import { useRef } from "react";
-import organBalance from "@/assets/organ-balance.png";
-import gutBalance from "@/assets/gut-balance.png";
-import omegaBalance from "@/assets/omega-balance.png";
+import organBalance from "@/assets/organ-balance-new.png";
+import gutBalance from "@/assets/gut-balance-new.png";
+import omegaBalance from "@/assets/omega-balance-new.png";
 
 const badges = [
   { icon: ShieldCheck, label: "Vet-formulated" },
