@@ -357,7 +357,7 @@ const BioBackground = () => (
       style={{ background: "transparent" }}
     >
       <StudioLighting />
-      <MicroSpheres />
+      <MolecularStructures />
       <CrystallineStructures />
       <DosingOrbitSachets />
     </Canvas>
