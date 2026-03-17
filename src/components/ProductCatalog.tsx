@@ -1,5 +1,8 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import organProduct from "@/assets/organ-product.png";
+import gutProduct from "@/assets/gut-product.png";
+import omegaProduct from "@/assets/omega-product.png";
 
 const products = [
 {
@@ -7,6 +10,7 @@ const products = [
   subtitle: "Daily organ-based topper",
   description:
   "Organ Balance+ is a dehydrated, organ-based topper that helps support overall vitality, natural micronutrient intake and immune function in dogs.",
+  image: organProduct,
   color: "organ" as const,
   bullets: [
   "Ideal for dogs on kibble or vegetarian home-cooked diets that miss out on organ meats",
@@ -25,6 +29,7 @@ const products = [
   subtitle: "Daily gut support topper",
   description:
   "Gut Balance+ is a 100% vegetarian, gut-friendly topper formulated to support healthy digestion, stool consistency and gut lining integrity in dogs.",
+  image: gutProduct,
   color: "gut" as const,
   bullets: [
   "Suited for dogs with soft stool, variable stool quality or occasional digestive upsets",
@@ -43,6 +48,7 @@ const products = [
   subtitle: "Marine-derived omega topper",
   description:
   "Omega Balance+ is a marine-derived topper with green-lipped mussel (GLM) and omega fatty acids to support joint comfort, skin and coat health and overall cardiovascular and brain function in dogs.",
+  image: omegaProduct,
   color: "omega" as const,
   bullets: [
   "Designed for dogs with emerging joint stiffness or reduced willingness to jump or climb stairs",
@@ -113,7 +119,18 @@ const ProductCatalog = () => {
                 <div className={`h-1 ${cls.accent}`} />
 
                 <div className="p-8 md:p-12">
-                  <div className="grid lg:grid-cols-2 gap-10">
+                  <div className="grid lg:grid-cols-[auto_1fr_1fr] gap-10 items-start">
+                    {/* Product image */}
+                    <div className="flex items-center justify-center lg:justify-start">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-32 md:w-40 lg:w-44 object-contain"
+                        style={{
+                          filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.10)) drop-shadow(0 2px 8px rgba(0,0,0,0.06))",
+                        }}
+                      />
+                    </div>
                     {/* Left — info */}
                     <div>
                       <div className={`text-xs font-semibold tracking-[0.2em] uppercase ${cls.text} mb-3`}>
