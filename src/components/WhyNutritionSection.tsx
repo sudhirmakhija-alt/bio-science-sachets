@@ -14,7 +14,7 @@ const chips = [
 
 const WhyNutritionSection = () => {
   return (
-    <section id="why" className="section-padding bg-background/65 backdrop-blur-sm my-0">
+    <section id="why" className="section-padding backdrop-blur-sm my-0" style={{ backgroundColor: '#f5f7f2' }}>
       <div className="max-w-[1400px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
