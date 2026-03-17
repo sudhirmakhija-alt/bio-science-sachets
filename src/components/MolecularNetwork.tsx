@@ -294,7 +294,7 @@ const MolecularNetwork = () => {
       // Nodes
       const time = timestamp / 1000;
       for (const n of nodes) {
-        const baseAlpha = isHero ? 0.55 : nodeOp;
+        const baseAlpha = isHero ? (n.isGlow ? 0.75 : 0.55) : nodeOp;
         const alpha = baseAlpha * n.opacity;
         if (alpha < 0.01) continue;
 
