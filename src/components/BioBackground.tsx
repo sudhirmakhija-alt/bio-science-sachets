@@ -72,7 +72,8 @@ const MolecularNetwork = () => {
     const ringMesh = ringRef.current;
     const coreMesh = coreRef.current;
     const bondMesh = bondRef.current;
-    if (!ringMesh || !coreMesh || !bondMesh) return;
+    const glowMesh = glowRef.current;
+    if (!ringMesh || !coreMesh || !bondMesh || !glowMesh) return;
 
     const t = clock.elapsedTime;
     const { stage, velocity, mouseX, mouseY } = scroll;
