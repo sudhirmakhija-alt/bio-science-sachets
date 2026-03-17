@@ -24,15 +24,15 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  const y0 = useTransform(scrollYProgress, [0, 1], [0, -500]);
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -750]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -350]);
-  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -15]);
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 12]);
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -10]);
-  const scale0 = useTransform(scrollYProgress, [0.5, 1], [1, 1.6]);
-  const scale1 = useTransform(scrollYProgress, [0.5, 1], [1, 1.8]);
-  const scale2 = useTransform(scrollYProgress, [0.5, 1], [1, 1.5]);
+  const y0 = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -4]);
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 3]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -3]);
+  const scale0 = useTransform(scrollYProgress, [0.6, 1], [1, 1.4]);
+  const scale1 = useTransform(scrollYProgress, [0.6, 1], [1, 1.5]);
+  const scale2 = useTransform(scrollYProgress, [0.6, 1], [1, 1.3]);
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
   const scaleValues = [scale0, scale1, scale2];
