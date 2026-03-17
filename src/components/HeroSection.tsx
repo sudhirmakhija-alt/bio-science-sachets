@@ -1,7 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ShieldCheck, Factory, Sun } from "lucide-react";
-import heroPackaging from "@/assets/hero-packaging.png";
-import sachetSingle from "@/assets/sachet-single.png";
+import { useRef } from "react";
+import organBalance from "@/assets/organ-balance.png";
+import gutBalance from "@/assets/gut-balance.png";
+import omegaBalance from "@/assets/omega-balance.png";
 
 const badges = [
   { icon: ShieldCheck, label: "Vet-formulated" },
