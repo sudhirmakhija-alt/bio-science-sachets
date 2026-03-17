@@ -83,7 +83,7 @@ const MolecularRing = ({ color, size = 280, speed = 0.3, nodeCount = 6 }: Molecu
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none"
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
       style={{ width: size, height: size }}
     />
   );
