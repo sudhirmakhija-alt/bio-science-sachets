@@ -122,7 +122,7 @@ const HeroSection = () => {
                 <img
                   src={product.src}
                   alt={product.alt}
-                  className={`w-[48rem] md:w-[56rem] lg:w-[64rem] object-contain ${i === 1 ? "scale-110" : ""}`}
+                  className={`w-56 md:w-72 lg:w-[22rem] object-contain ${i === 1 ? "scale-110" : ""}`}
                   style={{
                     filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.18)) drop-shadow(0 15px 30px rgba(0,0,0,0.10))",
                   }}
