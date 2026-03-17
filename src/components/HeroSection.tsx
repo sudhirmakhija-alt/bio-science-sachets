@@ -47,7 +47,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-8 mt-6 md:mt-0">
             <span className="w-2 h-2 rounded-full bg-gut" />
             <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground">
               Vet-formulated daily toppers for Indian dogs
