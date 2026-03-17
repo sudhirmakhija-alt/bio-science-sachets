@@ -52,6 +52,11 @@ const SPAWN_INTERVAL_MAX = 6000;
 const TEMP_NODE_LIFE_MIN = 12;
 const TEMP_NODE_LIFE_MAX = 15;
 const LABELS = ["EPA", "DHA", "GLM", "MSM", "CFU"];
+const GLOW_NODE_MIN = 10;
+const GLOW_NODE_MAX = 12;
+const NORMAL_NODE_MIN = 3;
+const NORMAL_NODE_MAX = 5;
+const PULSE_PERIOD = 3; // seconds for full pulse cycle
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
