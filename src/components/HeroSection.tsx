@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ShieldCheck, Factory, Sun } from "lucide-react";
+import { ShieldCheck, Factory, Sun, Microscope, Dog } from "lucide-react";
 import { useRef } from "react";
 import organBalance from "@/assets/organ-balance-new.png";
 import gutBalance from "@/assets/gut-balance-new.png";
