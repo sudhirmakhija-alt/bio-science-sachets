@@ -116,7 +116,7 @@ const ProductCatalog = () => {
                 className="border border-border bg-background">
                 
                 {/* Color accent bar */}
-                <div className={`h-1 ${cls.accent}`} />
+                <div className={`h-1 ${cls.accent}`} style={{ height: '4px' }} />
 
                 <div className="p-8 md:p-12">
                   <div className="grid lg:grid-cols-[auto_1fr_1fr] gap-10 items-start">
