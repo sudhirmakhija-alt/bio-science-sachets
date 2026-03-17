@@ -274,9 +274,9 @@ const MolecularClusters = () => {
         <sphereGeometry args={[1, 24, 24]} />
         <meshStandardMaterial
           transparent
-          opacity={0.7}
-          roughness={0.35}
-          metalness={0.1}
+          opacity={0.85}
+          roughness={0.25}
+          metalness={0.05}
           depthWrite={false}
         />
       </instancedMesh>
