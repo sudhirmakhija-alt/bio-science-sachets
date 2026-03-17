@@ -10,7 +10,7 @@ const Footer = () => {
             <p className="text-background/60 text-sm leading-relaxed px-0 mx-0">Clinical daily nutrition support for Indian dogs. Based in India.</p>
           </div>
 
-          <nav className="flex flex-col gap-3 px-[30px]">
+          <nav className="flex flex-col gap-[12px] px-0">
             {[
             { label: "Products", href: "#products" },
             { label: "Science", href: "#science" },
@@ -32,7 +32,7 @@ const Footer = () => {
               href="https://amazon.in/biologica"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-background text-foreground font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity">
+              className="inline-flex items-center gap-2 py-3 bg-background text-foreground font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity px-[30px]">
               
               Shop on Amazon India
               <ArrowRight className="w-4 h-4" />
