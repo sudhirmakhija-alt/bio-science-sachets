@@ -28,7 +28,7 @@ const products = [
   subtitle: "Daily gut support topper",
   description:
   "Gut Balance+ is a 100% vegetarian, gut-friendly topper formulated to support healthy digestion, stool consistency and gut lining integrity in dogs.",
-  color: "gut" as const,
+  image: gutProduct,
   bullets: [
   "Suited for dogs with soft stool, variable stool quality or occasional digestive upsets",
   "Combines functional fibres, prebiotics and selected actives to support beneficial gut bacteria and comfortable digestion",
