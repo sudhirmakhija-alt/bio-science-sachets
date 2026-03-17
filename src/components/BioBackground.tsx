@@ -3,112 +3,212 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useScrollState } from "./ScrollContext";
 import * as THREE from "three";
 
-const SPHERE_COUNT = 100;
-const CRYSTAL_COUNT = 16;
+const MOLECULE_COUNT = 18;
+const ATOMS_PER_MOLECULE = 5;
+const BONDS_PER_MOLECULE = 4;
+const TOTAL_ATOMS = MOLECULE_COUNT * ATOMS_PER_MOLECULE;
+const TOTAL_BONDS = MOLECULE_COUNT * BONDS_PER_MOLECULE;
 
 /** Stage color palettes (RGB 0-1) */
 const stageColors: Record<string, [number, number, number]> = {
-  hero:     [0.01, 0.52, 0.78],   // Marine Blue
-  xray:     [0.50, 0.50, 0.52],   // Neutral Grey
-  origin:   [0.82, 0.62, 0.28],   // Warm Amber
-  dosing:   [0.01, 0.52, 0.78],   // Marine Blue
-  science:  [0.09, 0.64, 0.29],   // Earth Green
-  products: [0.48, 0.48, 0.50],   // Neutral Grey
+  hero:     [0.01, 0.52, 0.78],
+  xray:     [0.50, 0.50, 0.52],
+  origin:   [0.82, 0.62, 0.28],
+  dosing:   [0.01, 0.52, 0.78],
+  science:  [0.09, 0.64, 0.29],
+  products: [0.48, 0.48, 0.50],
 };
 
-/** Speed multipliers per stage – xray = near halt for "Locked Integrity" */
+/** Speed multipliers per stage */
 const stageSpeed: Record<string, number> = {
   hero: 1, xray: 0.08, origin: 0.4, dosing: 0.9, science: 0.7, products: 0.5,
 };
 
-/** Opacity per stage – origin fades particles to create "Memory" aesthetic */
+/** Opacity per stage */
 const stageOpacity: Record<string, number> = {
   hero: 0.38, xray: 0.25, origin: 0.12, dosing: 0.4, science: 0.35, products: 0.2,
 };
 
-// ─── Micro-Spheres ─────────────────────────────────────────────────────────────
+// Molecular layout templates (local offsets for atoms)
+const moleculeTemplates = [
+  // Tetrahedral-ish
+  [
+    [0, 0, 0],
+    [0.35, 0.25, 0],
+    [-0.3, 0.3, 0.1],
+    [0.1, -0.35, 0.15],
+    [-0.2, -0.15, -0.2],
+  ],
+  // Linear chain
+  [
+    [-0.4, 0, 0],
+    [-0.15, 0.15, 0],
+    [0.1, -0.1, 0],
+    [0.35, 0.1, 0.1],
+    [0.55, -0.05, -0.1],
+  ],
+  // Ring-ish
+  [
+    [0, 0.3, 0],
+    [0.28, 0.1, 0],
+    [0.18, -0.25, 0],
+    [-0.18, -0.25, 0],
+    [-0.28, 0.1, 0],
+  ],
+];
 
-const MicroSpheres = () => {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
+// Bond connections (indices into atom array)
+const bondConnections = [
+  [0, 1], [1, 2], [2, 3], [3, 4],
+];
+
+// ─── Molecular Structures ──────────────────────────────────────────────────────
+
+const MolecularStructures = () => {
+  const atomRef = useRef<THREE.InstancedMesh>(null);
+  const bondRef = useRef<THREE.InstancedMesh>(null);
   const scroll = useScrollState();
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const currentColor = useRef(new THREE.Color(...stageColors.hero));
   const currentOpacity = useRef(0.38);
 
-  const particles = useMemo(() =>
-    Array.from({ length: SPHERE_COUNT }, () => ({
+  const molecules = useMemo(() =>
+    Array.from({ length: MOLECULE_COUNT }, () => ({
       x: (Math.random() - 0.5) * 18,
       y: (Math.random() - 0.5) * 14,
       z: (Math.random() - 0.5) * 12 - 2,
-      scale: 0.025 + Math.random() * 0.11,
+      scale: 0.4 + Math.random() * 0.6,
       phase: Math.random() * Math.PI * 2,
       speed: 0.25 + Math.random() * 0.6,
-      drift: (Math.random() - 0.5) * 0.003,
+      rotSpeed: (Math.random() - 0.5) * 0.3,
+      template: Math.floor(Math.random() * moleculeTemplates.length),
     })), []);
 
   useFrame(({ clock }) => {
-    const mesh = meshRef.current;
-    if (!mesh) return;
+    const atomMesh = atomRef.current;
+    const bondMesh = bondRef.current;
+    if (!atomMesh || !bondMesh) return;
     const t = clock.elapsedTime;
     const { stage, velocity, mouseX, mouseY } = scroll;
 
-    // Smooth color lerp
     const tc = stageColors[stage] ?? stageColors.hero;
     currentColor.current.lerp(new THREE.Color(tc[0], tc[1], tc[2]), 0.025);
 
-    // Smooth opacity
     const targetOp = stageOpacity[stage] ?? 0.35;
     currentOpacity.current += (targetOp - currentOpacity.current) * 0.03;
-    (mesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current;
+    (atomMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current;
+    (bondMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.6;
 
-    // Fluid dynamics: scroll velocity compresses Z
     const compression = 1 - Math.min(velocity * 0.007, 0.45);
     const speedMult = stageSpeed[stage] ?? 1;
 
-    for (let i = 0; i < SPHERE_COUNT; i++) {
-      const p = particles[i];
-      const st = t * p.speed * speedMult;
+    const tempPos = new THREE.Vector3();
+    const atomPositions: THREE.Vector3[] = [];
 
-      // Orbital + drift
-      const ox = Math.sin(st + p.phase) * 0.35 + Math.sin(st * 0.4) * 0.1;
-      const oy = Math.cos(st * 0.65 + p.phase) * 0.25;
+    // Place atoms
+    for (let m = 0; m < MOLECULE_COUNT; m++) {
+      const mol = molecules[m];
+      const st = t * mol.speed * speedMult;
+      const template = moleculeTemplates[mol.template];
 
-      // Mouse parallax (deeper particles move less)
-      const depthFactor = 1 + p.z * 0.06;
+      const ox = Math.sin(st + mol.phase) * 0.35;
+      const oy = Math.cos(st * 0.65 + mol.phase) * 0.25;
+      const depthFactor = 1 + mol.z * 0.06;
       const mx = mouseX * 0.6 * depthFactor;
       const my = mouseY * 0.6 * depthFactor;
 
-      dummy.position.set(p.x + ox + mx, p.y + oy + my, p.z * compression);
+      const baseX = mol.x + ox + mx;
+      const baseY = mol.y + oy + my;
+      const baseZ = mol.z * compression;
+      const rot = st * mol.rotSpeed;
 
-      // Scale with depth fade
-      const depthFade = Math.max(0.25, 1 - Math.abs(p.z) * 0.07);
-      dummy.scale.setScalar(p.scale * depthFade * (0.75 + compression * 0.5));
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
+      for (let a = 0; a < ATOMS_PER_MOLECULE; a++) {
+        const [lx, ly, lz] = template[a];
+        // Rotate local offset
+        const cosR = Math.cos(rot);
+        const sinR = Math.sin(rot);
+        const rx = lx * cosR - ly * sinR;
+        const ry = lx * sinR + ly * cosR;
 
-      // Per-instance color variation
-      const v = 0.8 + p.scale * 1.5;
-      mesh.setColorAt(i, new THREE.Color(
-        currentColor.current.r * v,
-        currentColor.current.g * v,
-        currentColor.current.b * v,
-      ));
+        const px = baseX + rx * mol.scale;
+        const py = baseY + ry * mol.scale;
+        const pz = baseZ + lz * mol.scale;
+
+        tempPos.set(px, py, pz);
+        atomPositions.push(tempPos.clone());
+
+        const idx = m * ATOMS_PER_MOLECULE + a;
+        dummy.position.copy(tempPos);
+        // Center atom larger, outer atoms smaller
+        const atomScale = a === 0 ? 0.06 * mol.scale : 0.04 * mol.scale;
+        dummy.scale.setScalar(atomScale);
+        dummy.updateMatrix();
+        atomMesh.setMatrixAt(idx, dummy.matrix);
+
+        const v = 0.8 + (a === 0 ? 0.3 : 0.15);
+        atomMesh.setColorAt(idx, new THREE.Color(
+          currentColor.current.r * v,
+          currentColor.current.g * v,
+          currentColor.current.b * v,
+        ));
+      }
+
+      // Place bonds
+      for (let b = 0; b < BONDS_PER_MOLECULE; b++) {
+        const [i0, i1] = bondConnections[b];
+        const p0 = atomPositions[m * ATOMS_PER_MOLECULE + i0];
+        const p1 = atomPositions[m * ATOMS_PER_MOLECULE + i1];
+
+        const midX = (p0.x + p1.x) / 2;
+        const midY = (p0.y + p1.y) / 2;
+        const midZ = (p0.z + p1.z) / 2;
+
+        const dx = p1.x - p0.x;
+        const dy = p1.y - p0.y;
+        const dz = p1.z - p0.z;
+        const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+        const bondIdx = m * BONDS_PER_MOLECULE + b;
+        dummy.position.set(midX, midY, midZ);
+        dummy.scale.set(0.012 * mol.scale, len, 0.012 * mol.scale);
+
+        // Orient cylinder along bond direction
+        dummy.lookAt(p1.x, p1.y, p1.z);
+        dummy.rotateX(Math.PI / 2);
+        dummy.updateMatrix();
+        bondMesh.setMatrixAt(bondIdx, dummy.matrix);
+      }
     }
-    mesh.instanceMatrix.needsUpdate = true;
-    if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+
+    atomMesh.instanceMatrix.needsUpdate = true;
+    if (atomMesh.instanceColor) atomMesh.instanceColor.needsUpdate = true;
+    bondMesh.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, SPHERE_COUNT]}>
-      <icosahedronGeometry args={[1, 2]} />
-      <meshStandardMaterial
-        transparent
-        opacity={0.38}
-        roughness={0.75}
-        metalness={0.08}
-        depthWrite={false}
-      />
-    </instancedMesh>
+    <>
+      <instancedMesh ref={atomRef} args={[undefined, undefined, TOTAL_ATOMS]}>
+        <icosahedronGeometry args={[1, 2]} />
+        <meshStandardMaterial
+          transparent
+          opacity={0.38}
+          roughness={0.5}
+          metalness={0.15}
+          depthWrite={false}
+        />
+      </instancedMesh>
+      <instancedMesh ref={bondRef} args={[undefined, undefined, TOTAL_BONDS]}>
+        <cylinderGeometry args={[1, 1, 1, 6]} />
+        <meshStandardMaterial
+          transparent
+          opacity={0.22}
+          roughness={0.6}
+          metalness={0.1}
+          color="#8899aa"
+          depthWrite={false}
+        />
+      </instancedMesh>
+    </>
   );
 };
 
