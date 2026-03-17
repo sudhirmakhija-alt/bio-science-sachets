@@ -24,14 +24,18 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  const y0 = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -40]);
-  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -4]);
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 3]);
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -2]);
+  const y0 = useTransform(scrollYProgress, [0, 1], [0, -180]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -280]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -8]);
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 6]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -5]);
+  const scale0 = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 0.85]);
+  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
+  const scaleValues = [scale0, scale1, scale2];
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
@@ -114,13 +118,13 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
-              style={{ y: yValues[i], rotate: rotateValues[i] }}
+              style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
             >
               <img
                 src={product.src}
                 alt={product.alt}
-                className={`w-28 md:w-36 lg:w-44 object-contain ${i === 1 ? "scale-110" : ""}`}
-                style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.10))" }}
+                className={`w-72 md:w-96 lg:w-[28rem] object-contain ${i === 1 ? "scale-110" : ""}`}
+                style={{ filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.12))" }}
               />
             </motion.div>
           ))}
