@@ -13,9 +13,9 @@ const badges = [
 ];
 
 const products = [
-  { src: organBalance, alt: "Organ Balance+ packaging", delay: 0 },
-  { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15 },
-  { src: omegaBalance, alt: "Omega Balance+ packaging", delay: 0.3 },
+  { src: organBalance, alt: "Organ Balance+ packaging", delay: 0, ringColor: "#f2c4b8", ringSpeed: 0.3 },
+  { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15, ringColor: "#b8e8c0", ringSpeed: 0.22 },
+  { src: omegaBalance, alt: "Omega Balance+ packaging", delay: 0.3, ringColor: "#b8d4f2", ringSpeed: 0.26 },
 ];
 
 const HeroSection = () => {
