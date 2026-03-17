@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-12">
           <div className="max-w-md">
             <h3 className="text-2xl font-black tracking-tight mb-4">BioLogica</h3>
-            <p className="text-background/60 text-sm leading-relaxed px-0 mx-0">Clinical daily nutrition support for Indian dogs. Based in India.</p>
+            <p className="text-background/60 text-sm leading-relaxed px-0 mx-0 pr-[40px]">Clinical daily nutrition support for Indian dogs. Based in India.</p>
           </div>
 
           <nav className="flex flex-col gap-[12px] px-0">
