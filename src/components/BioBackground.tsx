@@ -3,258 +3,302 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useScrollState } from "./ScrollContext";
 import * as THREE from "three";
 
-/** Stage color palettes (RGB 0-1) */
-const stageColors: Record<string, [number, number, number]> = {
-  hero:     [0.01, 0.52, 0.78],
-  xray:     [0.50, 0.50, 0.52],
-  origin:   [0.82, 0.62, 0.28],
-  dosing:   [0.01, 0.52, 0.78],
-  science:  [0.09, 0.64, 0.29],
-  products: [0.48, 0.48, 0.50],
+// ─── Color palette from reference (navy, medium blue, light blue, grey) ────────
+
+const nodeColors = [
+  new THREE.Color(0.08, 0.12, 0.22),  // dark navy
+  new THREE.Color(0.10, 0.18, 0.32),  // navy
+  new THREE.Color(0.25, 0.45, 0.62),  // medium blue
+  new THREE.Color(0.42, 0.65, 0.78),  // light blue
+  new THREE.Color(0.68, 0.82, 0.90),  // pale blue
+  new THREE.Color(0.55, 0.58, 0.60),  // grey
+];
+
+const bondColors = [
+  new THREE.Color(0.10, 0.18, 0.32),  // navy bond
+  new THREE.Color(0.30, 0.50, 0.65),  // blue bond
+  new THREE.Color(0.50, 0.65, 0.75),  // light bond
+];
+
+/** Stage-driven opacity */
+const stageOpacity: Record<string, number> = {
+  hero: 0.7, xray: 0.4, origin: 0.25, dosing: 0.65, science: 0.5, products: 0.35,
 };
 
 const stageSpeed: Record<string, number> = {
   hero: 1, xray: 0.08, origin: 0.4, dosing: 0.9, science: 0.7, products: 0.5,
 };
 
-const stageOpacity: Record<string, number> = {
-  hero: 0.55, xray: 0.35, origin: 0.2, dosing: 0.55, science: 0.45, products: 0.3,
-};
+// ─── Molecule cluster definitions ──────────────────────────────────────────────
+// Each cluster is a pre-defined molecule shape (like the reference image)
 
-// ─── Dynamic Molecular Network ─────────────────────────────────────────────────
+interface MolCluster {
+  // Local atom positions and sizes
+  atoms: { lx: number; ly: number; lz: number; size: number; colorIdx: number }[];
+  // Bond pairs (indices into atoms)
+  bonds: [number, number][];
+}
 
-const NODE_COUNT = 40;
-const MAX_BONDS = 120; // max dynamic connections
-const BOND_DISTANCE = 2.8; // nodes within this distance get connected
-const CURSOR_RADIUS = 3.5; // radius of cursor influence
-const CURSOR_REPEL = 2.5; // repulsion strength
+const clusterTemplates: MolCluster[] = [
+  // Large central molecule (like the big one in reference)
+  {
+    atoms: [
+      { lx: 0, ly: 0, lz: 0, size: 0.22, colorIdx: 0 },
+      { lx: 0.5, ly: 0.35, lz: 0, size: 0.18, colorIdx: 1 },
+      { lx: -0.45, ly: 0.4, lz: 0, size: 0.16, colorIdx: 0 },
+      { lx: -0.55, ly: -0.3, lz: 0, size: 0.20, colorIdx: 1 },
+      { lx: 0.15, ly: -0.5, lz: 0, size: 0.15, colorIdx: 2 },
+      { lx: 0.7, ly: -0.15, lz: 0, size: 0.22, colorIdx: 0 },
+      { lx: 1.1, ly: 0.2, lz: 0, size: 0.14, colorIdx: 3 },
+      { lx: -0.9, ly: 0.15, lz: 0, size: 0.12, colorIdx: 2 },
+      { lx: 0.3, ly: 0.75, lz: 0, size: 0.20, colorIdx: 3 },
+      { lx: -0.2, ly: 0.8, lz: 0, size: 0.10, colorIdx: 4 },
+    ],
+    bonds: [[0,1],[0,2],[0,3],[0,4],[1,5],[5,6],[2,7],[1,8],[8,9],[3,4]],
+  },
+  // Medium branching molecule
+  {
+    atoms: [
+      { lx: 0, ly: 0, lz: 0, size: 0.16, colorIdx: 1 },
+      { lx: 0.4, ly: 0.3, lz: 0, size: 0.12, colorIdx: 0 },
+      { lx: -0.35, ly: 0.25, lz: 0, size: 0.14, colorIdx: 2 },
+      { lx: -0.3, ly: -0.35, lz: 0, size: 0.10, colorIdx: 0 },
+      { lx: 0.35, ly: -0.25, lz: 0, size: 0.12, colorIdx: 3 },
+      { lx: 0.7, ly: 0.1, lz: 0, size: 0.08, colorIdx: 4 },
+      { lx: -0.6, ly: -0.15, lz: 0, size: 0.08, colorIdx: 1 },
+    ],
+    bonds: [[0,1],[0,2],[0,3],[0,4],[1,5],[3,6]],
+  },
+  // Small compact molecule
+  {
+    atoms: [
+      { lx: 0, ly: 0, lz: 0, size: 0.12, colorIdx: 0 },
+      { lx: 0.3, ly: 0.2, lz: 0, size: 0.08, colorIdx: 2 },
+      { lx: -0.25, ly: 0.2, lz: 0, size: 0.08, colorIdx: 1 },
+      { lx: 0, ly: -0.3, lz: 0, size: 0.10, colorIdx: 3 },
+      { lx: 0.3, ly: -0.15, lz: 0, size: 0.06, colorIdx: 4 },
+    ],
+    bonds: [[0,1],[0,2],[0,3],[3,4]],
+  },
+  // Tiny satellite
+  {
+    atoms: [
+      { lx: 0, ly: 0, lz: 0, size: 0.10, colorIdx: 5 },
+      { lx: 0.25, ly: 0.15, lz: 0, size: 0.06, colorIdx: 0 },
+      { lx: -0.2, ly: 0.18, lz: 0, size: 0.06, colorIdx: 2 },
+      { lx: -0.15, ly: -0.2, lz: 0, size: 0.05, colorIdx: 1 },
+    ],
+    bonds: [[0,1],[0,2],[0,3]],
+  },
+];
 
-interface NodeData {
-  homeX: number; homeY: number; homeZ: number;
-  x: number; y: number; z: number;
-  vx: number; vy: number; vz: number;
-  size: number; // 0=large, 1=medium, 2=small
+// ─── Molecule instances placed in world ────────────────────────────────────────
+
+interface MolInstance {
+  cx: number; cy: number; cz: number;
+  scale: number;
+  templateIdx: number;
   phase: number;
   orbitSpeed: number;
   orbitRadius: number;
+  rotSpeed: number;
 }
 
-const MolecularNetwork = () => {
-  const ringRef = useRef<THREE.InstancedMesh>(null);
-  const coreRef = useRef<THREE.InstancedMesh>(null);
+const MOLECULE_INSTANCES: MolInstance[] = [
+  // Large ones
+  { cx: 2.5, cy: 1.5, cz: -1, scale: 2.8, templateIdx: 0, phase: 0, orbitSpeed: 0.04, orbitRadius: 0.3, rotSpeed: 0.02 },
+  { cx: -4, cy: -2, cz: -2, scale: 2.0, templateIdx: 0, phase: 2.1, orbitSpeed: 0.05, orbitRadius: 0.25, rotSpeed: -0.015 },
+  // Medium
+  { cx: -2, cy: 3.5, cz: -1.5, scale: 1.8, templateIdx: 1, phase: 1.2, orbitSpeed: 0.06, orbitRadius: 0.35, rotSpeed: 0.025 },
+  { cx: 5, cy: -1, cz: -0.5, scale: 1.6, templateIdx: 1, phase: 3.5, orbitSpeed: 0.05, orbitRadius: 0.3, rotSpeed: -0.02 },
+  { cx: -5.5, cy: 1, cz: -2, scale: 1.4, templateIdx: 2, phase: 0.8, orbitSpeed: 0.07, orbitRadius: 0.2, rotSpeed: 0.03 },
+  // Small
+  { cx: 6, cy: 3, cz: -1, scale: 1.0, templateIdx: 2, phase: 4.2, orbitSpeed: 0.08, orbitRadius: 0.4, rotSpeed: -0.03 },
+  { cx: -6, cy: -3.5, cz: -1, scale: 0.9, templateIdx: 3, phase: 1.8, orbitSpeed: 0.09, orbitRadius: 0.35, rotSpeed: 0.04 },
+  { cx: 3, cy: -4, cz: -2, scale: 1.1, templateIdx: 3, phase: 5.0, orbitSpeed: 0.07, orbitRadius: 0.3, rotSpeed: -0.025 },
+  { cx: -3, cy: -5, cz: -1.5, scale: 0.8, templateIdx: 3, phase: 2.5, orbitSpeed: 0.1, orbitRadius: 0.25, rotSpeed: 0.035 },
+  { cx: 7, cy: 0, cz: -2, scale: 0.7, templateIdx: 3, phase: 3.8, orbitSpeed: 0.08, orbitRadius: 0.3, rotSpeed: -0.04 },
+];
+
+// Count total atoms and bonds
+let TOTAL_ATOMS = 0;
+let TOTAL_BONDS = 0;
+for (const inst of MOLECULE_INSTANCES) {
+  const t = clusterTemplates[inst.templateIdx];
+  TOTAL_ATOMS += t.atoms.length;
+  TOTAL_BONDS += t.bonds.length;
+}
+
+const CURSOR_RADIUS = 4;
+const CURSOR_REPEL = 1.8;
+
+// ─── MolecularClusters component ───────────────────────────────────────────────
+
+const MolecularClusters = () => {
+  const sphereRef = useRef<THREE.InstancedMesh>(null);
   const bondRef = useRef<THREE.InstancedMesh>(null);
   const glowRef = useRef<THREE.InstancedMesh>(null);
   const scroll = useScrollState();
   const dummy = useMemo(() => new THREE.Object3D(), []);
-  const currentColor = useRef(new THREE.Color(...stageColors.hero));
-  const currentOpacity = useRef(0.55);
+  const currentOpacity = useRef(0.7);
 
-  const nodes = useMemo<NodeData[]>(() =>
-    Array.from({ length: NODE_COUNT }, (_, i) => {
-      const x = (Math.random() - 0.5) * 20;
-      const y = (Math.random() - 0.5) * 14;
-      const z = (Math.random() - 0.5) * 6 - 1;
-      return {
-        homeX: x, homeY: y, homeZ: z,
-        x, y, z,
-        vx: 0, vy: 0, vz: 0,
-        size: i < 8 ? 0 : i < 22 ? 1 : 2, // mix of large, medium, small
-        phase: Math.random() * Math.PI * 2,
-        orbitSpeed: 0.06 + Math.random() * 0.12,
-        orbitRadius: 0.3 + Math.random() * 0.5,
-      };
-    }), []);
-
-  // Persistent bond count ref
-  const bondCount = useRef(0);
+  // Per-atom displacement for cursor interaction
+  const displacements = useMemo(() =>
+    Array.from({ length: TOTAL_ATOMS }, () => ({ dx: 0, dy: 0, vx: 0, vy: 0 })), []);
 
   useFrame(({ clock }) => {
-    const ringMesh = ringRef.current;
-    const coreMesh = coreRef.current;
+    const sphereMesh = sphereRef.current;
     const bondMesh = bondRef.current;
     const glowMesh = glowRef.current;
-    if (!ringMesh || !coreMesh || !bondMesh || !glowMesh) return;
+    if (!sphereMesh || !bondMesh || !glowMesh) return;
 
     const t = clock.elapsedTime;
-    const { stage, velocity, mouseX, mouseY } = scroll;
+    const { stage, mouseX, mouseY } = scroll;
     const speedMult = stageSpeed[stage] ?? 1;
 
-    const tc = stageColors[stage] ?? stageColors.hero;
-    currentColor.current.lerp(new THREE.Color(tc[0], tc[1], tc[2]), 0.035);
-
-    const targetOp = stageOpacity[stage] ?? 0.45;
+    const targetOp = stageOpacity[stage] ?? 0.5;
     currentOpacity.current += (targetOp - currentOpacity.current) * 0.04;
-
-    (ringMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current;
-    (coreMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.4;
-    (bondMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.7;
-    (bondMesh.material as THREE.MeshStandardMaterial).emissive.copy(currentColor.current);
+    (sphereMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current;
+    (bondMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.85;
     (glowMesh.material as THREE.MeshBasicMaterial).opacity = currentOpacity.current * 0.15;
-    (glowMesh.material as THREE.MeshBasicMaterial).color.copy(currentColor.current);
 
-    // Convert mouse to world-ish coords
     const cursorX = mouseX * 8;
     const cursorY = mouseY * 6;
 
-    // Update node positions with cursor interaction
-    for (let i = 0; i < NODE_COUNT; i++) {
-      const n = nodes[i];
-      const st = t * n.orbitSpeed * speedMult;
+    let atomIdx = 0;
+    let bondIdx = 0;
+    const atomWorldPositions: THREE.Vector3[] = [];
 
-      // Gentle orbital motion around home
-      const targetX = n.homeX + Math.sin(st + n.phase) * n.orbitRadius;
-      const targetY = n.homeY + Math.cos(st * 0.7 + n.phase) * n.orbitRadius;
-      const targetZ = n.homeZ + Math.sin(st * 0.3) * 0.15;
+    for (const inst of MOLECULE_INSTANCES) {
+      const template = clusterTemplates[inst.templateIdx];
+      const st = t * inst.orbitSpeed * speedMult;
 
-      // Cursor repulsion - break apart effect
-      const dx = n.x - cursorX;
-      const dy = n.y - cursorY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+      // Cluster center with gentle orbit
+      const cx = inst.cx + Math.sin(st + inst.phase) * inst.orbitRadius;
+      const cy = inst.cy + Math.cos(st * 0.7 + inst.phase) * inst.orbitRadius;
+      const cz = inst.cz;
+      const rot = st * inst.rotSpeed;
+      const cosR = Math.cos(rot);
+      const sinR = Math.sin(rot);
 
-      if (dist < CURSOR_RADIUS && dist > 0.01) {
-        const force = (1 - dist / CURSOR_RADIUS) * CURSOR_REPEL;
-        n.vx += (dx / dist) * force * 0.03;
-        n.vy += (dy / dist) * force * 0.03;
-      }
+      // Place atoms
+      const clusterAtomStart = atomIdx;
+      for (const atom of template.atoms) {
+        // Rotate local position
+        const rx = atom.lx * cosR - atom.ly * sinR;
+        const ry = atom.lx * sinR + atom.ly * cosR;
 
-      // Spring back to target (slower)
-      n.vx += (targetX - n.x) * 0.008;
-      n.vy += (targetY - n.y) * 0.008;
-      n.vz += (targetZ - n.z) * 0.008;
+        const baseX = cx + rx * inst.scale;
+        const baseY = cy + ry * inst.scale;
 
-      // Damping
-      n.vx *= 0.92;
-      n.vy *= 0.92;
-      n.vz *= 0.92;
+        // Cursor repulsion per atom
+        const d = displacements[atomIdx];
+        const adx = (baseX + d.dx) - cursorX;
+        const ady = (baseY + d.dy) - cursorY;
+        const adist = Math.sqrt(adx * adx + ady * ady);
 
-      n.x += n.vx;
-      n.y += n.vy;
-      n.z += n.vz;
-
-      // Size based on type (like the reference: big central nodes, medium, small)
-      const scale = n.size === 0 ? 0.18 : n.size === 1 ? 0.12 : 0.07;
-
-      // Ring (torus) for hollow circle look
-      dummy.position.set(n.x, n.y, n.z);
-      dummy.rotation.set(0, 0, 0); // face camera
-      dummy.scale.setScalar(scale);
-      dummy.updateMatrix();
-      ringMesh.setMatrixAt(i, dummy.matrix);
-
-      // Small core dot inside
-      dummy.scale.setScalar(scale * 0.3);
-      dummy.updateMatrix();
-      coreMesh.setMatrixAt(i, dummy.matrix);
-
-      // Color
-      const brightness = n.size === 0 ? 1.1 : n.size === 1 ? 0.95 : 0.8;
-      const col = new THREE.Color(
-        currentColor.current.r * brightness,
-        currentColor.current.g * brightness,
-        currentColor.current.b * brightness,
-      );
-      ringMesh.setColorAt(i, col);
-      coreMesh.setColorAt(i, col);
-    }
-
-    // Dynamic bonds - connect nearby nodes
-    let bIdx = 0;
-    for (let i = 0; i < NODE_COUNT && bIdx < MAX_BONDS; i++) {
-      for (let j = i + 1; j < NODE_COUNT && bIdx < MAX_BONDS; j++) {
-        const a = nodes[i];
-        const b = nodes[j];
-        const dx = b.x - a.x;
-        const dy = b.y - a.y;
-        const dz = b.z - a.z;
-        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-        if (dist < BOND_DISTANCE && dist > 0.1) {
-          const midX = (a.x + b.x) / 2;
-          const midY = (a.y + b.y) / 2;
-          const midZ = (a.z + b.z) / 2;
-
-          dummy.position.set(midX, midY, midZ);
-          // Thickness tapers with distance
-          const thickness = 0.04 * (1 - dist / BOND_DISTANCE) + 0.012;
-          dummy.scale.set(thickness, dist, thickness);
-          dummy.lookAt(b.x, b.y, b.z);
-          dummy.rotateX(Math.PI / 2);
-          dummy.updateMatrix();
-          bondMesh.setMatrixAt(bIdx, dummy.matrix);
-
-          // Glow: same position but thicker
-          dummy.scale.set(thickness * 3.5, dist, thickness * 3.5);
-          dummy.updateMatrix();
-          glowMesh.setMatrixAt(bIdx, dummy.matrix);
-          bIdx++;
+        if (adist < CURSOR_RADIUS && adist > 0.01) {
+          const force = (1 - adist / CURSOR_RADIUS) * CURSOR_REPEL;
+          d.vx += (adx / adist) * force * 0.025;
+          d.vy += (ady / adist) * force * 0.025;
         }
+
+        // Spring back
+        d.vx += -d.dx * 0.012;
+        d.vy += -d.dy * 0.012;
+        d.vx *= 0.93;
+        d.vy *= 0.93;
+        d.dx += d.vx;
+        d.dy += d.vy;
+
+        const wx = baseX + d.dx;
+        const wy = baseY + d.dy;
+        const wz = cz + atom.lz * inst.scale;
+
+        atomWorldPositions.push(new THREE.Vector3(wx, wy, wz));
+
+        const s = atom.size * inst.scale;
+        dummy.position.set(wx, wy, wz);
+        dummy.scale.setScalar(s);
+        dummy.rotation.set(0, 0, 0);
+        dummy.updateMatrix();
+        sphereMesh.setMatrixAt(atomIdx, dummy.matrix);
+
+        // Color from palette
+        sphereMesh.setColorAt(atomIdx, nodeColors[atom.colorIdx]);
+        atomIdx++;
+      }
+
+      // Place bonds
+      for (const [a, b] of template.bonds) {
+        const p0 = atomWorldPositions[clusterAtomStart + a];
+        const p1 = atomWorldPositions[clusterAtomStart + b];
+
+        const mx = (p0.x + p1.x) / 2;
+        const my = (p0.y + p1.y) / 2;
+        const mz = (p0.z + p1.z) / 2;
+        const len = p0.distanceTo(p1);
+
+        const thickness = 0.035 * inst.scale;
+        dummy.position.set(mx, my, mz);
+        dummy.scale.set(thickness, len, thickness);
+        dummy.lookAt(p1.x, p1.y, p1.z);
+        dummy.rotateX(Math.PI / 2);
+        dummy.updateMatrix();
+        bondMesh.setMatrixAt(bondIdx, dummy.matrix);
+
+        // Bond color: blend between the two atom colors
+        const cIdx = Math.min(template.atoms[a].colorIdx, 2);
+        bondMesh.setColorAt(bondIdx, bondColors[cIdx]);
+
+        // Glow layer
+        dummy.scale.set(thickness * 3, len, thickness * 3);
+        dummy.updateMatrix();
+        glowMesh.setMatrixAt(bondIdx, dummy.matrix);
+
+        bondIdx++;
       }
     }
 
-    // Hide ALL unused bonds (not just previous count)
-    for (let i = bIdx; i < MAX_BONDS; i++) {
-      dummy.position.set(0, 100, 0);
-      dummy.scale.setScalar(0);
-      dummy.updateMatrix();
-      bondMesh.setMatrixAt(i, dummy.matrix);
-      glowMesh.setMatrixAt(i, dummy.matrix);
-    }
-    bondCount.current = bIdx;
-
-    ringMesh.instanceMatrix.needsUpdate = true;
-    coreMesh.instanceMatrix.needsUpdate = true;
+    sphereMesh.instanceMatrix.needsUpdate = true;
     bondMesh.instanceMatrix.needsUpdate = true;
     glowMesh.instanceMatrix.needsUpdate = true;
-    if (ringMesh.instanceColor) ringMesh.instanceColor.needsUpdate = true;
-    if (coreMesh.instanceColor) coreMesh.instanceColor.needsUpdate = true;
+    if (sphereMesh.instanceColor) sphereMesh.instanceColor.needsUpdate = true;
+    if (bondMesh.instanceColor) bondMesh.instanceColor.needsUpdate = true;
   });
 
   return (
     <>
-      {/* Hollow ring nodes (torus) */}
-      <instancedMesh ref={ringRef} args={[undefined, undefined, NODE_COUNT]}>
-        <torusGeometry args={[1, 0.2, 12, 32]} />
+      {/* Solid spheres */}
+      <instancedMesh ref={sphereRef} args={[undefined, undefined, TOTAL_ATOMS]}>
+        <sphereGeometry args={[1, 24, 24]} />
         <meshStandardMaterial
           transparent
-          opacity={0.55}
-          roughness={0.4}
-          metalness={0.1}
-          depthWrite={false}
-          side={THREE.DoubleSide}
-        />
-      </instancedMesh>
-      {/* Small filled core dots */}
-      <instancedMesh ref={coreRef} args={[undefined, undefined, NODE_COUNT]}>
-        <sphereGeometry args={[1, 12, 12]} />
-        <meshStandardMaterial
-          transparent
-          opacity={0.25}
-          roughness={0.5}
+          opacity={0.7}
+          roughness={0.35}
           metalness={0.1}
           depthWrite={false}
         />
       </instancedMesh>
-      {/* Dynamic bonds - main */}
-      <instancedMesh ref={bondRef} args={[undefined, undefined, MAX_BONDS]}>
+      {/* Thick bonds */}
+      <instancedMesh ref={bondRef} args={[undefined, undefined, TOTAL_BONDS]}>
         <cylinderGeometry args={[1, 1, 1, 8]} />
         <meshStandardMaterial
           transparent
-          opacity={0.5}
+          opacity={0.65}
           roughness={0.3}
-          metalness={0.15}
+          metalness={0.1}
           depthWrite={false}
-          emissive={new THREE.Color(0.01, 0.52, 0.78)}
-          emissiveIntensity={0.35}
         />
       </instancedMesh>
-      {/* Bond glow layer */}
-      <instancedMesh ref={glowRef} args={[undefined, undefined, MAX_BONDS]}>
+      {/* Bond glow */}
+      <instancedMesh ref={glowRef} args={[undefined, undefined, TOTAL_BONDS]}>
         <cylinderGeometry args={[1, 1, 1, 6]} />
         <meshBasicMaterial
           transparent
-          opacity={0.12}
+          opacity={0.1}
           depthWrite={false}
-          color={new THREE.Color(0.01, 0.52, 0.78)}
+          color={new THREE.Color(0.25, 0.45, 0.65)}
         />
       </instancedMesh>
     </>
@@ -317,8 +361,8 @@ const DosingOrbitSachets = () => {
 
 const StudioLighting = () => (
   <>
-    <ambientLight intensity={0.65} />
-    <directionalLight position={[8, 10, 5]} intensity={0.85} color="#ffffff" />
+    <ambientLight intensity={0.7} />
+    <directionalLight position={[8, 10, 5]} intensity={0.9} color="#ffffff" />
     <directionalLight position={[-6, 4, -5]} intensity={0.3} color="#aabbcc" />
     <pointLight position={[0, -8, 4]} intensity={0.2} color="#eeddcc" />
   </>
@@ -335,7 +379,7 @@ const BioBackground = () => (
       style={{ background: "transparent" }}
     >
       <StudioLighting />
-      <MolecularNetwork />
+      <MolecularClusters />
       <DosingOrbitSachets />
     </Canvas>
     <div
