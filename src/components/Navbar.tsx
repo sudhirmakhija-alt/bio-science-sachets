@@ -32,7 +32,7 @@ const Navbar = () => {
           <img
             src={biologicaLogo}
             alt="BioLogica Pets"
-            className="h-7 w-auto" />
+            className="h-7 w-auto px-[15px]" />
           
         </a>
 
@@ -42,7 +42,7 @@ const Navbar = () => {
           <a
             key={link.href}
             href={link.href}
-            className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors">
+            className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors px-0">
             
               {link.label}
             </a>
