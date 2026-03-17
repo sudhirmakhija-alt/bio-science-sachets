@@ -108,14 +108,14 @@ const MolecularNetwork = () => {
 
       if (dist < CURSOR_RADIUS && dist > 0.01) {
         const force = (1 - dist / CURSOR_RADIUS) * CURSOR_REPEL;
-        n.vx += (dx / dist) * force * 0.08;
-        n.vy += (dy / dist) * force * 0.08;
+        n.vx += (dx / dist) * force * 0.03;
+        n.vy += (dy / dist) * force * 0.03;
       }
 
-      // Spring back to target
-      n.vx += (targetX - n.x) * 0.02;
-      n.vy += (targetY - n.y) * 0.02;
-      n.vz += (targetZ - n.z) * 0.02;
+      // Spring back to target (slower)
+      n.vx += (targetX - n.x) * 0.008;
+      n.vy += (targetY - n.y) * 0.008;
+      n.vz += (targetZ - n.z) * 0.008;
 
       // Damping
       n.vx *= 0.92;
