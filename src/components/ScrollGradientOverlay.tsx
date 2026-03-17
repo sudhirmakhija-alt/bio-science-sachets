@@ -5,7 +5,7 @@ import { useScrollState } from "./ScrollContext";
  * Surgical White → Laboratory Grey base, tinted per stage.
  */
 const stageGradients: Record<string, { from: string; to: string; blur: number }> = {
-  hero:     { from: "rgba(255,255,255,0.45)", to: "rgba(245,248,252,0.35)", blur: 0 },
+  hero:     { from: "rgba(255,255,255,0.14)", to: "rgba(245,248,252,0.10)", blur: 0 },
   xray:     { from: "rgba(248,248,248,0.50)", to: "rgba(238,238,240,0.40)", blur: 0 },
   origin:   { from: "rgba(255,250,240,0.50)", to: "rgba(248,240,225,0.40)", blur: 12 },
   organ:    { from: "rgba(255,248,245,0.45)", to: "rgba(252,242,238,0.35)", blur: 0 },
