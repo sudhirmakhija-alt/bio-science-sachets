@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { PawPrint } from "lucide-react";
 
 const WEIGHT_RANGES = [
   { min: 1, max: 5, sachets: 0.5 },
@@ -67,7 +68,7 @@ const DosingCalculator = () => {
                 placeholder="e.g. 12"
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
-                className="w-full h-12 px-4 border border-border bg-background text-foreground text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-foreground"
+                className="w-full h-12 px-5 border border-border/80 bg-background text-foreground text-sm rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-gut"
               />
             </div>
 
@@ -79,7 +80,7 @@ const DosingCalculator = () => {
               <select
                 value={lifeStage}
                 onChange={(e) => setLifeStage(e.target.value)}
-                className="w-full h-12 px-4 border border-border bg-background text-foreground text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-foreground appearance-none"
+                className="w-full h-12 px-5 border border-border/80 bg-background text-foreground text-sm rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-gut appearance-none"
               >
                 <option value="">Select life stage</option>
                 {LIFE_STAGES.map((s) => (
@@ -96,7 +97,7 @@ const DosingCalculator = () => {
               <select
                 value={goal}
                 onChange={(e) => setGoal(e.target.value)}
-                className="w-full h-12 px-4 border border-border bg-background text-foreground text-sm rounded-sm focus:outline-none focus:ring-1 focus:ring-foreground appearance-none"
+                className="w-full h-12 px-5 border border-border/80 bg-background text-foreground text-sm rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-gut appearance-none"
               >
                 <option value="">Select primary goal</option>
                 {GOALS.map((g) => (
@@ -108,8 +109,9 @@ const DosingCalculator = () => {
 
           <button
             onClick={handleCalculate}
-            className="w-full py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity mb-8"
+            className="w-full py-4 rounded-full bg-gradient-to-r from-gut to-omega text-white font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity mb-8 inline-flex items-center justify-center gap-2"
           >
+            <PawPrint className="w-4 h-4" />
             Calculate suggested daily sachets
           </button>
 
