@@ -30,9 +30,9 @@ const HeroSection = () => {
   const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -15]);
   const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 12]);
   const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -10]);
-  const scale0 = useTransform(scrollYProgress, [0, 0.5], [1, 1.4]);
-  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 1.5]);
-  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 1.3]);
+  const scale0 = useTransform(scrollYProgress, [0.5, 1], [1, 1.6]);
+  const scale1 = useTransform(scrollYProgress, [0.5, 1], [1, 1.8]);
+  const scale2 = useTransform(scrollYProgress, [0.5, 1], [1, 1.5]);
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
   const scaleValues = [scale0, scale1, scale2];
@@ -122,8 +122,10 @@ const HeroSection = () => {
                 <img
                   src={product.src}
                   alt={product.alt}
-                  className={`w-48 md:w-64 lg:w-80 object-contain ${i === 1 ? "scale-110" : ""}`}
-                  style={{ filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.12))" }}
+                  className={`w-56 md:w-72 lg:w-[22rem] object-contain ${i === 1 ? "scale-110" : ""}`}
+                  style={{
+                    filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.18)) drop-shadow(0 15px 30px rgba(0,0,0,0.10))",
+                  }}
                 />
               </motion.div>
             ))}
