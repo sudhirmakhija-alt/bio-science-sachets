@@ -11,9 +11,30 @@ const badges = [
   { icon: Sun, label: "Designed for Indian diets & climate" },
 ];
 
+const products = [
+  { src: organBalance, alt: "Organ Balance+ packaging", delay: 0 },
+  { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15 },
+  { src: omegaBalance, alt: "Omega Balance+ packaging", delay: 0.3 },
+];
+
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const y0 = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -4]);
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 3]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -2]);
+  const yValues = [y0, y1, y2];
+  const rotateValues = [rotate0, rotate1, rotate2];
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       <div className="section-padding w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
