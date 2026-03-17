@@ -178,6 +178,11 @@ const MolecularNetwork = () => {
           dummy.rotateX(Math.PI / 2);
           dummy.updateMatrix();
           bondMesh.setMatrixAt(bIdx, dummy.matrix);
+
+          // Glow: same position but thicker
+          dummy.scale.set(thickness * 3.5, dist, thickness * 3.5);
+          dummy.updateMatrix();
+          glowMesh.setMatrixAt(bIdx, dummy.matrix);
           bIdx++;
         }
       }
@@ -189,12 +194,14 @@ const MolecularNetwork = () => {
       dummy.scale.setScalar(0);
       dummy.updateMatrix();
       bondMesh.setMatrixAt(i, dummy.matrix);
+      glowMesh.setMatrixAt(i, dummy.matrix);
     }
     bondCount.current = bIdx;
 
     ringMesh.instanceMatrix.needsUpdate = true;
     coreMesh.instanceMatrix.needsUpdate = true;
     bondMesh.instanceMatrix.needsUpdate = true;
+    glowMesh.instanceMatrix.needsUpdate = true;
     if (ringMesh.instanceColor) ringMesh.instanceColor.needsUpdate = true;
     if (coreMesh.instanceColor) coreMesh.instanceColor.needsUpdate = true;
   });
