@@ -36,9 +36,9 @@ const OriginSection = () => {
           </span>
 
           <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground mb-8 leading-[1.05]">
-            Born from a dog
+            It all started with
             <br />
-            named Cat.
+            a dog named Cat.
           </h2>
 
           <div className="space-y-6 text-muted-foreground leading-relaxed">
