@@ -4,6 +4,7 @@ import { useRef } from "react";
 import organBalance from "@/assets/organ-balance-new.png";
 import gutBalance from "@/assets/gut-balance-new.png";
 import omegaBalance from "@/assets/omega-balance-new.png";
+import MolecularRing from "@/components/MolecularRing";
 
 const badges = [
   { icon: ShieldCheck, label: "Vet-formulated" },
