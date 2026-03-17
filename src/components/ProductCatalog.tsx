@@ -109,6 +109,7 @@ const ProductCatalog = () => {
             return (
               <motion.div
                 key={product.name}
+                data-product={product.color}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

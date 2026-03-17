@@ -13,15 +13,15 @@ interface StageColors {
 }
 
 const STAGE_COLORS: Record<string, StageColors> = {
-  hero:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.6, lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.25 },
-  xray:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5, lineOpacity: 0.12, glowNode: "#c0c4cc", glowOpacity: 0.2 },
-  origin:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.4, lineOpacity: 0.10, glowNode: "#c0c4cc", glowOpacity: 0.15 },
-  organ:    { node: "#f2c4b8", line: "#f2c4b8", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#e8a090", glowOpacity: 0.3 },
-  gut:      { node: "#b8e8c0", line: "#b8e8c0", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#80d090", glowOpacity: 0.3 },
-  omega:    { node: "#b8d4f2", line: "#b8d4f2", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#90b8e0", glowOpacity: 0.3 },
-  dosing:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5, lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.2 },
-  science:  { node: "#7ec8a0", line: "#7ec8a0", nodeOpacity: 0.7, lineOpacity: 0.30, glowNode: "#5cb880", glowOpacity: 0.4 },
-  products: { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5, lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.2 },
+  hero:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.6,  lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.25 },
+  xray:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5,  lineOpacity: 0.12, glowNode: "#c0c4cc", glowOpacity: 0.20 },
+  origin:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.4,  lineOpacity: 0.10, glowNode: "#c0c4cc", glowOpacity: 0.15 },
+  organ:    { node: "#f2c4b8", line: "#f2c4b8", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#e8a090", glowOpacity: 0.30 },
+  gut:      { node: "#b8e8c0", line: "#b8e8c0", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#80d090", glowOpacity: 0.30 },
+  omega:    { node: "#b8d4f2", line: "#b8d4f2", nodeOpacity: 0.55, lineOpacity: 0.20, glowNode: "#90b8e0", glowOpacity: 0.30 },
+  dosing:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5,  lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.20 },
+  science:  { node: "#7ec8a0", line: "#7ec8a0", nodeOpacity: 0.7,  lineOpacity: 0.30, glowNode: "#5cb880", glowOpacity: 0.40 },
+  products: { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.5,  lineOpacity: 0.15, glowNode: "#c0c4cc", glowOpacity: 0.20 },
 };
 
 // ─── Node interface ────────────────────────────────────────────────────────────
@@ -34,7 +34,7 @@ interface MolNode {
   radius: number;
   isGlow: boolean;
   label: string | null;
-  life: number;      // 0 = permanent, >0 = remaining life in seconds
+  life: number;
   maxLife: number;
   opacity: number;
   pulsePhase: number;
@@ -80,16 +80,12 @@ const createNode = (w: number, h: number, isPermanent: boolean, labelIdx: number
 
   if (isPermanent) {
     return {
-      x: rand(0, w),
-      y: rand(0, h),
+      x: rand(0, w), y: rand(0, h),
       vx: rand(-MAX_SPEED, MAX_SPEED) || MIN_SPEED,
       vy: rand(-MAX_SPEED, MAX_SPEED) || MIN_SPEED,
-      radius,
-      isGlow,
+      radius, isGlow,
       label: labelIdx >= 0 && labelIdx < LABELS.length ? LABELS[labelIdx] : null,
-      life: 0,
-      maxLife: 0,
-      opacity: 1,
+      life: 0, maxLife: 0, opacity: 1,
       pulsePhase: rand(0, Math.PI * 2),
     };
   }
@@ -102,26 +98,19 @@ const createNode = (w: number, h: number, isPermanent: boolean, labelIdx: number
   else if (edge === 2) { x = rand(0, w); y = 0; }
   else { x = rand(0, w); y = h; }
 
-  // Drift inward
   const cx = w / 2 + rand(-w * 0.3, w * 0.3);
   const cy = h / 2 + rand(-h * 0.3, h * 0.3);
   const dx = cx - x;
   const dy = cy - y;
   const dist = Math.sqrt(dx * dx + dy * dy) || 1;
   const speed = rand(MIN_SPEED, MAX_SPEED);
-
   const life = rand(TEMP_NODE_LIFE_MIN, TEMP_NODE_LIFE_MAX);
 
   return {
     x, y,
-    vx: (dx / dist) * speed,
-    vy: (dy / dist) * speed,
-    radius,
-    isGlow,
-    label: null,
-    life,
-    maxLife: life,
-    opacity: 0, // fade in
+    vx: (dx / dist) * speed, vy: (dy / dist) * speed,
+    radius, isGlow, label: null,
+    life, maxLife: life, opacity: 0,
     pulsePhase: rand(0, Math.PI * 2),
   };
 };
@@ -133,14 +122,24 @@ const MolecularNetwork = () => {
   const nodesRef = useRef<MolNode[]>([]);
   const lastSpawnRef = useRef(0);
   const nextSpawnDelayRef = useRef(rand(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX));
-  const currentColorsRef = useRef<StageColors>(STAGE_COLORS.hero);
-  const targetColorsRef = useRef<StageColors>(STAGE_COLORS.hero);
-  const colorTRef = useRef(1);
   const animRef = useRef(0);
   const lastTimeRef = useRef(0);
+
+  // Color interpolation state stored in refs to avoid effect restarts
+  const currentColorsRef = useRef({ ...STAGE_COLORS.hero });
+  const targetColorsRef = useRef(STAGE_COLORS.hero);
+  const prevColorsRef = useRef(STAGE_COLORS.hero);
+  const colorTRef = useRef(1);
+
+  // Store stage in a ref, updated via scroll context
+  const stageRef = useRef("hero");
   const scroll = useScrollState();
 
-  // Initialize nodes
+  // Sync stage to ref without causing effect restart
+  useEffect(() => {
+    stageRef.current = scroll.stage;
+  }, [scroll.stage]);
+
   const initNodes = useCallback((w: number, h: number) => {
     const nodes: MolNode[] = [];
     let labelCount = 0;
@@ -148,8 +147,7 @@ const MolecularNetwork = () => {
       const labelIdx = labelCount < 3 && Math.random() < 0.15 ? labelCount++ : -1;
       nodes.push(createNode(w, h, true, labelIdx));
     }
-    // Ensure at least 2 labels
-    while (labelCount < 2) {
+    while (labelCount < 3) {
       const idx = Math.floor(rand(0, nodes.length));
       if (!nodes[idx].label) {
         nodes[idx].label = LABELS[labelCount];
@@ -190,42 +188,46 @@ const MolecularNetwork = () => {
       const h = window.innerHeight;
       const nodes = nodesRef.current;
 
-      // Color interpolation
-      const stageKey = scroll.stage;
-      const target = STAGE_COLORS[stageKey] ?? STAGE_COLORS.hero;
-      if (target !== targetColorsRef.current) {
-        targetColorsRef.current = target;
+      // ── Color interpolation using refs ──
+      const stageKey = stageRef.current;
+      const newTarget = STAGE_COLORS[stageKey] ?? STAGE_COLORS.hero;
+      if (newTarget !== targetColorsRef.current) {
+        // Snapshot current interpolated colors as the new "previous"
+        prevColorsRef.current = { ...currentColorsRef.current };
+        targetColorsRef.current = newTarget;
         colorTRef.current = 0;
       }
-      colorTRef.current = Math.min(1, colorTRef.current + 0.015 * dt);
-      const t = colorTRef.current;
-      const prev = currentColorsRef.current;
-      const nodeColor = lerpColor(prev.node, target.node, t);
-      const lineColor = lerpColor(prev.line, target.line, t);
-      const glowColor = lerpColor(prev.glowNode, target.glowNode, t);
-      const nodeOp = prev.nodeOpacity + (target.nodeOpacity - prev.nodeOpacity) * t;
-      const lineOp = prev.lineOpacity + (target.lineOpacity - prev.lineOpacity) * t;
-      const glowOp = prev.glowOpacity + (target.glowOpacity - prev.glowOpacity) * t;
+      colorTRef.current = Math.min(1, colorTRef.current + 0.02 * dt);
+      const ct = colorTRef.current;
+      const prev = prevColorsRef.current;
+      const tgt = targetColorsRef.current;
 
-      if (t >= 1) currentColorsRef.current = target;
+      const nodeColor = lerpColor(prev.node, tgt.node, ct);
+      const lineColor = lerpColor(prev.line, tgt.line, ct);
+      const glowColor = lerpColor(prev.glowNode, tgt.glowNode, ct);
+      const nodeOp = prev.nodeOpacity + (tgt.nodeOpacity - prev.nodeOpacity) * ct;
+      const lineOp = prev.lineOpacity + (tgt.lineOpacity - prev.lineOpacity) * ct;
+      const glowOp = prev.glowOpacity + (tgt.glowOpacity - prev.glowOpacity) * ct;
 
-      // Spawn new temp nodes
-      const now = timestamp;
-      if (now - lastSpawnRef.current > nextSpawnDelayRef.current && nodes.length < MAX_NODES) {
+      // Store current interpolated state
+      currentColorsRef.current = {
+        node: tgt.node, line: tgt.line, glowNode: tgt.glowNode,
+        nodeOpacity: nodeOp, lineOpacity: lineOp, glowOpacity: glowOp,
+      };
+
+      // ── Spawn temp nodes ──
+      if (timestamp - lastSpawnRef.current > nextSpawnDelayRef.current && nodes.length < MAX_NODES) {
         nodes.push(createNode(w, h, false, -1));
-        lastSpawnRef.current = now;
+        lastSpawnRef.current = timestamp;
         nextSpawnDelayRef.current = rand(SPAWN_INTERVAL_MIN, SPAWN_INTERVAL_MAX);
       }
 
-      // Update nodes
+      // ── Update nodes ──
       for (let i = nodes.length - 1; i >= 0; i--) {
         const n = nodes[i];
-
-        // Move
         n.x += n.vx * dt;
         n.y += n.vy * dt;
 
-        // Bounce permanent, remove temp if far out
         if (n.life === 0) {
           if (n.x < -20) { n.x = -20; n.vx = Math.abs(n.vx); }
           if (n.x > w + 20) { n.x = w + 20; n.vx = -Math.abs(n.vx); }
@@ -233,45 +235,32 @@ const MolecularNetwork = () => {
           if (n.y > h + 20) { n.y = h + 20; n.vy = -Math.abs(n.vy); }
         }
 
-        // Temp node life
         if (n.maxLife > 0) {
           n.life -= dt / 60;
-          // Fade in first 2 seconds, fade out last 3 seconds
           const elapsed = n.maxLife - n.life;
-          if (elapsed < 2) {
-            n.opacity = Math.min(1, elapsed / 2);
-          } else if (n.life < 3) {
-            n.opacity = Math.max(0, n.life / 3);
-          } else {
-            n.opacity = 1;
-          }
-          if (n.life <= 0) {
-            nodes.splice(i, 1);
-            continue;
-          }
+          if (elapsed < 2) n.opacity = Math.min(1, elapsed / 2);
+          else if (n.life < 3) n.opacity = Math.max(0, n.life / 3);
+          else n.opacity = 1;
+          if (n.life <= 0) { nodes.splice(i, 1); continue; }
         }
       }
 
-      // Clear
+      // ── Clear & draw ──
       ctx.clearRect(0, 0, w, h);
 
-      // Draw connections
+      // Connections
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          const a = nodes[i];
-          const b = nodes[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
+          const a = nodes[i], b = nodes[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < DISCONNECT_DIST) {
-            // Opacity based on distance: full at CONNECT_DIST, fade to 0 at DISCONNECT_DIST
             let alpha = lineOp;
             if (dist > CONNECT_DIST) {
               alpha *= 1 - (dist - CONNECT_DIST) / (DISCONNECT_DIST - CONNECT_DIST);
             }
             alpha *= a.opacity * b.opacity;
-
             if (alpha > 0.005) {
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
@@ -284,7 +273,7 @@ const MolecularNetwork = () => {
         }
       }
 
-      // Draw nodes
+      // Nodes
       const time = timestamp / 1000;
       for (const n of nodes) {
         const alpha = nodeOp * n.opacity;
@@ -292,12 +281,10 @@ const MolecularNetwork = () => {
 
         let r = n.radius;
 
-        // Pulse for glow nodes
         if (n.isGlow) {
           const pulse = 1 + 0.2 * Math.sin(time * (Math.PI * 2 / 3) + n.pulsePhase);
           r *= pulse;
 
-          // Glow halo
           const gradient = ctx.createRadialGradient(n.x, n.y, r * 0.5, n.x, n.y, r * 3);
           gradient.addColorStop(0, `rgba(${glowColor.r},${glowColor.g},${glowColor.b},${glowOp * n.opacity * 0.5})`);
           gradient.addColorStop(1, `rgba(${glowColor.r},${glowColor.g},${glowColor.b},0)`);
@@ -307,13 +294,11 @@ const MolecularNetwork = () => {
           ctx.fill();
         }
 
-        // Node circle
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${nodeColor.r},${nodeColor.g},${nodeColor.b},${alpha})`;
         ctx.fill();
 
-        // Label
         if (n.label) {
           ctx.font = "500 9px 'Inter', sans-serif";
           ctx.fillStyle = `rgba(${nodeColor.r},${nodeColor.g},${nodeColor.b},${alpha * 0.35})`;
@@ -331,7 +316,7 @@ const MolecularNetwork = () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener("resize", resize);
     };
-  }, [scroll, initNodes]);
+  }, [initNodes]);
 
   return (
     <canvas
