@@ -214,6 +214,8 @@ const MolecularStructures = () => {
 
 // ─── Crystalline Structures ────────────────────────────────────────────────────
 
+const CRYSTAL_COUNT = 16;
+
 const CrystallineStructures = () => {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const scroll = useScrollState();
