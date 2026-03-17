@@ -45,22 +45,48 @@ const ScienceGrid = () => {
             </p>
           </motion.div>
 
-          {/* Right — tags */}
+          {/* Right — certification cards + tags */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="flex flex-wrap gap-3 content-start"
+            className="flex flex-col gap-4"
           >
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="px-4 py-2 border border-border text-sm font-medium text-foreground rounded-sm"
-              >
-                {tag}
-              </span>
-            ))}
+            {/* Certification cards */}
+            <div className="border border-foreground/20 rounded-md overflow-hidden flex">
+              <div className="w-[3px] bg-gut shrink-0" />
+              <div className="p-5 flex items-start gap-4">
+                <ShieldCheck className="w-6 h-6 text-gut shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-bold text-foreground">WHO-GMP+ Certified Manufacturing</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Verified by UK Certification — Cert #UQ-2023041215</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-foreground/20 rounded-md overflow-hidden flex">
+              <div className="w-[3px] bg-gut shrink-0" />
+              <div className="p-5 flex items-start gap-4">
+                <Award className="w-6 h-6 text-gut shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-sm font-bold text-foreground">FAMI-QS Compliant Facility</h4>
+                  <p className="text-xs text-muted-foreground mt-1">FAMI-QS Code v5.1 — Cert #UQ-2023041217</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Supporting tag pills */}
+            <div className="flex flex-wrap gap-3 mt-4">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-4 py-2 border border-border text-sm font-medium text-foreground rounded-sm"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
