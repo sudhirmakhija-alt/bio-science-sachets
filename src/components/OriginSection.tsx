@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import originDog from "@/assets/origin-dog.png";
+import originDog from "@/assets/cat2.png";
 
 const OriginSection = () => {
   return (
