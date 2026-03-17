@@ -59,7 +59,7 @@ const MolecularNetwork = () => {
         vx: 0, vy: 0, vz: 0,
         size: i < 8 ? 0 : i < 22 ? 1 : 2, // mix of large, medium, small
         phase: Math.random() * Math.PI * 2,
-        orbitSpeed: 0.15 + Math.random() * 0.35,
+        orbitSpeed: 0.06 + Math.random() * 0.12,
         orbitRadius: 0.3 + Math.random() * 0.5,
       };
     }), []);
