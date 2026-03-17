@@ -59,15 +59,15 @@ const OriginSection = () => {
           </div>
 
           <div className="mt-10 pt-10 border-t border-border">
-            <div className="grid grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-4 md:gap-8">
               {[
               { value: '30', label: 'Precision Sachets' },
               { value: '<25°C', label: 'Storage Standard' },
               { value: 'v5.2', label: 'Formulation' }].
               map((stat) =>
               <div key={stat.label} className="border-t border-border pt-4">
-                  <div className="font-black text-foreground" style={{ fontSize: '48px', lineHeight: 1 }}>{stat.value}</div>
-                  <div className="text-muted-foreground mt-2 tracking-widest uppercase" style={{ fontSize: '11px' }}>
+                  <div className="text-2xl md:text-4xl lg:text-[48px] font-black text-foreground leading-none">{stat.value}</div>
+                  <div className="text-muted-foreground mt-2 tracking-widest uppercase text-[9px] md:text-[11px]">
                     {stat.label}
                   </div>
                 </div>
