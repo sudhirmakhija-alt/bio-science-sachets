@@ -59,7 +59,7 @@ const MolecularNetwork = () => {
         vx: 0, vy: 0, vz: 0,
         size: i < 8 ? 0 : i < 22 ? 1 : 2, // mix of large, medium, small
         phase: Math.random() * Math.PI * 2,
-        orbitSpeed: 0.15 + Math.random() * 0.35,
+        orbitSpeed: 0.06 + Math.random() * 0.12,
         orbitRadius: 0.3 + Math.random() * 0.5,
       };
     }), []);
@@ -108,14 +108,14 @@ const MolecularNetwork = () => {
 
       if (dist < CURSOR_RADIUS && dist > 0.01) {
         const force = (1 - dist / CURSOR_RADIUS) * CURSOR_REPEL;
-        n.vx += (dx / dist) * force * 0.08;
-        n.vy += (dy / dist) * force * 0.08;
+        n.vx += (dx / dist) * force * 0.03;
+        n.vy += (dy / dist) * force * 0.03;
       }
 
-      // Spring back to target
-      n.vx += (targetX - n.x) * 0.02;
-      n.vy += (targetY - n.y) * 0.02;
-      n.vz += (targetZ - n.z) * 0.02;
+      // Spring back to target (slower)
+      n.vx += (targetX - n.x) * 0.008;
+      n.vy += (targetY - n.y) * 0.008;
+      n.vz += (targetZ - n.z) * 0.008;
 
       // Damping
       n.vx *= 0.92;
@@ -181,8 +181,8 @@ const MolecularNetwork = () => {
       }
     }
 
-    // Hide unused bonds
-    for (let i = bIdx; i < bondCount.current; i++) {
+    // Hide ALL unused bonds (not just previous count)
+    for (let i = bIdx; i < MAX_BONDS; i++) {
       dummy.position.set(0, 100, 0);
       dummy.scale.setScalar(0);
       dummy.updateMatrix();
