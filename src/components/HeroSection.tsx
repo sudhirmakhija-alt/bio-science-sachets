@@ -12,6 +12,12 @@ const badges = [
   { icon: Sun, label: "Designed for Indian diets & climate" },
 ];
 
+const heroProducts = [
+  { src: organBalance, alt: "Organ Balance+", xOffset: "-55%", rotate: -8, scale: 0.75, zIndex: 1, shadow: "drop-shadow(0 12px 24px rgba(232,130,154,0.35))" },
+  { src: gutBalance, alt: "Gut Balance+", xOffset: "0%", rotate: 0, scale: 1, zIndex: 3, shadow: "drop-shadow(0 12px 24px rgba(93,184,122,0.35))" },
+  { src: omegaBalance, alt: "Omega Balance+", xOffset: "55%", rotate: 8, scale: 0.75, zIndex: 1, shadow: "drop-shadow(0 12px 24px rgba(106,174,214,0.35))" },
+];
+
 const products = [
   { src: organBalance, alt: "Organ Balance+ packaging", delay: 0, ringColor: "#f2c4b8", ringSpeed: 0.3 },
   { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15, ringColor: "#b8e8c0", ringSpeed: 0.22 },
@@ -40,7 +46,7 @@ const HeroSection = () => {
 
   return (
     <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)' }}>
-      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
+      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -55,7 +61,7 @@ const HeroSection = () => {
             </span>
           </div>
 
-          {/* Headline - black & grey style preserved */}
+          {/* Headline */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95] tracking-[-0.04em] text-foreground mb-6">
             Clinical-grade
             <br />
@@ -108,32 +114,59 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Product visuals — centered below */}
-        <div className="lg:col-span-2 flex items-center justify-center mt-8" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
-          <div className="relative flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
-            {products.map((product, i) => (
-              <motion.div
-                key={product.alt}
-                className="relative"
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
-                style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
-              >
-                <div className="relative flex items-center justify-center">
-                  <MolecularRing color={product.ringColor} size={320} speed={product.ringSpeed} nodeCount={6} />
-                  <img
-                    src={product.src}
-                    alt={product.alt}
-                    className={`w-56 md:w-72 lg:w-[22rem] object-contain relative z-[1] ${i === 1 ? "scale-110" : ""}`}
-                    style={{
-                      filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
-                    }}
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        {/* Right - Stacked fan of 3 canisters */}
+        <div className="relative flex items-center justify-center min-h-[400px] lg:min-h-[500px]">
+          {heroProducts.map((product, i) => (
+            <motion.div
+              key={product.alt}
+              className="absolute"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.7, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                zIndex: product.zIndex,
+                transform: `translateX(${product.xOffset}) rotate(${product.rotate}deg) scale(${product.scale})`,
+              }}
+            >
+              <img
+                src={product.src}
+                alt={product.alt}
+                className="w-44 md:w-56 lg:w-64 object-contain"
+                style={{
+                  filter: product.shadow,
+                }}
+              />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Full-width 3-product section below */}
+      <div className="w-full flex items-center justify-center mt-8 pb-8" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
+        <div className="relative flex items-end justify-center -space-x-6 lg:-space-x-10">
+          {products.map((product, i) => (
+            <motion.div
+              key={product.alt}
+              className="relative"
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
+              style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
+            >
+              <div className="relative flex items-center justify-center">
+                <MolecularRing color={product.ringColor} size={320} speed={product.ringSpeed} nodeCount={6} />
+                <img
+                  src={product.src}
+                  alt={product.alt}
+                  className={`w-56 md:w-72 lg:w-[22rem] object-contain relative z-[1] ${i === 1 ? "scale-110" : ""}`}
+                  style={{
+                    filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+                  }}
+                />
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
 
