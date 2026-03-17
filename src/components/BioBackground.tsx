@@ -6,12 +6,12 @@ import * as THREE from "three";
 // ─── Color palette from reference (navy, medium blue, light blue, grey) ────────
 
 const nodeColors = [
-  new THREE.Color(0.08, 0.12, 0.22),  // dark navy
-  new THREE.Color(0.10, 0.18, 0.32),  // navy
-  new THREE.Color(0.25, 0.45, 0.62),  // medium blue
-  new THREE.Color(0.42, 0.65, 0.78),  // light blue
-  new THREE.Color(0.68, 0.82, 0.90),  // pale blue
-  new THREE.Color(0.55, 0.58, 0.60),  // grey
+  new THREE.Color(0.05, 0.08, 0.20),  // dark navy
+  new THREE.Color(0.08, 0.15, 0.30),  // navy
+  new THREE.Color(0.20, 0.42, 0.60),  // medium blue
+  new THREE.Color(0.38, 0.62, 0.78),  // light blue
+  new THREE.Color(0.65, 0.82, 0.92),  // pale blue
+  new THREE.Color(0.50, 0.52, 0.55),  // grey
 ];
 
 const bondColors = [
