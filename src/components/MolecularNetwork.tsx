@@ -245,6 +245,22 @@ const MolecularNetwork = () => {
         }
       }
 
+      // ── Position-based colors for hero stage ──
+      const isHero = stageKey === "hero";
+      const thirdW = w / 3;
+      // Rose (left), Green (center), Blue (right)
+      const clusterColors = [
+        { r: 232, g: 130, b: 154 }, // #e8829a
+        { r: 93, g: 184, b: 122 },  // #5db87a
+        { r: 106, g: 174, b: 214 }, // #6aaed6
+      ];
+
+      const getClusterColor = (x: number) => {
+        if (x < thirdW) return clusterColors[0];
+        if (x < thirdW * 2) return clusterColors[1];
+        return clusterColors[2];
+      };
+
       // ── Clear & draw ──
       ctx.clearRect(0, 0, w, h);
 
@@ -262,10 +278,12 @@ const MolecularNetwork = () => {
             }
             alpha *= a.opacity * b.opacity;
             if (alpha > 0.005) {
+              const lc = isHero ? getClusterColor((a.x + b.x) / 2) : lineColor;
+              const la = isHero ? alpha * 0.57 : alpha; // 20% opacity feel
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
-              ctx.strokeStyle = `rgba(${lineColor.r},${lineColor.g},${lineColor.b},${alpha})`;
+              ctx.strokeStyle = `rgba(${lc.r},${lc.g},${lc.b},${la})`;
               ctx.lineWidth = 1;
               ctx.stroke();
             }
@@ -276,18 +294,35 @@ const MolecularNetwork = () => {
       // Nodes
       const time = timestamp / 1000;
       for (const n of nodes) {
-        const alpha = nodeOp * n.opacity;
+        const baseAlpha = isHero ? 0.55 : nodeOp;
+        const alpha = baseAlpha * n.opacity;
         if (alpha < 0.01) continue;
 
+        const nc = isHero ? getClusterColor(n.x) : nodeColor;
         let r = n.radius;
 
         if (n.isGlow) {
           const pulse = 1 + 0.2 * Math.sin(time * (Math.PI * 2 / 3) + n.pulsePhase);
           r *= pulse;
 
+          const gc = isHero ? getClusterColor(n.x) : glowColor;
+          const go = isHero ? 0.75 * n.opacity : glowOp * n.opacity;
+
+          // Soft drop-shadow glow for hero
+          if (isHero) {
+            ctx.save();
+            ctx.shadowColor = `rgba(${gc.r},${gc.g},${gc.b},0.6)`;
+            ctx.shadowBlur = 12;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${gc.r},${gc.g},${gc.b},${go})`;
+            ctx.fill();
+            ctx.restore();
+          }
+
           const gradient = ctx.createRadialGradient(n.x, n.y, r * 0.5, n.x, n.y, r * 3);
-          gradient.addColorStop(0, `rgba(${glowColor.r},${glowColor.g},${glowColor.b},${glowOp * n.opacity * 0.5})`);
-          gradient.addColorStop(1, `rgba(${glowColor.r},${glowColor.g},${glowColor.b},0)`);
+          gradient.addColorStop(0, `rgba(${gc.r},${gc.g},${gc.b},${go * 0.5})`);
+          gradient.addColorStop(1, `rgba(${gc.r},${gc.g},${gc.b},0)`);
           ctx.beginPath();
           ctx.arc(n.x, n.y, r * 3, 0, Math.PI * 2);
           ctx.fillStyle = gradient;
@@ -296,7 +331,7 @@ const MolecularNetwork = () => {
 
         ctx.beginPath();
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${nodeColor.r},${nodeColor.g},${nodeColor.b},${alpha})`;
+        ctx.fillStyle = `rgba(${nc.r},${nc.g},${nc.b},${alpha})`;
         ctx.fill();
 
       }
