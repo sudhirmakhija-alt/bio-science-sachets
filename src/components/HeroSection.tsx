@@ -30,16 +30,16 @@ const HeroSection = () => {
   const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -15]);
   const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 12]);
   const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -10]);
-  const scale0 = useTransform(scrollYProgress, [0, 0.5], [1, 0.7]);
-  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 0.6]);
-  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 0.75]);
+  const scale0 = useTransform(scrollYProgress, [0, 0.5], [1, 1.4]);
+  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 1.5]);
+  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 1.3]);
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
   const scaleValues = [scale0, scale1, scale2];
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
-      <div className="section-padding w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -107,27 +107,27 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Right - Product visuals */}
-        <div
-          className="relative flex items-end justify-center gap-4 lg:gap-6"
-        >
-          {products.map((product, i) => (
-            <motion.div
-              key={product.alt}
-              className="relative"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
-              style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
-            >
-              <img
-                src={product.src}
-                alt={product.alt}
-                className={`w-[54rem] md:w-[72rem] lg:w-[84rem] object-contain ${i === 1 ? "scale-110" : ""}`}
-                style={{ filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.12))" }}
-              />
-            </motion.div>
-          ))}
+        {/* Product visuals — centered below */}
+        <div className="lg:col-span-2 flex items-center justify-center mt-8">
+          <div className="relative flex items-end justify-center gap-6 lg:gap-10">
+            {products.map((product, i) => (
+              <motion.div
+                key={product.alt}
+                className="relative"
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
+                style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
+              >
+                <img
+                  src={product.src}
+                  alt={product.alt}
+                  className={`w-48 md:w-64 lg:w-80 object-contain ${i === 1 ? "scale-110" : ""}`}
+                  style={{ filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.12))" }}
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
 
