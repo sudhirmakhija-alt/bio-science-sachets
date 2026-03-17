@@ -27,7 +27,7 @@ const ScrollContext = createContext<ScrollState>({
 
 export const useScrollState = () => useContext(ScrollContext);
 
-const STAGES = ["hero", "xray", "origin", "dosing", "science", "products"];
+const STAGES = ["hero", "xray", "origin", "dosing", "science", "organ", "gut", "omega", "products"];
 
 export const ScrollProvider = ({ children }: { children: ReactNode }) => {
   const [progress, setProgress] = useState(0);

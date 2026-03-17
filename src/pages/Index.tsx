@@ -16,7 +16,7 @@ import Footer from "@/components/Footer";
 const Index = () => {
   return (
     <ScrollProvider>
-      <BioBackground />
+      <MolecularNetwork />
       <ScrollGradientOverlay />
       <Navbar />
       <main className="relative z-[2]">
