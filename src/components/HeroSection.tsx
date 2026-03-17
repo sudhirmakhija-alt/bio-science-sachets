@@ -38,8 +38,8 @@ const HeroSection = () => {
   const scaleValues = [scale0, scale1, scale2];
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden" style={{ background: 'radial-gradient(ellipse 80% 60% at 60% 50%, rgba(245,243,240,0.7) 0%, rgba(250,249,248,0.3) 50%, transparent 100%)' }}>
-      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center relative z-10">
+    <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 70%, rgba(245,243,240,0.7) 0%, rgba(250,249,248,0.3) 50%, transparent 100%)' }}>
+      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -54,7 +54,7 @@ const HeroSection = () => {
             </span>
           </div>
 
-          {/* Headline */}
+          {/* Headline - black & grey style preserved */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95] tracking-[-0.04em] text-foreground mb-6">
             Clinical-grade
             <br />
@@ -107,56 +107,28 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Right - Product visuals */}
-        <div className="flex items-center justify-center relative">
-          <div className="relative flex items-end justify-center -space-x-8 lg:-space-x-12">
-            {/* Organ Balance+ (left, behind) */}
-            <motion.div
-              className="relative z-10"
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              style={{ y: yValues[0], rotate: rotateValues[0] }}
-            >
-              <img
-                src={organBalance}
-                alt="Organ Balance+ packaging"
-                className="w-36 md:w-48 lg:w-56 object-contain"
-                style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))" }}
-              />
-            </motion.div>
-
-            {/* Gut Balance+ (centre, in front, larger) */}
-            <motion.div
-              className="relative z-20"
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              style={{ y: yValues[1], rotate: rotateValues[1] }}
-            >
-              <img
-                src={gutBalance}
-                alt="Gut Balance+ packaging"
-                className="w-44 md:w-60 lg:w-72 object-contain"
-                style={{ filter: "drop-shadow(0 24px 48px rgba(0,0,0,0.12)) drop-shadow(0 10px 20px rgba(0,0,0,0.08))" }}
-              />
-            </motion.div>
-
-            {/* Omega Balance+ (right, behind) */}
-            <motion.div
-              className="relative z-10"
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              style={{ y: yValues[2], rotate: rotateValues[2] }}
-            >
-              <img
-                src={omegaBalance}
-                alt="Omega Balance+ packaging"
-                className="w-36 md:w-48 lg:w-56 object-contain"
-                style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))" }}
-              />
-            </motion.div>
+        {/* Product visuals — centered below */}
+        <div className="lg:col-span-2 flex items-center justify-center mt-8">
+          <div className="relative flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
+            {products.map((product, i) => (
+              <motion.div
+                key={product.alt}
+                className="relative"
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
+                style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
+              >
+                <img
+                  src={product.src}
+                  alt={product.alt}
+                  className={`w-56 md:w-72 lg:w-[22rem] object-contain ${i === 1 ? "scale-110" : ""}`}
+                  style={{
+                    filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+                  }}
+                />
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
