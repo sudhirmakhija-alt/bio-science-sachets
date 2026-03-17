@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ShieldCheck, Award } from "lucide-react";
 
 const tags = [
   "AAFCO dog profiles referenced",
