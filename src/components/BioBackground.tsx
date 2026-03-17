@@ -43,6 +43,7 @@ const MolecularNetwork = () => {
   const ringRef = useRef<THREE.InstancedMesh>(null);
   const coreRef = useRef<THREE.InstancedMesh>(null);
   const bondRef = useRef<THREE.InstancedMesh>(null);
+  const glowRef = useRef<THREE.InstancedMesh>(null);
   const scroll = useScrollState();
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const currentColor = useRef(new THREE.Color(...stageColors.hero));
@@ -71,7 +72,8 @@ const MolecularNetwork = () => {
     const ringMesh = ringRef.current;
     const coreMesh = coreRef.current;
     const bondMesh = bondRef.current;
-    if (!ringMesh || !coreMesh || !bondMesh) return;
+    const glowMesh = glowRef.current;
+    if (!ringMesh || !coreMesh || !bondMesh || !glowMesh) return;
 
     const t = clock.elapsedTime;
     const { stage, velocity, mouseX, mouseY } = scroll;
@@ -86,6 +88,9 @@ const MolecularNetwork = () => {
     (ringMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current;
     (coreMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.4;
     (bondMesh.material as THREE.MeshStandardMaterial).opacity = currentOpacity.current * 0.7;
+    (bondMesh.material as THREE.MeshStandardMaterial).emissive.copy(currentColor.current);
+    (glowMesh.material as THREE.MeshBasicMaterial).opacity = currentOpacity.current * 0.15;
+    (glowMesh.material as THREE.MeshBasicMaterial).color.copy(currentColor.current);
 
     // Convert mouse to world-ish coords
     const cursorX = mouseX * 8;
@@ -170,12 +175,17 @@ const MolecularNetwork = () => {
 
           dummy.position.set(midX, midY, midZ);
           // Thickness tapers with distance
-          const thickness = 0.015 * (1 - dist / BOND_DISTANCE);
+          const thickness = 0.04 * (1 - dist / BOND_DISTANCE) + 0.012;
           dummy.scale.set(thickness, dist, thickness);
           dummy.lookAt(b.x, b.y, b.z);
           dummy.rotateX(Math.PI / 2);
           dummy.updateMatrix();
           bondMesh.setMatrixAt(bIdx, dummy.matrix);
+
+          // Glow: same position but thicker
+          dummy.scale.set(thickness * 3.5, dist, thickness * 3.5);
+          dummy.updateMatrix();
+          glowMesh.setMatrixAt(bIdx, dummy.matrix);
           bIdx++;
         }
       }
@@ -187,12 +197,14 @@ const MolecularNetwork = () => {
       dummy.scale.setScalar(0);
       dummy.updateMatrix();
       bondMesh.setMatrixAt(i, dummy.matrix);
+      glowMesh.setMatrixAt(i, dummy.matrix);
     }
     bondCount.current = bIdx;
 
     ringMesh.instanceMatrix.needsUpdate = true;
     coreMesh.instanceMatrix.needsUpdate = true;
     bondMesh.instanceMatrix.needsUpdate = true;
+    glowMesh.instanceMatrix.needsUpdate = true;
     if (ringMesh.instanceColor) ringMesh.instanceColor.needsUpdate = true;
     if (coreMesh.instanceColor) coreMesh.instanceColor.needsUpdate = true;
   });
@@ -222,15 +234,27 @@ const MolecularNetwork = () => {
           depthWrite={false}
         />
       </instancedMesh>
-      {/* Dynamic bonds */}
+      {/* Dynamic bonds - main */}
       <instancedMesh ref={bondRef} args={[undefined, undefined, MAX_BONDS]}>
-        <cylinderGeometry args={[1, 1, 1, 4]} />
+        <cylinderGeometry args={[1, 1, 1, 8]} />
         <meshStandardMaterial
           transparent
-          opacity={0.4}
-          roughness={0.5}
-          metalness={0.05}
+          opacity={0.5}
+          roughness={0.3}
+          metalness={0.15}
           depthWrite={false}
+          emissive={new THREE.Color(0.01, 0.52, 0.78)}
+          emissiveIntensity={0.35}
+        />
+      </instancedMesh>
+      {/* Bond glow layer */}
+      <instancedMesh ref={glowRef} args={[undefined, undefined, MAX_BONDS]}>
+        <cylinderGeometry args={[1, 1, 1, 6]} />
+        <meshBasicMaterial
+          transparent
+          opacity={0.12}
+          depthWrite={false}
+          color={new THREE.Color(0.01, 0.52, 0.78)}
         />
       </instancedMesh>
     </>
