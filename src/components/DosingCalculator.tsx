@@ -32,7 +32,7 @@ const DosingCalculator = () => {
   };
 
   return (
-    <section id="dosing" className="section-padding relative overflow-hidden">
+    <section id="dosing" className="section-padding relative overflow-hidden" style={{ backgroundColor: '#ffffff' }}>
       <div className="max-w-[1000px] mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

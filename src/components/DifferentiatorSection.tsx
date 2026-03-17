@@ -10,7 +10,7 @@ const bullets = [
 
 const DifferentiatorSection = () => {
   return (
-    <section id="differentiator" className="section-padding bg-background/70 backdrop-blur-sm">
+    <section id="differentiator" className="section-padding" style={{ backgroundColor: '#f5f7f2' }}>
       <div className="max-w-[1400px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

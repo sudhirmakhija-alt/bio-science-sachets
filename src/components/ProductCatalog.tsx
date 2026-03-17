@@ -87,7 +87,7 @@ const colorClasses = {
 
 const ProductCatalog = () => {
   return (
-    <section id="products" className="section-padding bg-background/70 backdrop-blur-sm">
+    <section id="products" className="section-padding" style={{ backgroundColor: '#ffffff' }}>
       <div className="max-w-[1400px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
