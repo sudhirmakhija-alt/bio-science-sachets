@@ -39,7 +39,7 @@ const HeroSection = () => {
   const scaleValues = [scale0, scale1, scale2];
 
   return (
-    <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 70%, rgba(245,243,240,0.7) 0%, rgba(250,249,248,0.3) 50%, transparent 100%)' }}>
+    <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, #fafbff 0%, #f4f7f4 100%)' }}>
       <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
