@@ -39,7 +39,7 @@ const HeroSection = () => {
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
-      <div className="section-padding w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
