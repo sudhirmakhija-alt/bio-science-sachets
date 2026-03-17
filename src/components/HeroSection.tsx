@@ -120,14 +120,17 @@ const HeroSection = () => {
                 transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
                 style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
               >
-                <img
-                  src={product.src}
-                  alt={product.alt}
-                  className={`w-56 md:w-72 lg:w-[22rem] object-contain ${i === 1 ? "scale-110" : ""}`}
-                  style={{
-                    filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
-                  }}
-                />
+                <div className="relative flex items-center justify-center">
+                  <MolecularRing color={product.ringColor} size={320} speed={product.ringSpeed} nodeCount={6} />
+                  <img
+                    src={product.src}
+                    alt={product.alt}
+                    className={`w-56 md:w-72 lg:w-[22rem] object-contain relative z-[1] ${i === 1 ? "scale-110" : ""}`}
+                    style={{
+                      filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+                    }}
+                  />
+                </div>
               </motion.div>
             ))}
           </div>
