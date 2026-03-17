@@ -239,7 +239,7 @@ const MolecularClusters = () => {
         const mz = (p0.z + p1.z) / 2;
         const len = p0.distanceTo(p1);
 
-        const thickness = 0.035 * inst.scale;
+        const thickness = 0.06 * inst.scale;
         dummy.position.set(mx, my, mz);
         dummy.scale.set(thickness, len, thickness);
         dummy.lookAt(p1.x, p1.y, p1.z);
