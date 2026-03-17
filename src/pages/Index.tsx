@@ -1,5 +1,5 @@
 import { ScrollProvider } from "@/components/ScrollContext";
-import BioBackground from "@/components/BioBackground";
+import MolecularNetwork from "@/components/MolecularNetwork";
 import ScrollGradientOverlay from "@/components/ScrollGradientOverlay";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
