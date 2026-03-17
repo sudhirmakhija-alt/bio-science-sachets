@@ -299,12 +299,6 @@ const MolecularNetwork = () => {
         ctx.fillStyle = `rgba(${nodeColor.r},${nodeColor.g},${nodeColor.b},${alpha})`;
         ctx.fill();
 
-        if (n.label) {
-          ctx.font = "500 9px 'Inter', sans-serif";
-          ctx.fillStyle = `rgba(${nodeColor.r},${nodeColor.g},${nodeColor.b},${alpha * 0.35})`;
-          ctx.textAlign = "center";
-          ctx.fillText(n.label, n.x, n.y - r - 6);
-        }
       }
 
       animRef.current = requestAnimationFrame(animate);
