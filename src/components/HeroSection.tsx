@@ -1,7 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ShieldCheck, Factory, Sun } from "lucide-react";
-import heroPackaging from "@/assets/hero-packaging.png";
-import sachetSingle from "@/assets/sachet-single.png";
+import { useRef } from "react";
+import organBalance from "@/assets/organ-balance.png";
+import gutBalance from "@/assets/gut-balance.png";
+import omegaBalance from "@/assets/omega-balance.png";
 
 const badges = [
   { icon: ShieldCheck, label: "Vet-formulated" },
@@ -9,9 +11,30 @@ const badges = [
   { icon: Sun, label: "Designed for Indian diets & climate" },
 ];
 
+const products = [
+  { src: organBalance, alt: "Organ Balance+ packaging", delay: 0 },
+  { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15 },
+  { src: omegaBalance, alt: "Omega Balance+ packaging", delay: 0.3 },
+];
+
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const y0 = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -4]);
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 3]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -2]);
+  const yValues = [y0, y1, y2];
+  const rotateValues = [rotate0, rotate1, rotate2];
+
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center overflow-hidden">
       <div className="section-padding w-full max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
@@ -81,37 +104,27 @@ const HeroSection = () => {
         </motion.div>
 
         {/* Right - Product visuals */}
-        <motion.div
-          className="relative flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        <div
+          className="relative flex items-end justify-center gap-4 lg:gap-6"
         >
-          {/* Main packaging */}
-          <motion.img
-            src={heroPackaging}
-            alt="BioLogica product range — Organ, Gut, Omega Balance precision sachets for Indian dogs"
-            className="w-full max-w-lg animate-float relative z-10"
-            style={{ filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.12))" }}
-          />
-
-          {/* Floating sachet accents */}
-          <motion.img
-            src={sachetSingle}
-            alt=""
-            className="absolute top-8 right-4 w-20 animate-float-slow opacity-60"
-            style={{ animationDelay: "1s" }}
-          />
-          <motion.img
-            src={sachetSingle}
-            alt=""
-            className="absolute bottom-16 left-4 w-16 animate-float-slow opacity-40"
-            style={{ animationDelay: "2.5s", transform: "rotate(-15deg)" }}
-          />
-
-          {/* Subtle radial glow */}
-          <div className="absolute inset-0 bg-gradient-radial from-omega/5 to-transparent rounded-full blur-3xl" />
-        </motion.div>
+          {products.map((product, i) => (
+            <motion.div
+              key={product.alt}
+              className="relative"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
+              style={{ y: yValues[i], rotate: rotateValues[i] }}
+            >
+              <img
+                src={product.src}
+                alt={product.alt}
+                className={`w-28 md:w-36 lg:w-44 object-contain ${i === 1 ? "scale-110" : ""}`}
+                style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.10))" }}
+              />
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Scroll indicator */}
