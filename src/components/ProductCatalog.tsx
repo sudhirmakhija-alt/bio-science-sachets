@@ -125,7 +125,7 @@ const ProductCatalog = () => {
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-32 md:w-40 lg:w-44 object-contain"
+                        className="w-48 md:w-56 lg:w-64 object-contain"
                         style={{
                           filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.10)) drop-shadow(0 2px 8px rgba(0,0,0,0.06))",
                         }}
