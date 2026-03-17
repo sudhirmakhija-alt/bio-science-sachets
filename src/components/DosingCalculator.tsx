@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { PawPrint } from "lucide-react";
 
 const WEIGHT_RANGES = [
   { min: 1, max: 5, sachets: 0.5 },
