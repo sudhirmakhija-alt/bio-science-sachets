@@ -119,7 +119,18 @@ const ProductCatalog = () => {
                 <div className={`h-1 ${cls.accent}`} />
 
                 <div className="p-8 md:p-12">
-                  <div className="grid lg:grid-cols-2 gap-10">
+                  <div className="grid lg:grid-cols-[auto_1fr_1fr] gap-10 items-start">
+                    {/* Product image */}
+                    <div className="flex items-center justify-center lg:justify-start">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-32 md:w-40 lg:w-44 object-contain"
+                        style={{
+                          filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.10)) drop-shadow(0 2px 8px rgba(0,0,0,0.06))",
+                        }}
+                      />
+                    </div>
                     {/* Left — info */}
                     <div>
                       <div className={`text-xs font-semibold tracking-[0.2em] uppercase ${cls.text} mb-3`}>
