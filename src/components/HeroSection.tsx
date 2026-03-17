@@ -104,37 +104,27 @@ const HeroSection = () => {
         </motion.div>
 
         {/* Right - Product visuals */}
-        <motion.div
-          className="relative flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        <div
+          className="relative flex items-end justify-center gap-4 lg:gap-6"
         >
-          {/* Main packaging */}
-          <motion.img
-            src={heroPackaging}
-            alt="BioLogica product range — Organ, Gut, Omega Balance precision sachets for Indian dogs"
-            className="w-full max-w-lg animate-float relative z-10"
-            style={{ filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.12))" }}
-          />
-
-          {/* Floating sachet accents */}
-          <motion.img
-            src={sachetSingle}
-            alt=""
-            className="absolute top-8 right-4 w-20 animate-float-slow opacity-60"
-            style={{ animationDelay: "1s" }}
-          />
-          <motion.img
-            src={sachetSingle}
-            alt=""
-            className="absolute bottom-16 left-4 w-16 animate-float-slow opacity-40"
-            style={{ animationDelay: "2.5s", transform: "rotate(-15deg)" }}
-          />
-
-          {/* Subtle radial glow */}
-          <div className="absolute inset-0 bg-gradient-radial from-omega/5 to-transparent rounded-full blur-3xl" />
-        </motion.div>
+          {products.map((product, i) => (
+            <motion.div
+              key={product.alt}
+              className="relative"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
+              style={{ y: yValues[i], rotate: rotateValues[i] }}
+            >
+              <img
+                src={product.src}
+                alt={product.alt}
+                className={`w-28 md:w-36 lg:w-44 object-contain ${i === 1 ? "scale-110" : ""}`}
+                style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.10))" }}
+              />
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Scroll indicator */}
