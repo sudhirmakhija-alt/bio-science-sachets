@@ -38,7 +38,7 @@ const HeroSection = () => {
   const scaleValues = [scale0, scale1, scale2];
 
   return (
-    <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0">
+    <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 70%, rgba(245,243,240,0.7) 0%, rgba(250,249,248,0.3) 50%, transparent 100%)' }}>
       <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
