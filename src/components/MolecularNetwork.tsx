@@ -13,15 +13,15 @@ interface StageColors {
 }
 
 const STAGE_COLORS: Record<string, StageColors> = {
-  hero:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.8,  lineOpacity: 0.15, glowNode: "#b8bcc4", glowOpacity: 0.35 },
-  xray:     { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.7,  lineOpacity: 0.12, glowNode: "#b8bcc4", glowOpacity: 0.30 },
-  origin:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.6,  lineOpacity: 0.12, glowNode: "#b8bcc4", glowOpacity: 0.25 },
-  organ:    { node: "#f2c4b8", line: "#f2c4b8", nodeOpacity: 0.8,  lineOpacity: 0.20, glowNode: "#e8a898", glowOpacity: 0.40 },
-  gut:      { node: "#b8e8c0", line: "#b8e8c0", nodeOpacity: 0.8,  lineOpacity: 0.20, glowNode: "#90d8a0", glowOpacity: 0.40 },
-  omega:    { node: "#b8d4f2", line: "#b8d4f2", nodeOpacity: 0.8,  lineOpacity: 0.20, glowNode: "#98c0e8", glowOpacity: 0.40 },
-  dosing:   { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.7,  lineOpacity: 0.12, glowNode: "#b8bcc4", glowOpacity: 0.30 },
-  science:  { node: "#7ec8a0", line: "#7ec8a0", nodeOpacity: 0.9,  lineOpacity: 0.30, glowNode: "#60b888", glowOpacity: 0.50 },
-  products: { node: "#d0d4dc", line: "#d0d4dc", nodeOpacity: 0.7,  lineOpacity: 0.12, glowNode: "#b8bcc4", glowOpacity: 0.30 },
+  hero:     { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.9,  lineOpacity: 0.35, glowNode: "#8090a0", glowOpacity: 0.5  },
+  xray:     { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.8,  lineOpacity: 0.30, glowNode: "#8090a0", glowOpacity: 0.45 },
+  origin:   { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.7,  lineOpacity: 0.25, glowNode: "#8090a0", glowOpacity: 0.35 },
+  organ:    { node: "#e8a090", line: "#e8a090", nodeOpacity: 0.85, lineOpacity: 0.35, glowNode: "#d08070", glowOpacity: 0.5  },
+  gut:      { node: "#70c880", line: "#70c880", nodeOpacity: 0.85, lineOpacity: 0.35, glowNode: "#50b060", glowOpacity: 0.5  },
+  omega:    { node: "#80b8e0", line: "#80b8e0", nodeOpacity: 0.85, lineOpacity: 0.35, glowNode: "#6098c8", glowOpacity: 0.5  },
+  dosing:   { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.8,  lineOpacity: 0.30, glowNode: "#8090a0", glowOpacity: 0.45 },
+  science:  { node: "#50b878", line: "#50b878", nodeOpacity: 0.95, lineOpacity: 0.45, glowNode: "#40a068", glowOpacity: 0.6  },
+  products: { node: "#a0a8b4", line: "#a0a8b4", nodeOpacity: 0.8,  lineOpacity: 0.30, glowNode: "#8090a0", glowOpacity: 0.45 },
 };
 
 // ─── Node interface ────────────────────────────────────────────────────────────
@@ -52,11 +52,6 @@ const SPAWN_INTERVAL_MAX = 6000;
 const TEMP_NODE_LIFE_MIN = 12;
 const TEMP_NODE_LIFE_MAX = 15;
 const LABELS = ["EPA", "DHA", "GLM", "MSM", "CFU"];
-const GLOW_NODE_MIN = 10;
-const GLOW_NODE_MAX = 12;
-const NORMAL_NODE_MIN = 3;
-const NORMAL_NODE_MAX = 5;
-const PULSE_PERIOD = 3; // seconds for full pulse cycle
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -81,7 +76,7 @@ const lerpColor = (a: string, b: string, t: number) => {
 
 const createNode = (w: number, h: number, isPermanent: boolean, labelIdx: number): MolNode => {
   const isGlow = Math.random() < 1 / 6;
-  const radius = isGlow ? rand(GLOW_NODE_MIN, GLOW_NODE_MAX) : rand(NORMAL_NODE_MIN, NORMAL_NODE_MAX);
+  const radius = isGlow ? rand(6, 8) : rand(3, 5);
 
   if (isPermanent) {
     return {
@@ -287,10 +282,7 @@ const MolecularNetwork = () => {
         let r = n.radius;
 
         if (n.isGlow) {
-          // Pulse scale 1 → 1.2 → 1 over PULSE_PERIOD seconds, ease-in-out
-          const phase = ((time + n.pulsePhase) % PULSE_PERIOD) / PULSE_PERIOD;
-          const ease = 0.5 - 0.5 * Math.cos(phase * Math.PI * 2);
-          const pulse = 1 + 0.2 * ease;
+          const pulse = 1 + 0.2 * Math.sin(time * (Math.PI * 2 / 3) + n.pulsePhase);
           r *= pulse;
 
           const gradient = ctx.createRadialGradient(n.x, n.y, r * 0.5, n.x, n.y, r * 3);
@@ -300,14 +292,6 @@ const MolecularNetwork = () => {
           ctx.arc(n.x, n.y, r * 3, 0, Math.PI * 2);
           ctx.fillStyle = gradient;
           ctx.fill();
-        }
-
-        // Draw label for labeled glow nodes
-        if (n.label && n.isGlow) {
-          ctx.font = "bold 9px sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillStyle = `rgba(${nodeColor.r},${nodeColor.g},${nodeColor.b},${0.2 * n.opacity})`;
-          ctx.fillText(n.label, n.x, n.y - r - 6);
         }
 
         ctx.beginPath();

@@ -60,8 +60,8 @@ const MolecularRing = ({ color, size = 280, speed = 0.3, nodeCount = 6 }: Molecu
         ctx.beginPath();
         ctx.moveTo(positions[i].x, positions[i].y);
         ctx.lineTo(next.x, next.y);
-      ctx.strokeStyle = `rgba(${r},${g},${b},0.18)`;
-      ctx.lineWidth = 0.5;
+        ctx.strokeStyle = `rgba(${r},${g},${b},0.15)`;
+        ctx.lineWidth = 0.5;
         ctx.stroke();
       }
 
