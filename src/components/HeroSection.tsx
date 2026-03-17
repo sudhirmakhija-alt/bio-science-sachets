@@ -109,7 +109,7 @@ const HeroSection = () => {
 
         {/* Product visuals — centered below */}
         <div className="lg:col-span-2 flex items-center justify-center mt-8">
-          <div className="relative flex items-end justify-center gap-6 lg:gap-10">
+          <div className="relative flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
             {products.map((product, i) => (
               <motion.div
                 key={product.alt}
