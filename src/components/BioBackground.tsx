@@ -170,7 +170,7 @@ const MolecularNetwork = () => {
 
           dummy.position.set(midX, midY, midZ);
           // Thickness tapers with distance
-          const thickness = 0.015 * (1 - dist / BOND_DISTANCE);
+          const thickness = 0.04 * (1 - dist / BOND_DISTANCE) + 0.012;
           dummy.scale.set(thickness, dist, thickness);
           dummy.lookAt(b.x, b.y, b.z);
           dummy.rotateX(Math.PI / 2);
