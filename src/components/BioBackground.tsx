@@ -43,6 +43,7 @@ const MolecularNetwork = () => {
   const ringRef = useRef<THREE.InstancedMesh>(null);
   const coreRef = useRef<THREE.InstancedMesh>(null);
   const bondRef = useRef<THREE.InstancedMesh>(null);
+  const glowRef = useRef<THREE.InstancedMesh>(null);
   const scroll = useScrollState();
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const currentColor = useRef(new THREE.Color(...stageColors.hero));
