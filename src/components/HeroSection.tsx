@@ -24,12 +24,15 @@ const HeroSection = () => {
     offset: ["start start", "end start"],
   });
 
-  const y0 = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -40]);
-  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -4]);
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 3]);
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -2]);
+  const y0 = useTransform(scrollYProgress, [0, 1], [0, -180]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -280]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -8]);
+  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 6]);
+  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -5]);
+  const scale0 = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 0.85]);
+  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
 
