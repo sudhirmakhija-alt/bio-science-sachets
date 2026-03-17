@@ -10,7 +10,7 @@ const products = [
   subtitle: "Daily organ-based topper",
   description:
   "Organ Balance+ is a dehydrated, organ-based topper that helps support overall vitality, natural micronutrient intake and immune function in dogs.",
-  color: "organ" as const,
+  image: organProduct,
   bullets: [
   "Ideal for dogs on kibble or vegetarian home-cooked diets that miss out on organ meats",
   "Provides concentrated organ-based nutrients to complement regular food and support energy and immune function",
