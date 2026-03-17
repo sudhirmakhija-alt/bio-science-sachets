@@ -30,9 +30,9 @@ const HeroSection = () => {
   const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -15]);
   const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 12]);
   const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -10]);
-  const scale0 = useTransform(scrollYProgress, [0, 0.5], [1, 0.7]);
-  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 0.6]);
-  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 0.75]);
+  const scale0 = useTransform(scrollYProgress, [0, 0.5], [1, 1.4]);
+  const scale1 = useTransform(scrollYProgress, [0, 0.5], [1, 1.5]);
+  const scale2 = useTransform(scrollYProgress, [0, 0.5], [1, 1.3]);
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
   const scaleValues = [scale0, scale1, scale2];
