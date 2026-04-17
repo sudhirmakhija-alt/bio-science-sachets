@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import organProduct from "@/assets/organ-product.png";
 import gutProduct from "@/assets/gut-product.png";
 import omegaProduct from "@/assets/omega-product.png";
+import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 
 const products = [
 {
