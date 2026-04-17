@@ -2,6 +2,15 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ShieldCheck, Factory, Sun, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import SpotlightCard from "@/components/SpotlightCard";
+import organBalance from "@/assets/organ-balance-new.png";
+import gutBalance from "@/assets/gut-balance-new.png";
+import omegaBalance from "@/assets/omega-balance-new.png";
+
+const tins = [
+  { src: omegaBalance, alt: "Omega Balance+ packaging", delay: 0 },
+  { src: organBalance, alt: "Organ Balance+ packaging", delay: 0.1 },
+  { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.2 },
+];
 
 const badges = [
   { icon: ShieldCheck, label: "Vet-formulated" },
@@ -145,6 +154,26 @@ const HeroSection = () => {
         </div>
       </div>
 
+      {/* Product tins peeking from bottom edge */}
+      <div className="relative w-full max-w-[1400px] mx-auto px-6 md:px-12 mt-8 md:mt-12 pointer-events-none">
+        <div className="flex items-end justify-center gap-4 md:gap-8 lg:gap-12 -mb-16 md:-mb-24 lg:-mb-32">
+          {tins.map((tin, i) => (
+            <motion.img
+              key={tin.alt}
+              src={tin.src}
+              alt={tin.alt}
+              className={`w-28 md:w-40 lg:w-52 object-contain ${i === 1 ? "motion-safe:animate-sachet-float" : ""}`}
+              style={{
+                filter:
+                  "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+              }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 + tin.delay, ease: [0.16, 1, 0.3, 1] }}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   );
 };
