@@ -1,10 +1,7 @@
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ShieldCheck, Factory, Sun, ArrowRight } from "lucide-react";
 import { useRef } from "react";
-import organBalance from "@/assets/organ-balance-new.png";
-import gutBalance from "@/assets/gut-balance-new.png";
-import omegaBalance from "@/assets/omega-balance-new.png";
-import MolecularRing from "@/components/MolecularRing";
+import SpotlightCard from "@/components/SpotlightCard";
 
 const badges = [
   { icon: ShieldCheck, label: "Vet-formulated" },
@@ -12,32 +9,9 @@ const badges = [
   { icon: Sun, label: "Designed for Indian diets & climate" },
 ];
 
-const products = [
-  { src: organBalance, alt: "Organ Balance+ packaging", delay: 0, ringColor: "#f2c4b8", ringSpeed: 0.3 },
-  { src: gutBalance, alt: "Gut Balance+ packaging", delay: 0.15, ringColor: "#b8e8c0", ringSpeed: 0.22 },
-  { src: omegaBalance, alt: "Omega Balance+ packaging", delay: 0.3, ringColor: "#b8d4f2", ringSpeed: 0.26 },
-];
-
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const y0 = useTransform(scrollYProgress, [0, 1], [0, -80]);
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const rotate0 = useTransform(scrollYProgress, [0, 1], [0, -4]);
-  const rotate1 = useTransform(scrollYProgress, [0, 1], [0, 3]);
-  const rotate2 = useTransform(scrollYProgress, [0, 1], [0, -3]);
-  const scale0 = useTransform(scrollYProgress, [0.3, 0.7], [1, 1.4]);
-  const scale1 = useTransform(scrollYProgress, [0.3, 0.7], [1, 1.5]);
-  const scale2 = useTransform(scrollYProgress, [0.3, 0.7], [1, 1.3]);
-  const yValues = [y0, y1, y2];
-  const rotateValues = [rotate0, rotate1, rotate2];
-  const scaleValues = [scale0, scale1, scale2];
 
   // Headline split into words for stagger animation.
   // Each line keeps its own array so we can preserve <br /> breaks.
@@ -165,37 +139,9 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Product visuals */}
-        <div className="flex items-center justify-center mt-4 lg:mt-0" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
-          <div className="relative flex items-end justify-center -space-x-4 lg:-space-x-6">
-            {products.map((product, i) => (
-              <motion.div
-                key={product.alt}
-                className="relative"
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
-                style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
-              >
-                <div className="relative flex items-center justify-center">
-                  <MolecularRing color={product.ringColor} size={220} speed={product.ringSpeed} nodeCount={6} />
-                  <img
-                    src={product.src}
-                    alt={product.alt}
-                    className={`w-36 md:w-44 lg:w-56 object-contain relative z-[1] ${i === 1 ? "scale-110 motion-safe:animate-sachet-float" : ""}`}
-                    style={
-                      i === 1
-                        ? undefined
-                        : {
-                            filter:
-                              "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
-                          }
-                    }
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        {/* Spotlight card (hidden on mobile) */}
+        <div className="hidden md:flex items-center justify-center mt-4 lg:mt-0">
+          <SpotlightCard variant="notify" />
         </div>
       </div>
 
