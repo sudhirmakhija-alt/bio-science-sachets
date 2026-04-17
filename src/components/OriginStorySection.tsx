@@ -20,7 +20,7 @@ const OriginStorySection = () => {
           Cat changed everything.
         </h2>
         <p className="text-base text-muted-foreground leading-relaxed mt-4 max-w-2xl">
-          What started as a treat brand in 2021 pivoted to clinical discipline when our founder's dog — ironically named Cat — needed consistent, vet-grade nutrition that no Indian product could deliver. BioLogica was rebuilt from the ground up around that single gap.
+          What started as a treat brand in 2021 pivoted to clinical discipline when our founder's dog - ironically named Cat - needed consistent, vet-grade nutrition that no Indian product could deliver. BioLogica was rebuilt from the ground up around that single gap.
         </p>
 
         {/* Timeline */}
