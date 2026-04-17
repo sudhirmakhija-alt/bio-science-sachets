@@ -112,29 +112,29 @@ const HeroSection = () => {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed mb-6 font-light">
+          <p className="text-base md:text-lg text-muted-foreground max-w-md leading-relaxed mb-3 font-light">
             Vet-formulated toppers that support joints, digestion, immunity, skin & coat and overall vitality in dogs living in Indian homes and climates.
           </p>
 
           {/* Trust line */}
-          <p className="text-xs text-muted-foreground/70 max-w-md leading-relaxed mb-10">
+          <p className="text-xs text-muted-foreground/70 max-w-md leading-relaxed mb-5">
             Developed by veterinarians and animal nutrition experts, referencing AAFCO and FEDIAF dog nutrition guidelines and manufactured in WHO-GMP+ and FAMI-QS certified facilities.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap gap-4 mb-6">
+          <div className="flex flex-wrap gap-3 mb-4">
             <a
               href="https://amazon.in/biologica"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
             >
               SHOP ON AMAZON INDIA
               <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
             </a>
             <a
               href="#science"
-              className="group inline-flex items-center justify-center gap-2 px-8 py-4 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
             >
               HOW BIOLOGICA HELPS YOUR DOG
               <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
@@ -143,7 +143,7 @@ const HeroSection = () => {
 
           {/* Stat row */}
           <motion.div
-            className="text-xs tracking-wide text-muted-foreground mt-6 mb-10"
+            className="text-xs tracking-wide text-muted-foreground mt-3 mb-4"
             initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : statDelayMs / 1000, ease: "easeOut" }}
@@ -152,7 +152,7 @@ const HeroSection = () => {
           </motion.div>
 
           {/* Badges */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {badges.map((badge) => (
               <div
                 key={badge.label}
@@ -165,9 +165,9 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Product visuals — centered below */}
-        <div className="lg:col-span-2 flex items-center justify-center mt-8" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
-          <div className="relative flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
+        {/* Product visuals */}
+        <div className="flex items-center justify-center mt-4 lg:mt-0" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
+          <div className="relative flex items-end justify-center -space-x-4 lg:-space-x-6">
             {products.map((product, i) => (
               <motion.div
                 key={product.alt}
