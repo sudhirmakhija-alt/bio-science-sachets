@@ -182,10 +182,15 @@ const HeroSection = () => {
                   <img
                     src={product.src}
                     alt={product.alt}
-                    className={`w-56 md:w-72 lg:w-[22rem] object-contain relative z-[1] ${i === 1 ? "scale-110" : ""}`}
-                    style={{
-                      filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
-                    }}
+                    className={`w-56 md:w-72 lg:w-[22rem] object-contain relative z-[1] ${i === 1 ? "scale-110 motion-safe:animate-sachet-float" : ""}`}
+                    style={
+                      i === 1
+                        ? undefined
+                        : {
+                            filter:
+                              "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+                          }
+                    }
                   />
                 </div>
               </motion.div>

@@ -105,6 +105,16 @@ export default {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
         },
+        "sachet-float": {
+          "0%, 100%": {
+            transform: "translateY(0px)",
+            filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+          },
+          "50%": {
+            transform: "translateY(-10px)",
+            filter: "drop-shadow(0 32px 56px rgba(0,0,0,0.12)) drop-shadow(0 14px 24px rgba(0,0,0,0.08))",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -113,6 +123,7 @@ export default {
         "float-slow": "float-slow 8s ease-in-out infinite",
         "particle-expand": "particle-expand 2s ease-out forwards",
         "marquee": "marquee 35s linear infinite",
+        "sachet-float": "sachet-float 5s ease-in-out infinite",
       },
     },
   },
