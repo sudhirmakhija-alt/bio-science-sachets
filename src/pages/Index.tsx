@@ -3,6 +3,7 @@ import MolecularNetwork from "@/components/MolecularNetwork";
 import ScrollGradientOverlay from "@/components/ScrollGradientOverlay";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
+import CredentialsMarquee from "@/components/CredentialsMarquee";
 import OriginSection from "@/components/OriginSection";
 import AboutSection from "@/components/AboutSection";
 import WhyNutritionSection from "@/components/WhyNutritionSection";
@@ -22,6 +23,9 @@ const Index = () => {
       <main className="relative z-[2]">
         {/* HERO */}
         <HeroSection />
+
+        {/* CREDENTIALS MARQUEE */}
+        <CredentialsMarquee />
 
         {/* ORIGIN — kept as-is */}
         <OriginSection />
