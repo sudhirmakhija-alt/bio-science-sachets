@@ -12,11 +12,11 @@ const WEIGHT_RANGES = [
 ];
 
 const SIZE_LABELS = [
-  "Toy (1–5kg)",
-  "Small (5–10kg)",
-  "Medium (10–25kg)",
-  "Large (25–45kg)",
-  "Giant (45kg+)",
+  "Toy",
+  "Small",
+  "Medium",
+  "Large",
+  "Giant",
 ];
 
 type ProductKey = "omega" | "organ" | "gut";
