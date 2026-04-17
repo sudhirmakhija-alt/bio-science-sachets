@@ -60,7 +60,7 @@ const ScienceGrid = () => {
                 <ShieldCheck className="w-6 h-6 text-gut shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-foreground">WHO-GMP+ Certified Manufacturing</h4>
-                  <p className="text-xs text-muted-foreground mt-1">Verified by UK Certification — Cert #UQ-2023041215</p>
+                  <p className="text-xs text-muted-foreground mt-1">Verified by UK Certification - Cert #UQ-2023041215</p>
                 </div>
               </div>
             </div>
@@ -71,7 +71,7 @@ const ScienceGrid = () => {
                 <Award className="w-6 h-6 text-gut shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-sm font-bold text-foreground">FAMI-QS Compliant Facility</h4>
-                  <p className="text-xs text-muted-foreground mt-1">FAMI-QS Code v5.1 — Cert #UQ-2023041217</p>
+                  <p className="text-xs text-muted-foreground mt-1">FAMI-QS Code v5.1  - Cert #UQ-2023041217</p>
                 </div>
               </div>
             </div>
