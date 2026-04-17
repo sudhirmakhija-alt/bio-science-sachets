@@ -63,11 +63,11 @@ const AboutSection = () => {
               </li>
             </ul>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-3">
               {["Vet-formulated", "AAFCO & FEDIAF referenced", "WHO-GMP+ & FAMI-QS"].map((tag) =>
               <span
                 key={tag}
-                className="px-3 py-1.5 bg-secondary text-xs font-medium text-muted-foreground rounded-sm">
+                className="px-3 py-1.5 bg-secondary text-xs font-medium text-muted-foreground border border-border rounded-none">
                 
                   {tag}
                 </span>
