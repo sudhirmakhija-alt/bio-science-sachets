@@ -143,12 +143,12 @@ const HeroSection = () => {
 
           {/* Stat row */}
           <motion.div
-            className="text-xs tracking-wide text-muted-foreground mt-3 mb-4"
+            className="text-[10px] md:text-xs tracking-wide text-muted-foreground mt-3 mb-4 whitespace-nowrap"
             initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : statDelayMs / 1000, ease: "easeOut" }}
           >
-            0% Oxidation <span className="mx-2 text-muted-foreground/50">·</span> 3 Feed Systems <span className="mx-2 text-muted-foreground/50">·</span> WHO-GMP+ Certified
+            0% Oxidation <span className="mx-1.5 md:mx-2 text-muted-foreground/50">·</span> 3 Feed Systems <span className="mx-1.5 md:mx-2 text-muted-foreground/50">·</span> WHO-GMP+ Certified
           </motion.div>
 
           {/* Badges */}
