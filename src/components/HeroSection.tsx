@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ShieldCheck, Factory, Sun } from "lucide-react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { ShieldCheck, Factory, Sun, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import organBalance from "@/assets/organ-balance-new.png";
 import gutBalance from "@/assets/gut-balance-new.png";
@@ -20,6 +20,7 @@ const products = [
 
 const HeroSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -37,6 +38,20 @@ const HeroSection = () => {
   const yValues = [y0, y1, y2];
   const rotateValues = [rotate0, rotate1, rotate2];
   const scaleValues = [scale0, scale1, scale2];
+
+  // Headline split into words for stagger animation.
+  // Each line keeps its own array so we can preserve <br /> breaks.
+  const headlineLines: { words: string[]; muted?: boolean }[] = [
+    { words: ["Clinical-grade"] },
+    { words: ["daily", "Precision", "nutrition"] },
+    { words: ["support", "for"], muted: true },
+    { words: ["Indian", "dogs."], muted: true },
+  ];
+  const allWords = headlineLines.flatMap((l) => l.words);
+  const totalWords = allWords.length;
+  const wordStaggerMs = 60;
+  const wordDurationMs = 400;
+  const statDelayMs = totalWords * wordStaggerMs + 200;
 
   return (
     <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)' }}>
@@ -57,13 +72,43 @@ const HeroSection = () => {
 
           {/* Headline - black & grey style preserved */}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95] tracking-[-0.04em] text-foreground mb-6">
-            Clinical-grade
-            <br />
-            daily nutrition
-            <br />
-            <span className="text-muted-foreground">support for</span>
-            <br />
-            <span className="text-muted-foreground">Indian dogs.</span>
+            {(() => {
+              let wordIndex = 0;
+              return headlineLines.map((line, lineIdx) => (
+                <span key={lineIdx} className="block">
+                  {line.words.map((word, i) => {
+                    const delay = prefersReducedMotion ? 0 : wordIndex * wordStaggerMs;
+                    wordIndex++;
+                    const isPrecision = word === "Precision";
+                    return (
+                      <motion.span
+                        key={`${lineIdx}-${i}`}
+                        className={`inline-block ${line.muted && !isPrecision ? "text-muted-foreground" : ""} ${i < line.words.length - 1 ? "mr-[0.25em]" : ""}`}
+                        style={
+                          isPrecision
+                            ? {
+                                background: "linear-gradient(135deg, #0EA5E9, #059669)",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                                backgroundClip: "text",
+                              }
+                            : undefined
+                        }
+                        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: wordDurationMs / 1000,
+                          delay: delay / 1000,
+                          ease: [0.16, 1, 0.3, 1],
+                        }}
+                      >
+                        {word}
+                      </motion.span>
+                    );
+                  })}
+                </span>
+              ));
+            })()}
           </h1>
 
           {/* Subheadline */}
@@ -77,22 +122,34 @@ const HeroSection = () => {
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap gap-4 mb-10">
+          <div className="flex flex-wrap gap-4 mb-6">
             <a
               href="https://amazon.in/biologica"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-8 py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
             >
               SHOP ON AMAZON INDIA
+              <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
             </a>
             <a
               href="#science"
-              className="inline-flex items-center justify-center px-8 py-4 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-4 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
             >
               HOW BIOLOGICA HELPS YOUR DOG
+              <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
             </a>
           </div>
+
+          {/* Stat row */}
+          <motion.div
+            className="text-xs tracking-wide text-muted-foreground mt-6 mb-10"
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : statDelayMs / 1000, ease: "easeOut" }}
+          >
+            0% Oxidation <span className="mx-2 text-muted-foreground/50">·</span> 3 Feed Systems <span className="mx-2 text-muted-foreground/50">·</span> WHO-GMP+ Certified
+          </motion.div>
 
           {/* Badges */}
           <div className="flex flex-wrap gap-3">
