@@ -205,7 +205,6 @@ const HeroSection = () => {
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground">Scroll</span>
         <div className="w-px h-8 bg-border" />
       </motion.div>
     </section>
