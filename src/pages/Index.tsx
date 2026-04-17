@@ -49,6 +49,9 @@ const Index = () => {
         {/* EVIDENCE & SAFETY */}
         <ScienceGrid />
 
+        {/* INSIDE EVERY SACHET */}
+        <InsideEverySachet />
+
         {/* FAQ */}
         <FAQSection />
 
