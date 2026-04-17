@@ -1,4 +1,5 @@
 import { ScrollProvider } from "@/components/ScrollContext";
+import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import MolecularNetwork from "@/components/MolecularNetwork";
 import ScrollGradientOverlay from "@/components/ScrollGradientOverlay";
 import Navbar from "@/components/Navbar";
@@ -17,6 +18,7 @@ import OriginStorySection from "@/components/OriginStorySection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  useScrollReveal();
   return (
     <ScrollProvider>
       <MolecularNetwork />

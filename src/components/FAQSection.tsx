@@ -34,7 +34,7 @@ const FAQSection = () => {
     <section id="faq" className="section-padding backdrop-blur-sm" style={{ backgroundColor: '#f5f7f2' }}>
       <div className="max-w-[900px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-16"
@@ -48,7 +48,7 @@ const FAQSection = () => {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >

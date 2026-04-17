@@ -139,4 +139,29 @@
     border: 2px solid hsl(var(--background));
     box-shadow: 0 2px 6px hsl(var(--foreground) / 0.2);
   }
+
+  /* Scroll-reveal — see src/hooks/use-scroll-reveal.ts */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 500ms ease-out, transform 500ms ease-out;
+    will-change: opacity, transform;
+  }
+  [data-reveal][data-revealed="true"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced-motion + no-JS safety: never let content stay hidden */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+.no-js [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
 }

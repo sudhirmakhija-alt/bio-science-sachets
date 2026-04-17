@@ -36,7 +36,7 @@ const OriginStorySection = () => {
             {milestones.map((m, i) => (
               <motion.div
                 key={m.year}
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{

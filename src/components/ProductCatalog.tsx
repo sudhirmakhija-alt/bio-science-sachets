@@ -133,7 +133,7 @@ const ProductCatalog = () => {
       {/* Section heading */}
       <div className="section-padding pb-0 max-w-[1400px] mx-auto">
         <motion.div
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -182,7 +182,7 @@ const ProductCatalog = () => {
                   >
                     {/* Glass content card */}
                     <motion.div
-                      initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
+                      initial={false}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: "-100px" }}
                       transition={{ duration: 0.5, ease: "easeOut" }}
