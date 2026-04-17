@@ -54,8 +54,8 @@ const HeroSection = () => {
   const statDelayMs = totalWords * wordStaggerMs + 200;
 
   return (
-    <section ref={sectionRef} className="relative flex flex-col items-center overflow-visible pb-0" style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)' }}>
-      <div className="section-padding w-full max-w-[1400px] mx-auto grid grid-cols-1 gap-12 items-center relative z-10">
+    <section ref={sectionRef} className="relative flex flex-col items-center justify-center overflow-hidden min-h-screen lg:h-screen pb-0 pt-20" style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)' }}>
+      <div className="px-6 md:px-12 w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
         {/* Left - Copy */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -63,7 +63,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-8 mt-6 md:mt-0">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-4 mt-2 md:mt-0">
             <span className="w-2 h-2 rounded-full bg-gut" />
             <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground">
               Vet-formulated daily toppers for Indian dogs
@@ -71,7 +71,7 @@ const HeroSection = () => {
           </div>
 
           {/* Headline - black & grey style preserved */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[0.95] tracking-[-0.04em] text-foreground mb-6">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-black leading-[0.95] tracking-[-0.04em] text-foreground mb-4">
             {(() => {
               let wordIndex = 0;
               return headlineLines.map((line, lineIdx) => (
@@ -112,29 +112,29 @@ const HeroSection = () => {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed mb-6 font-light">
+          <p className="text-base md:text-lg text-muted-foreground max-w-md leading-relaxed mb-3 font-light">
             Vet-formulated toppers that support joints, digestion, immunity, skin & coat and overall vitality in dogs living in Indian homes and climates.
           </p>
 
           {/* Trust line */}
-          <p className="text-xs text-muted-foreground/70 max-w-md leading-relaxed mb-10">
+          <p className="text-xs text-muted-foreground/70 max-w-md leading-relaxed mb-5">
             Developed by veterinarians and animal nutrition experts, referencing AAFCO and FEDIAF dog nutrition guidelines and manufactured in WHO-GMP+ and FAMI-QS certified facilities.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-wrap gap-4 mb-6">
+          <div className="flex flex-wrap gap-3 mb-4">
             <a
               href="https://amazon.in/biologica"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
             >
               SHOP ON AMAZON INDIA
               <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
             </a>
             <a
               href="#science"
-              className="group inline-flex items-center justify-center gap-2 px-8 py-4 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
+              className="group inline-flex items-center justify-center gap-2 px-6 py-3 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
             >
               HOW BIOLOGICA HELPS YOUR DOG
               <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
@@ -143,7 +143,7 @@ const HeroSection = () => {
 
           {/* Stat row */}
           <motion.div
-            className="text-xs tracking-wide text-muted-foreground mt-6 mb-10"
+            className="text-xs tracking-wide text-muted-foreground mt-3 mb-4"
             initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : statDelayMs / 1000, ease: "easeOut" }}
@@ -152,7 +152,7 @@ const HeroSection = () => {
           </motion.div>
 
           {/* Badges */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {badges.map((badge) => (
               <div
                 key={badge.label}
@@ -165,9 +165,9 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Product visuals — centered below */}
-        <div className="lg:col-span-2 flex items-center justify-center mt-8" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
-          <div className="relative flex items-end justify-center gap-0 lg:gap-0 -space-x-6 lg:-space-x-10">
+        {/* Product visuals */}
+        <div className="flex items-center justify-center mt-4 lg:mt-0" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
+          <div className="relative flex items-end justify-center -space-x-4 lg:-space-x-6">
             {products.map((product, i) => (
               <motion.div
                 key={product.alt}
@@ -178,11 +178,11 @@ const HeroSection = () => {
                 style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
               >
                 <div className="relative flex items-center justify-center">
-                  <MolecularRing color={product.ringColor} size={320} speed={product.ringSpeed} nodeCount={6} />
+                  <MolecularRing color={product.ringColor} size={220} speed={product.ringSpeed} nodeCount={6} />
                   <img
                     src={product.src}
                     alt={product.alt}
-                    className={`w-56 md:w-72 lg:w-[22rem] object-contain relative z-[1] ${i === 1 ? "scale-110 motion-safe:animate-sachet-float" : ""}`}
+                    className={`w-36 md:w-44 lg:w-56 object-contain relative z-[1] ${i === 1 ? "scale-110 motion-safe:animate-sachet-float" : ""}`}
                     style={
                       i === 1
                         ? undefined
