@@ -88,9 +88,36 @@ const colorClasses = {
 };
 
 const ProductCatalog = () => {
+  const [loadedCount, setLoadedCount] = useState(0);
+  const allLoaded = loadedCount >= products.length;
   return (
     <section id="products" className="section-padding" style={{ backgroundColor: '#ffffff' }}>
       <div className="max-w-[1400px] mx-auto">
+        {/* Hidden preloaders to detect when product images are ready */}
+        <div className="sr-only" aria-hidden>
+          {products.map((p) => (
+            <img
+              key={`preload-${p.name}`}
+              src={p.image}
+              alt=""
+              onLoad={() => setLoadedCount((c) => c + 1)}
+              onError={() => setLoadedCount((c) => c + 1)}
+            />
+          ))}
+        </div>
+
+        {!allLoaded ? (
+          <div className="space-y-12" aria-busy="true" aria-live="polite">
+            <div className="mb-16 space-y-3">
+              <div className="h-3 w-32 bg-muted rounded-md animate-pulse" />
+              <div className="h-10 w-2/3 bg-muted rounded-md animate-pulse" />
+            </div>
+            {products.map((p) => (
+              <ProductCardSkeleton key={`skeleton-${p.name}`} />
+            ))}
+          </div>
+        ) : (
+        <>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
