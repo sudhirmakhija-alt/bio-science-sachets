@@ -7,7 +7,7 @@ const OriginSection = () => {
       <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
         {/* Image */}
         <motion.div
-          initial={{ opacity: 0, x: -40 }}
+          initial={false}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
@@ -26,7 +26,7 @@ const OriginSection = () => {
 
         {/* Editorial copy */}
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
+          initial={false}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}>

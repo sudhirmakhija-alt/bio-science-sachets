@@ -17,7 +17,7 @@ const WhyNutritionSection = () => {
     <section id="why" className="section-padding my-0" style={{ backgroundColor: '#ffffff' }}>
       <div className="max-w-[1400px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-16">
@@ -33,7 +33,7 @@ const WhyNutritionSection = () => {
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left — paragraphs */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="space-y-6">
@@ -51,7 +51,7 @@ const WhyNutritionSection = () => {
 
           {/* Right — cards & chips */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}

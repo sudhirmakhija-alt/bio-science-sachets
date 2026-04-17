@@ -5,7 +5,7 @@ const AboutSection = () => {
     <section id="about" className="section-padding my-0" style={{ backgroundColor: '#f5f7f2' }}>
       <div className="max-w-[1400px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-16">
@@ -21,7 +21,7 @@ const AboutSection = () => {
         <div className="grid lg:grid-cols-2 gap-16">
           {/* Left — paragraphs */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="space-y-6">
@@ -39,7 +39,7 @@ const AboutSection = () => {
 
           {/* Right — pill, bullets, tags */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}>
