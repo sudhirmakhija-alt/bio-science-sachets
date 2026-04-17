@@ -178,11 +178,11 @@ const HeroSection = () => {
                 style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
               >
                 <div className="relative flex items-center justify-center">
-                  <MolecularRing color={product.ringColor} size={320} speed={product.ringSpeed} nodeCount={6} />
+                  <MolecularRing color={product.ringColor} size={220} speed={product.ringSpeed} nodeCount={6} />
                   <img
                     src={product.src}
                     alt={product.alt}
-                    className={`w-56 md:w-72 lg:w-[22rem] object-contain relative z-[1] ${i === 1 ? "scale-110 motion-safe:animate-sachet-float" : ""}`}
+                    className={`w-36 md:w-44 lg:w-56 object-contain relative z-[1] ${i === 1 ? "scale-110 motion-safe:animate-sachet-float" : ""}`}
                     style={
                       i === 1
                         ? undefined
