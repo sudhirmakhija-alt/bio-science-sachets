@@ -11,6 +11,7 @@ import DifferentiatorSection from "@/components/DifferentiatorSection";
 import ProductCatalog from "@/components/ProductCatalog";
 import DosingCalculator from "@/components/DosingCalculator";
 import ScienceGrid from "@/components/ScienceGrid";
+import InsideEverySachet from "@/components/InsideEverySachet";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 
@@ -47,6 +48,9 @@ const Index = () => {
 
         {/* EVIDENCE & SAFETY */}
         <ScienceGrid />
+
+        {/* INSIDE EVERY SACHET */}
+        <InsideEverySachet />
 
         {/* FAQ */}
         <FAQSection />
