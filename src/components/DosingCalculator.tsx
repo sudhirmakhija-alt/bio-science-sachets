@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { PawPrint } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 const WEIGHT_RANGES = [
   { min: 1, max: 5, sachets: 0.5 },
@@ -11,132 +11,187 @@ const WEIGHT_RANGES = [
   { min: 41, max: 60, sachets: 3 },
 ];
 
-const LIFE_STAGES = ["Adult", "Senior", "Puppy (only under vet guidance)"];
-const GOALS = [
-  "Gut support and stool consistency",
-  "Overall vitality and natural micronutrients",
-  "Joints, skin and coat",
+const SIZE_LABELS = [
+  "Toy (1–5kg)",
+  "Small (5–10kg)",
+  "Medium (10–25kg)",
+  "Large (25–45kg)",
+  "Giant (45kg+)",
 ];
 
-const DosingCalculator = () => {
-  const [weight, setWeight] = useState("");
-  const [lifeStage, setLifeStage] = useState("");
-  const [goal, setGoal] = useState("");
-  const [result, setResult] = useState<number | null>(null);
+type ProductKey = "omega" | "organ" | "gut";
+const PRODUCTS: { key: ProductKey; label: string; name: string; activeClass: string }[] = [
+  { key: "omega", label: "Omega", name: "Omega Balance+", activeClass: "bg-omega text-omega-foreground border-transparent" },
+  { key: "organ", label: "Organ", name: "Organ Balance+", activeClass: "bg-organ text-organ-foreground border-transparent" },
+  { key: "gut", label: "Gut", name: "Gut Balance+", activeClass: "bg-gut text-gut-foreground border-transparent" },
+];
 
-  const handleCalculate = () => {
-    const w = parseFloat(weight);
-    if (!w || w <= 0) return;
-    const range = WEIGHT_RANGES.find((r) => w >= r.min && w <= r.max);
-    setResult(range ? range.sachets : WEIGHT_RANGES[WEIGHT_RANGES.length - 1].sachets);
+const calcSachets = (w: number) => {
+  const range = WEIGHT_RANGES.find((r) => w >= r.min && w <= r.max);
+  return range ? range.sachets : WEIGHT_RANGES[WEIGHT_RANGES.length - 1].sachets;
+};
+
+// Animated count-up display
+const AnimatedNumber = ({ value, duration = 600 }: { value: number; duration?: number }) => {
+  const prefersReducedMotion = useReducedMotion();
+  const [display, setDisplay] = useState(value);
+  const startTimeRef = useRef<number | null>(null);
+  const fromRef = useRef(value);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setDisplay(value);
+      return;
+    }
+    fromRef.current = display;
+    startTimeRef.current = null;
+    const target = value;
+    const from = display;
+
+    const step = (ts: number) => {
+      if (startTimeRef.current === null) startTimeRef.current = ts;
+      const elapsed = ts - startTimeRef.current;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplay(from + (target - from) * eased);
+      if (t < 1) rafRef.current = requestAnimationFrame(step);
+    };
+    rafRef.current = requestAnimationFrame(step);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, prefersReducedMotion]);
+
+  // Round to 1 decimal if needed (matches 0.5 increments)
+  const formatted = Number.isInteger(display) ? display.toString() : display.toFixed(1);
+  return <>{formatted}</>;
+};
+
+const DosingCalculator = () => {
+  const prefersReducedMotion = useReducedMotion();
+  const [weight, setWeight] = useState(12);
+  const [selected, setSelected] = useState<ProductKey[]>([]);
+
+  const toggleProduct = (key: ProductKey) => {
+    setSelected((curr) =>
+      curr.includes(key) ? curr.filter((k) => k !== key) : [...curr, key]
+    );
   };
 
+  const sachets = calcSachets(weight);
+  const showResult = selected.length > 0;
+  const selectedNames = PRODUCTS.filter((p) => selected.includes(p.key)).map((p) => p.name).join(" · ");
+
   return (
-    <section id="dosing" className="section-padding relative overflow-hidden" style={{ backgroundColor: '#ffffff' }}>
-      <div className="max-w-[1000px] mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
-            Daily routine
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground mb-6">
-            Dosing helper
-          </h2>
-          <p className="text-sm text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Use this simple helper to estimate how many sachets per day may be appropriate for your dog. This is not a substitute for veterinary advice. Always follow the product label and your vet's specific guidance.
-          </p>
-        </motion.div>
+    <section id="dosing" className="section-padding">
+      <div className="bg-muted/40 backdrop-blur-sm rounded-3xl border border-border/50 p-8 md:p-12 max-w-2xl mx-auto">
+        <span className="text-xs tracking-widest uppercase text-muted-foreground mb-2 block">
+          Dosing Calculator
+        </span>
+        <h2 className="text-2xl font-bold mb-8 text-foreground">
+          How much does your dog need?
+        </h2>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="glass-card rounded-sm p-8 md:p-12"
-        >
-          <div className="space-y-6 mb-8">
-            {/* Weight */}
-            <div>
-              <label className="text-sm font-medium tracking-wide text-foreground block mb-2">
-                Dog weight in kg
-              </label>
-              <input
-                type="number"
-                placeholder="e.g. 12"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-                className="w-full h-12 px-5 border border-border/80 bg-background text-foreground text-sm rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-gut"
-              />
-            </div>
-
-            {/* Life Stage */}
-            <div>
-              <label className="text-sm font-medium tracking-wide text-foreground block mb-2">
-                Life stage
-              </label>
-              <select
-                value={lifeStage}
-                onChange={(e) => setLifeStage(e.target.value)}
-                className="w-full h-12 px-5 border border-border/80 bg-background text-foreground text-sm rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-gut appearance-none"
-              >
-                <option value="">Select life stage</option>
-                {LIFE_STAGES.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Goal */}
-            <div>
-              <label className="text-sm font-medium tracking-wide text-foreground block mb-2">
-                Primary goal
-              </label>
-              <select
-                value={goal}
-                onChange={(e) => setGoal(e.target.value)}
-                className="w-full h-12 px-5 border border-border/80 bg-background text-foreground text-sm rounded-full shadow-sm focus:outline-none focus:ring-1 focus:ring-gut appearance-none"
-              >
-                <option value="">Select primary goal</option>
-                {GOALS.map((g) => (
-                  <option key={g} value={g}>{g}</option>
-                ))}
-              </select>
-            </div>
+        {/* STEP 1 — Weight slider */}
+        <div>
+          <label className="text-sm font-medium mb-2 block text-foreground">
+            Dog's weight
+          </label>
+          <div className="text-2xl font-bold text-foreground mb-3">
+            {weight} kg
           </div>
+          <input
+            type="range"
+            min={1}
+            max={60}
+            step={1}
+            value={weight}
+            onChange={(e) => setWeight(parseInt(e.target.value, 10))}
+            className="dosing-range w-full"
+            aria-label="Dog weight in kilograms"
+          />
+          <div className="flex justify-between mt-3">
+            {SIZE_LABELS.map((s) => (
+              <span key={s} className="text-xs text-muted-foreground text-center flex-1">
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
 
-          <button
-            onClick={handleCalculate}
-            className="w-full py-4 rounded-full bg-gradient-to-r from-gut to-omega text-white font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity mb-8 inline-flex items-center justify-center gap-2"
-          >
-            <PawPrint className="w-4 h-4" />
-            Calculate suggested daily sachets
-          </button>
+        {/* STEP 2 — Product selector */}
+        <div className="mt-8">
+          <label className="text-sm font-medium mb-3 block text-foreground">
+            Select product
+          </label>
+          <div className="flex gap-3 flex-wrap">
+            {PRODUCTS.map((p) => {
+              const isActive = selected.includes(p.key);
+              return (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={() => toggleProduct(p.key)}
+                  aria-pressed={isActive}
+                  className={`text-sm font-medium px-5 py-2.5 rounded-full border transition-all duration-200 ${
+                    isActive
+                      ? p.activeClass
+                      : "border-border bg-background text-foreground hover:border-foreground/30"
+                  }`}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
-          {result !== null && (
+        {/* STEP 3 — Result card */}
+        <AnimatePresence>
+          {showResult && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              key={`result-${selected.join("-")}-${weight}`}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center border border-border p-8"
+              exit={prefersReducedMotion ? undefined : { opacity: 0, y: 8 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="bg-background border border-border rounded-2xl p-6 mt-8"
             >
-              <div className="text-4xl font-black text-foreground mb-2">{result}</div>
-              <div className="text-xs text-muted-foreground tracking-wide uppercase mb-4">
-                Suggested sachets per day
+              <div className="text-sm text-muted-foreground">
+                For a {weight}kg dog
               </div>
-              {goal && (
-                <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-sm text-xs text-muted-foreground">
-                  {goal}
+              <div className="mt-1">
+                <span className="text-5xl font-bold text-foreground">
+                  <AnimatedNumber value={sachets} />
                 </span>
-              )}
+                <span className="text-xl text-muted-foreground ml-2">
+                  sachet/day
+                </span>
+              </div>
+              <div className="text-sm text-muted-foreground mt-1">
+                {selectedNames}
+              </div>
+
+              <div className="mt-4 border-t border-border" />
+
+              <a
+                href="https://amazon.in/biologica"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold mt-4 text-foreground hover:gap-3 transition-all"
+              >
+                Shop on Amazon
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </motion.div>
           )}
+        </AnimatePresence>
 
-          <p className="text-xs text-muted-foreground mt-6 text-center">
-            Always follow the product label and your vet's specific advice, especially for puppies, seniors or dogs on medication.
-          </p>
-        </motion.div>
+        <p className="text-xs text-muted-foreground/60 italic mt-4 leading-relaxed">
+          Always follow the product label and your vet's specific advice, especially for puppies, seniors or dogs on medication. This helper is not a substitute for veterinary guidance.
+        </p>
       </div>
     </section>
   );
