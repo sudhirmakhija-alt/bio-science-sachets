@@ -74,16 +74,16 @@ const HeroSection = () => {
           </div>
         </div>
         <div className="relative w-full max-w-[1400px] mx-auto px-6 md:px-12 mt-8 md:mt-12">
-          <div className="flex items-end justify-center gap-4 md:gap-8 lg:gap-12">
+          <div className="grid grid-cols-3 gap-4 md:gap-8 lg:gap-12 items-end">
             {tins.map((tin) => (
               <div key={tin.alt} className="flex flex-col items-center gap-3">
                 <img
                   src={tin.src}
                   alt={tin.alt}
-                  className="w-28 md:w-40 lg:w-52 object-contain"
+                  className="w-28 md:w-40 lg:w-52 h-auto object-contain mx-auto"
                   style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))" }}
                 />
-                <span className="text-xs tracking-widest uppercase text-muted-foreground">{tin.label}</span>
+                <span className="text-xs tracking-widest uppercase text-muted-foreground text-center">{tin.label}</span>
               </div>
             ))}
           </div>
