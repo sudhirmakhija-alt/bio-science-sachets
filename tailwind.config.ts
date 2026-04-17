@@ -115,6 +115,10 @@ export default {
             filter: "drop-shadow(0 32px 56px rgba(0,0,0,0.12)) drop-shadow(0 14px 24px rgba(0,0,0,0.08))",
           },
         },
+        "product-float": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-12px)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -124,6 +128,7 @@ export default {
         "particle-expand": "particle-expand 2s ease-out forwards",
         "marquee": "marquee 35s linear infinite",
         "sachet-float": "sachet-float 5s ease-in-out infinite",
+        "product-float": "product-float 5s ease-in-out infinite",
       },
     },
   },
