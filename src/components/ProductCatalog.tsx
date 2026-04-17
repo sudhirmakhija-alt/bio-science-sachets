@@ -213,6 +213,8 @@ const ProductCatalog = () => {
 
           })}
         </div>
+        </>
+        )}
       </div>
     </section>);
 
