@@ -112,9 +112,14 @@ const DosingCalculator = () => {
             className="dosing-range w-full"
             aria-label="Dog weight in kilograms"
           />
-          <div className="flex justify-between mt-3">
-            {SIZE_LABELS.map((s) => (
-              <span key={s} className="text-xs text-muted-foreground text-center flex-1">
+          <div className="flex justify-between mt-3 px-1">
+            {SIZE_LABELS.map((s, i) => (
+              <span
+                key={s}
+                className={`text-xs text-muted-foreground ${
+                  i === 0 ? "text-left" : i === SIZE_LABELS.length - 1 ? "text-right" : "text-center"
+                }`}
+              >
                 {s}
               </span>
             ))}
