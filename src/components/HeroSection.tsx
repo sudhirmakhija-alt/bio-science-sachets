@@ -139,37 +139,9 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Product visuals */}
-        <div className="flex items-center justify-center mt-4 lg:mt-0" style={{ background: 'radial-gradient(ellipse at 20% 60%, rgba(255,182,193,0.15) 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, rgba(144,238,144,0.12) 0%, transparent 40%), radial-gradient(ellipse at 80% 60%, rgba(173,216,230,0.15) 0%, transparent 40%)' }}>
-          <div className="relative flex items-end justify-center -space-x-4 lg:-space-x-6">
-            {products.map((product, i) => (
-              <motion.div
-                key={product.alt}
-                className="relative"
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 + product.delay, ease: [0.16, 1, 0.3, 1] }}
-                style={{ y: yValues[i], rotate: rotateValues[i], scale: scaleValues[i] }}
-              >
-                <div className="relative flex items-center justify-center">
-                  <MolecularRing color={product.ringColor} size={220} speed={product.ringSpeed} nodeCount={6} />
-                  <img
-                    src={product.src}
-                    alt={product.alt}
-                    className={`w-36 md:w-44 lg:w-56 object-contain relative z-[1] ${i === 1 ? "scale-110 motion-safe:animate-sachet-float" : ""}`}
-                    style={
-                      i === 1
-                        ? undefined
-                        : {
-                            filter:
-                              "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
-                          }
-                    }
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        {/* Spotlight card (hidden on mobile) */}
+        <div className="hidden md:flex items-center justify-center mt-4 lg:mt-0">
+          <SpotlightCard variant="notify" />
         </div>
       </div>
 
