@@ -143,7 +143,7 @@ const HeroSection = () => {
 
           {/* Stat row */}
           <motion.div
-            className="text-[10px] md:text-xs tracking-wide text-muted-foreground mt-3 mb-4 whitespace-nowrap"
+            className="md:text-xs tracking-wide text-muted-foreground mt-3 mb-4 whitespace-nowrap text-xs"
             initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : statDelayMs / 1000, ease: "easeOut" }}
