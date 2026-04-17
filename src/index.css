@@ -105,4 +105,38 @@
     --tier-color: var(--gut);
     --tier-foreground: var(--gut-foreground);
   }
+
+  /* Dosing calculator range slider */
+  .dosing-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: hsl(var(--border));
+    border-radius: 9999px;
+    outline: none;
+  }
+  .dosing-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    background: hsl(var(--foreground));
+    cursor: pointer;
+    border: 2px solid hsl(var(--background));
+    box-shadow: 0 2px 6px hsl(var(--foreground) / 0.2);
+    transition: transform 0.15s ease-out;
+  }
+  .dosing-range::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+  }
+  .dosing-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    background: hsl(var(--foreground));
+    cursor: pointer;
+    border: 2px solid hsl(var(--background));
+    box-shadow: 0 2px 6px hsl(var(--foreground) / 0.2);
+  }
 }
