@@ -40,9 +40,9 @@ const HeroSection = () => {
   const heroY = useTransform(smoothProgress, [0, 0.4], [0, -80]);
 
   // Tins: parallax rise + scale + fade
-  const tinsY = useTransform(smoothProgress, [0, 0.5, 0.8], [120, 0, -20]);
+  const tinsY = useTransform(smoothProgress, [0, 0.6, 0.9], [80, 0, -10]);
   const tinsOpacity = useTransform(smoothProgress, [0, 0.3], [0, 1]);
-  const tinsScale = useTransform(smoothProgress, [0, 0.5], [0.92, 1]);
+  const tinsScale = useTransform(smoothProgress, [0, 0.6], [0.94, 1]);
 
   // Tin labels: staggered fade-in around 50%
   const label0Opacity = useTransform(smoothProgress, [0.5, 0.6], [0, 1]);
@@ -63,7 +63,25 @@ const HeroSection = () => {
   const wordDurationMs = 400;
   const statDelayMs = totalWords * wordStaggerMs + 200;
 
-  // Reduced motion: render statically without scroll wrapper transforms
+  // Mobile/reduced-motion: render statically with tins below content in normal flow
+  const StaticTins = ({ mobileOnly = false }: { mobileOnly?: boolean }) => (
+    <div className={`relative w-full max-w-[1400px] mx-auto px-6 md:px-12 mt-8 ${mobileOnly ? "md:hidden" : "md:mt-12"}`}>
+      <div className="grid grid-cols-3 gap-4 md:gap-6 items-end">
+        {tins.map((tin) => (
+          <div key={tin.alt} className="flex flex-col items-center gap-3">
+            <img
+              src={tin.src}
+              alt={tin.alt}
+              className="w-[120px] md:w-[240px] lg:w-[300px] h-auto object-contain mx-auto"
+              style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))" }}
+            />
+            <span className="text-xs tracking-widest uppercase text-muted-foreground text-center">{tin.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   if (prefersReducedMotion) {
     return (
       <section className="relative flex flex-col items-center justify-center overflow-hidden min-h-screen pb-0 pt-20 bg-background">
@@ -73,84 +91,88 @@ const HeroSection = () => {
             <SpotlightCard variant="notify" />
           </div>
         </div>
-        <div className="relative w-full max-w-[1400px] mx-auto px-6 md:px-12 mt-8 md:mt-12">
-          <div className="grid grid-cols-3 gap-4 md:gap-8 lg:gap-12 items-end">
-            {tins.map((tin) => (
-              <div key={tin.alt} className="flex flex-col items-center gap-3">
-                <img
-                  src={tin.src}
-                  alt={tin.alt}
-                  className="w-28 md:w-40 lg:w-52 h-auto object-contain mx-auto"
-                  style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))" }}
-                />
-                <span className="text-xs tracking-widest uppercase text-muted-foreground text-center">{tin.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <StaticTins />
       </section>
     );
   }
 
   return (
-    <div ref={wrapperRef} className="relative" style={{ height: "200vh" }}>
-      <div className="sticky top-0 h-screen overflow-hidden bg-background">
-        {/* HERO CONTENT — scrolls up & fades out */}
-        <motion.section
-          style={{ opacity: heroOpacity, y: heroY }}
-          className="relative flex flex-col items-center justify-center min-h-screen pt-20"
-        >
-          <div
-            className="absolute inset-0 -z-10"
-            style={{
-              background:
-                "radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)",
-            }}
+    <>
+      {/* MOBILE: static hero + tins in normal flow, no parallax */}
+      <section className="md:hidden relative flex flex-col items-center overflow-hidden min-h-screen pt-20 pb-12 bg-background">
+        <div className="px-6 w-full max-w-[1400px] mx-auto relative z-10">
+          <HeroCopy
+            headlineLines={headlineLines}
+            badges={badges}
+            prefersReducedMotion={false}
+            wordStaggerMs={wordStaggerMs}
+            wordDurationMs={wordDurationMs}
+            statDelayMs={statDelayMs}
           />
-          <div className="px-6 md:px-12 w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
-            <HeroCopy
-              headlineLines={headlineLines}
-              badges={badges}
-              prefersReducedMotion={false}
-              wordStaggerMs={wordStaggerMs}
-              wordDurationMs={wordDurationMs}
-              statDelayMs={statDelayMs}
-            />
-            <div className="hidden md:flex items-center justify-center mt-4 lg:mt-0">
-              <SpotlightCard variant="notify" />
-            </div>
-          </div>
-        </motion.section>
+        </div>
+        <StaticTins mobileOnly />
+      </section>
 
-        {/* PRODUCT TINS — parallax rise on clean white bg */}
-        <motion.div
-          className="absolute inset-x-0 bottom-0 top-0 flex items-center justify-center pointer-events-none px-6 md:px-12"
-          style={{ y: tinsY, opacity: tinsOpacity, scale: tinsScale }}
-        >
-          <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-4 md:gap-8 lg:gap-12 items-end">
-            {tins.map((tin, i) => (
-              <div key={tin.alt} className="flex flex-col items-center gap-3 md:gap-4">
-                <img
-                  src={tin.src}
-                  alt={tin.alt}
-                  className="w-28 md:w-40 lg:w-52 h-auto object-contain"
-                  style={{
-                    filter:
-                      "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
-                  }}
-                />
-                <motion.span
-                  className="text-xs tracking-widest uppercase text-muted-foreground text-center"
-                  style={{ opacity: labelOpacities[i] }}
-                >
-                  {tin.label}
-                </motion.span>
+      {/* DESKTOP/TABLET: scroll-driven reveal */}
+      <div ref={wrapperRef} className="relative hidden md:block" style={{ height: "130vh" }}>
+        <div className="sticky top-0 h-screen overflow-hidden bg-background">
+          {/* HERO CONTENT — scrolls up & fades out */}
+          <motion.section
+            style={{ opacity: heroOpacity, y: heroY }}
+            className="relative flex flex-col items-center justify-center min-h-screen pt-20"
+          >
+            <div
+              className="absolute inset-0 -z-10"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)",
+              }}
+            />
+            <div className="px-6 md:px-12 w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
+              <HeroCopy
+                headlineLines={headlineLines}
+                badges={badges}
+                prefersReducedMotion={false}
+                wordStaggerMs={wordStaggerMs}
+                wordDurationMs={wordDurationMs}
+                statDelayMs={statDelayMs}
+              />
+              <div className="hidden md:flex items-center justify-center mt-4 lg:mt-0">
+                <SpotlightCard variant="notify" />
               </div>
-            ))}
-          </div>
-        </motion.div>
+            </div>
+          </motion.section>
+
+          {/* PRODUCT TINS — parallax rise on clean white bg, centered with tight whitespace */}
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none px-6 md:px-12"
+            style={{ y: tinsY, opacity: tinsOpacity, scale: tinsScale }}
+          >
+            <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-6 items-end">
+              {tins.map((tin, i) => (
+                <div key={tin.alt} className="flex flex-col items-center gap-4">
+                  <img
+                    src={tin.src}
+                    alt={tin.alt}
+                    className="w-[240px] lg:w-[300px] h-auto object-contain"
+                    style={{
+                      filter:
+                        "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+                    }}
+                  />
+                  <motion.span
+                    className="text-xs tracking-widest uppercase text-muted-foreground text-center"
+                    style={{ opacity: labelOpacities[i] }}
+                  >
+                    {tin.label}
+                  </motion.span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
