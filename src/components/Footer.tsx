@@ -2,29 +2,39 @@ import { ArrowRight } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="section-padding bg-foreground text-background">
+    <footer className="section-padding bg-foreground text-background border-t border-border/20">
       <div className="max-w-[1400px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-12">
           <div className="max-w-md">
-            <h3 className="text-2xl font-black tracking-tight mb-4">BioLogica</h3>
-            <p className="text-background/60 text-sm leading-relaxed px-0 mx-0 pr-[40px]">Clinical daily nutrition support for Indian dogs. Based in India.</p>
+            <h3 className="text-2xl font-black tracking-tight mb-2">BioLogica</h3>
+            <p className="text-xs text-background/40 mt-2">
+              Veterinary-grade sachet nutrition for dogs. Bangalore, India.
+            </p>
+            <p className="text-background/60 text-sm leading-relaxed mt-4 pr-[40px]">
+              Clinical daily nutrition support for Indian dogs. Based in India.
+            </p>
           </div>
 
           <nav className="flex flex-col gap-[12px] px-0">
             {[
-            { label: "Products", href: "#products" },
-            { label: "Science", href: "#science" },
-            { label: "Dosing", href: "#dosing" },
-            { label: "Origin", href: "#origin" }].
-            map((link) =>
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-xs font-medium tracking-widest uppercase text-background/50 hover:text-background transition-colors">
-              
+              { label: "Omega", href: "#products", dot: "bg-omega" },
+              { label: "Organ", href: "#products", dot: "bg-organ" },
+              { label: "Gut", href: "#products", dot: "bg-gut" },
+              { label: "Science", href: "#science", dot: null },
+              { label: "Dosing", href: "#dosing", dot: null },
+              { label: "Origin", href: "#origin", dot: null },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="inline-flex items-center text-xs font-medium tracking-widest uppercase text-background/50 hover:text-background transition-colors"
+              >
+                {link.dot && (
+                  <span className={`w-2 h-2 rounded-full ${link.dot} inline-block mr-2`} />
+                )}
                 {link.label}
               </a>
-            )}
+            ))}
           </nav>
 
           <div className="md:text-right">
