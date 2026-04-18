@@ -3,9 +3,9 @@ import { ShieldCheck, Factory, Sun, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import SpotlightCard from "@/components/SpotlightCard";
 import { useIsMobile } from "@/hooks/use-mobile";
-import organBalance from "@/assets/organ-balance-new.png";
-import gutBalance from "@/assets/gut-balance-new.png";
-import omegaBalance from "@/assets/omega-balance-new.png";
+import organBalance from "@/assets/organ-balance-hero-cropped.png";
+import gutBalance from "@/assets/gut-balance-hero-cropped.png";
+import omegaBalance from "@/assets/omega-balance-hero-cropped.png";
 
 const tins = [
   { src: omegaBalance, alt: "BioLogica Omega Balance+ dog nutrition topper with Green-Lipped Mussel, 30 sachets", label: "OMEGA BALANCE+", labelLine1: "OMEGA", labelLine2: "BALANCE+", labelDelay: 0 },
