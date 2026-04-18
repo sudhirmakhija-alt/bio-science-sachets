@@ -26,6 +26,7 @@ const BlogPost = () => {
         title={post.title}
         heroImage={post.heroImage}
         heroImageAlt={post.title}
+        heroImagePosition={post.heroImagePosition}
       >
         {post.content.map((para, i) => {
           if (para.startsWith("## ")) {
