@@ -25,7 +25,7 @@ const testimonials = [
 const TestimonialsSection = () => {
   return (
     <section
-      id="testimonials"
+      id="reviews"
       className="pt-20 md:pt-24 pb-8 md:pb-10 px-6 md:px-12 backdrop-blur-sm bg-stone-50"
     >
       <div className="max-w-[1200px] mx-auto">

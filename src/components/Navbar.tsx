@@ -8,7 +8,7 @@ const NAV_LINKS = [
 { label: "Dosing", href: "#dosing" },
 { label: "Origin", href: "#origin" },
 { label: "Blog", href: "#journal" },
-{ label: "Reviews", href: "#testimonials" }];
+{ label: "Reviews", href: "#reviews" }];
 
 
 const Navbar = () => {
