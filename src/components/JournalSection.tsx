@@ -43,7 +43,7 @@ const articles: Article[] = [
     title: "Toppers vs Supplements. They Are Not the Same Thing.",
     excerpt:
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise, and understanding it will help you make a much better choice for your dog.",
-    image: "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=800&q=80&auto=format",
+    image: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&q=80&auto=format",
     content: [
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise.",
       "## What's a supplement?",
