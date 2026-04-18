@@ -29,7 +29,7 @@ const CredentialsMarquee = () => {
   );
 
   return (
-    <div className="mt-8 md:mt-10 w-full bg-black py-3 overflow-hidden">
+    <div className="mt-0 md:mt-10 w-full bg-black py-3 overflow-hidden">
       <style>{`
         @keyframes credentials-marquee {
           0%   { transform: translate3d(0, 0, 0); }
