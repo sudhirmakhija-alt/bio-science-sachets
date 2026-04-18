@@ -151,7 +151,7 @@ const HeroSection = () => {
             {/* PRODUCT TINS — parallax rise on clean white bg, centered with tight whitespace */}
             <motion.div
               className="absolute inset-0 flex items-center justify-center pointer-events-none px-6 md:px-12"
-              style={{ y: tinsY, opacity: tinsOpacity, scale: tinsScale }}
+              style={{ y: tinsY, opacity: 1, scale: tinsScale }}
             >
               <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-6 items-end">
                 {tins.map((tin, i) => (
