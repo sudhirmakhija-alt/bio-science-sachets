@@ -59,7 +59,7 @@ const OriginSection = () => {
           </div>
 
           <div className="mt-10 pt-10 border-t border-border">
-            <div className="grid grid-cols-3 gap-4 md:gap-8">
+            <div className="grid grid-cols-3 gap-0">
               {[
               { value: '30', label: 'Precision Sachets' },
               { value: '<25°C', label: 'Storage Standard' },
@@ -67,7 +67,7 @@ const OriginSection = () => {
               map((stat, idx) =>
               <div
                 key={stat.label}
-                className={`flex flex-col items-center text-center ${idx === 1 ? 'border-x border-border' : ''}`}
+                className={`flex flex-col items-center justify-center text-center px-2 md:px-4 ${idx === 1 ? 'border-x border-border' : ''}`}
               >
                   <div className="text-2xl md:text-4xl lg:text-[48px] font-black text-foreground leading-none">{stat.value}</div>
                   <div className="text-muted-foreground mt-2 tracking-widest uppercase text-[9px] md:text-[11px]">
