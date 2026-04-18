@@ -159,7 +159,7 @@ const HeroSection = () => {
                     <img
                       src={tin.src}
                       alt={tin.alt}
-                      className="w-full max-w-[450px] lg:max-w-[675px] xl:max-w-[846px] h-auto object-contain"
+                      className="w-full max-w-[450px] lg:max-w-[675px] xl:max-w-[846px] h-auto object-contain opacity-100"
                       style={{
                         filter:
                           "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
