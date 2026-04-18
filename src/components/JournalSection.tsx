@@ -90,7 +90,7 @@ const articles: Article[] = [
     title: "The Food Your Dog's Ancestors Ate First. And Why Modern Dogs Are Missing It.",
     excerpt:
       "When a wolf makes a kill, the first thing it eats isn't the muscle meat. It's the organs. This isn't random behaviour. It's nutritional intelligence that took thousands of years to develop.",
-    image: "https://images.unsplash.com/photo-1530281700549-e82e7bf110d6?w=800&q=80&auto=format",
+    image: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=800&q=80&fit=crop&crop=faces",
     content: [
       "When a wolf makes a kill, the first thing it eats is not the muscle meat. It is the organs. Liver first. Then kidney, heart, and spleen. The muscle meat comes last, or gets left for scavengers.",
       "This is not random behaviour. It is nutritional intelligence that took thousands of years to develop.",
