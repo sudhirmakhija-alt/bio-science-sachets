@@ -19,7 +19,7 @@ const articles: Article[] = [
     title: "The New Zealand Shellfish That's Changing How We Think About Dog Joints",
     excerpt:
       "Most people haven't heard of Green-Lipped Mussel. Which is strange, because it might be the single best thing you can give a dog with stiff joints, a dull coat, or low energy.",
-    image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1600&q=80",
+    image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80&auto=format",
     content: [
       "Most people haven't heard of Green-Lipped Mussel. Which is strange, because it might be the single best thing you can give a dog with stiff joints, a dull coat, or low energy.",
       "Here's what it is and why it works.",
@@ -43,7 +43,7 @@ const articles: Article[] = [
     title: "Toppers vs Supplements. They Are Not the Same Thing.",
     excerpt:
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise, and understanding it will help you make a much better choice for your dog.",
-    image: "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=800&q=80&auto=format",
     content: [
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise.",
       "## What's a supplement?",
@@ -66,7 +66,7 @@ const articles: Article[] = [
     title: "Your Dog's Gut Is Trying to Tell You Something. Here's How to Listen.",
     excerpt:
       "Loose stools. Itchy skin. Low energy after meals. Recurring ear infections. Most dog owners treat these as separate problems. They are usually not.",
-    image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80&auto=format",
     content: [
       "Loose stools. Itchy skin. Low energy after meals. Recurring ear infections.",
       "Most dog owners treat these as separate problems. They are usually not. They are often the same problem showing up in different places, and that problem is gut health.",
@@ -90,7 +90,7 @@ const articles: Article[] = [
     title: "The Food Your Dog's Ancestors Ate First. And Why Modern Dogs Are Missing It.",
     excerpt:
       "When a wolf makes a kill, the first thing it eats isn't the muscle meat. It's the organs. This isn't random behaviour. It's nutritional intelligence that took thousands of years to develop.",
-    image: "https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1583511655826-05700d52f4d9?w=800&q=80&auto=format",
     content: [
       "When a wolf makes a kill, the first thing it eats is not the muscle meat. It is the organs. Liver first. Then kidney, heart, and spleen. The muscle meat comes last, or gets left for scavengers.",
       "This is not random behaviour. It is nutritional intelligence that took thousands of years to develop.",
@@ -112,7 +112,7 @@ const articles: Article[] = [
     title: "Not Every Dog Needs the Same Thing. Here's How to Figure Out What Yours Does.",
     excerpt:
       "The three BioLogica toppers are not interchangeable. They do different things, for different dogs, at different life stages. Here is how to think about which one makes sense for yours.",
-    image: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=800&q=80&auto=format",
     content: [
       "The three BioLogica toppers are not interchangeable. They do different things, for different dogs, at different life stages.",
       "## Start with your dog's most obvious issue",
@@ -144,15 +144,17 @@ const ArticleCard = ({
     whileHover={{ y: -4 }}
     transition={{ type: "spring", stiffness: 300, damping: 24 }}
     className={`group relative flex flex-col overflow-hidden rounded-2xl bg-gray-900 text-left shadow-md transition-shadow hover:shadow-2xl hover:shadow-black/40 ${
-      hero ? "min-h-[480px]" : "min-h-[420px]"
+      hero ? "" : "h-[480px]"
     }`}
   >
-    <div className={`relative overflow-hidden ${hero ? "h-[55%] min-h-[280px]" : "h-[55%] min-h-[220px]"}`}>
+    <div
+      className={`relative overflow-hidden ${hero ? "h-[480px]" : "h-[240px] flex-shrink-0"}`}
+    >
       <img
         src={article.image}
         alt={article.title}
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        className="absolute inset-0 h-full w-full object-cover object-[center_top] transition-transform duration-700 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
     </div>
@@ -233,7 +235,7 @@ const JournalSection = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-12 md:mb-16"
+          className="mb-6 md:mb-8"
         >
           <span className="mb-4 block text-xs font-medium uppercase tracking-[0.3em] text-gray-500">
             From the Journal
