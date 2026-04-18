@@ -58,6 +58,7 @@ const products: Product[] = [
     description:
       "Gut Balance+ is a 100% vegetarian, gut-friendly topper formulated to support healthy digestion, stool consistency and gut lining integrity in dogs.",
     image: gutProduct,
+    imageAlt: "BioLogica Gut Balance+ vegetarian gut health topper for dogs, 30 sachets",
     color: "gut",
     benefits: ["Digestion", "Stool Quality", "Gut Lining"],
     amazonUrl: "https://amazon.in/biologica",
