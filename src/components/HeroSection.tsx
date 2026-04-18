@@ -158,7 +158,7 @@ const HeroSection = () => {
                   <span className="text-[10px] lg:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
                     {tin.label}
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
 
