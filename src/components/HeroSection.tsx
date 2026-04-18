@@ -2,6 +2,7 @@ import { motion, useReducedMotion, useScroll, useTransform, useSpring, MotionVal
 import { ShieldCheck, Factory, Sun, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import SpotlightCard from "@/components/SpotlightCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 import organBalance from "@/assets/organ-balance-new.png";
 import gutBalance from "@/assets/gut-balance-new.png";
 import omegaBalance from "@/assets/omega-balance-new.png";
