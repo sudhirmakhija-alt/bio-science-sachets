@@ -45,7 +45,7 @@ const articles: Article[] = [
     excerpt:
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise, and understanding it will help you make a much better choice for your dog.",
     image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80&auto=format",
-    imagePosition: "center 18%",
+    imagePosition: "center 35%",
     content: [
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise.",
       "## What's a supplement?",
