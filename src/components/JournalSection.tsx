@@ -156,7 +156,8 @@ const ArticleCard = ({
         src={article.image}
         alt={article.title}
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover object-[center_top] transition-transform duration-700 group-hover:scale-105"
+        style={{ objectPosition: article.imagePosition ?? "center top" }}
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
     </div>
