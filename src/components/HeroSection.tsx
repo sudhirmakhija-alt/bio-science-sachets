@@ -138,14 +138,11 @@ const HeroSection = () => {
             {heroCopy}
 
             {/* PRODUCT TINS — center column with scroll-in animation */}
-            <div className="flex items-end justify-center gap-8 lg:gap-12 mt-2 lg:mt-0">
-              {tins.map((tin, i) => (
-                <motion.div
+            <div className="flex items-end justify-center gap-12 mt-2 lg:mt-0">
+              {tins.map((tin) => (
+                <div
                   key={tin.alt}
                   className="flex flex-col items-center gap-3 min-w-0"
-                  initial={prefersReducedMotion ? false : { opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.3 + i * 0.15, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <img
                     src={tin.src}
@@ -161,7 +158,7 @@ const HeroSection = () => {
                   <span className="text-[10px] lg:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
                     {tin.label}
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
 
