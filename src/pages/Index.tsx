@@ -59,9 +59,6 @@ const Index = () => {
         {/* FAQ */}
         <FAQSection />
 
-        {/* ORIGIN STORY (timeline) */}
-        <OriginStorySection />
-
         {/* JOURNAL */}
         <JournalSection />
 
