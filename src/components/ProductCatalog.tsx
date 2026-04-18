@@ -204,6 +204,7 @@ const ProductCatalog = () => {
               return (
                 <motion.div
                   key={product.name}
+                  id={product.color}
                   data-product={product.color}
                   initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
                   whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
