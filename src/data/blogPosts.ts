@@ -1,3 +1,5 @@
+import blogToppersHero from "@/assets/blog-toppers-hero.jpg";
+
 export type BlogPost = {
   slug: string;
   pageTitle: string;
@@ -39,7 +41,7 @@ export const blogPosts: BlogPost[] = [
     pageTitle: "Dog Food Toppers vs Supplements — What's the Difference? | BioLogica Pets",
     metaDescription:
       "Dog food toppers and supplements are not the same thing. Here's the difference and why it matters for your dog's health.",
-    heroImage: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=1200&q=80",
+    heroImage: blogToppersHero,
     category: "Nutrition",
     title: "Toppers vs Supplements. They Are Not the Same Thing.",
     content: [
