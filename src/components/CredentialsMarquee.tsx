@@ -11,26 +11,46 @@ const items = [
 
 const CredentialsMarquee = () => {
   const renderRow = (keyPrefix: string) => (
-    <div className="flex shrink-0 items-center flex-nowrap whitespace-nowrap" aria-hidden={keyPrefix === "b"}>
+    <div
+      className="flex shrink-0 items-center"
+      aria-hidden={keyPrefix === "b"}
+    >
       {items.map((item, i) => (
-        <div key={`${keyPrefix}-${i}`} className="flex items-center shrink-0 whitespace-nowrap">
-          <span className="text-xs font-medium tracking-widest uppercase text-muted-foreground whitespace-nowrap">
+        <div key={`${keyPrefix}-${i}`} className="flex items-center shrink-0">
+          <span className="text-xs font-medium tracking-widest uppercase text-white whitespace-nowrap">
             {item}
           </span>
-          <span className="mx-6 text-xs text-muted-foreground/60 shrink-0" aria-hidden="true">·</span>
+          <span className="mx-6 text-xs text-white shrink-0" aria-hidden="true">
+            ·
+          </span>
         </div>
       ))}
     </div>
   );
 
   return (
-    <div className="border-y border-border/40 bg-background/80 backdrop-blur-sm py-3 overflow-hidden w-full relative">
-      {/* Animated marquee — runs on all screen sizes */}
-      <div className="group w-full overflow-hidden">
-        <div
-          className="inline-flex flex-nowrap whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none"
-          style={{ willChange: "transform" }}
-        >
+    <div className="mt-8 md:mt-10 w-full bg-black py-3 overflow-hidden">
+      <style>{`
+        @keyframes credentials-marquee {
+          0%   { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+        .credentials-marquee-track {
+          display: inline-flex;
+          flex-wrap: nowrap;
+          white-space: nowrap;
+          will-change: transform;
+          animation: credentials-marquee 30s linear infinite;
+        }
+        .credentials-marquee-wrapper:hover .credentials-marquee-track {
+          animation-play-state: paused;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .credentials-marquee-track { animation: none; }
+        }
+      `}</style>
+      <div className="credentials-marquee-wrapper w-full overflow-hidden">
+        <div className="credentials-marquee-track">
           {renderRow("a")}
           {renderRow("b")}
         </div>
