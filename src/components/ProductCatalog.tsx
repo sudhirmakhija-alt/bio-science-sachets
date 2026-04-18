@@ -44,6 +44,7 @@ const products: Product[] = [
     description:
       "Organ Balance+ is a dehydrated, organ-based topper that helps support overall vitality, natural micronutrient intake and immune function in dogs.",
     image: organProduct,
+    imageAlt: "BioLogica Organ Balance+ dehydrated organ topper for dogs, 30 sachets",
     color: "organ",
     benefits: ["Vitality", "Energy", "Immunity"],
     amazonUrl: "https://amazon.in/biologica",
