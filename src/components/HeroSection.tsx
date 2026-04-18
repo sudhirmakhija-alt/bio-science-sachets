@@ -43,7 +43,7 @@ const HeroSection = () => {
 
   // Tins: parallax rise + scale + fade
   const tinsY = useTransform(smoothProgress, [0, 0.6, 0.9], [80, 0, -10]);
-  const tinsOpacity = useTransform(smoothProgress, [0, 0.3], [0, 1]);
+  const tinsOpacity = useTransform(smoothProgress, [0, 0.3], [1, 1]);
   const tinsScale = useTransform(smoothProgress, [0, 0.6], [0.94, 1]);
 
   // Tin labels: staggered fade-in around 50%
