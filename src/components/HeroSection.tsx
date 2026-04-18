@@ -143,9 +143,9 @@ const HeroSection = () => {
                 <motion.div
                   key={tin.alt}
                   className="flex flex-col items-center gap-3 min-w-0"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 + i * 0.2, ease: "easeOut" }}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 + i * 0.2, ease: "easeOut" }}
                 >
                   <img
                     src={tin.src}
