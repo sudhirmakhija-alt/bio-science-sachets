@@ -45,7 +45,7 @@ const articles: Article[] = [
     excerpt:
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise, and understanding it will help you make a much better choice for your dog.",
     image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80&auto=format",
-    imagePosition: "center",
+    imagePosition: "center center",
     content: [
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise.",
       "## What's a supplement?",
@@ -156,7 +156,7 @@ const ArticleCard = ({
         src={article.image}
         alt={article.title}
         loading="lazy"
-        style={{ objectPosition: hero ? "center top" : "top" }}
+        style={{ objectPosition: article.imagePosition ?? (hero ? "center top" : "top") }}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
