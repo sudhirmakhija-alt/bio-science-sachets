@@ -74,7 +74,7 @@ const HeroSection = () => {
             <img
               src={tin.src}
               alt={tin.alt}
-              className="w-[225px] md:w-[450px] lg:w-[564px] h-auto object-contain mx-auto"
+              className="w-[270px] md:w-[450px] lg:w-[564px] h-auto object-contain mx-auto"
               style={{ filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
             />
             <span className="text-xs tracking-widest uppercase text-muted-foreground text-center">
