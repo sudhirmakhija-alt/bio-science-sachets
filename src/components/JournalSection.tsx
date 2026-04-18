@@ -197,7 +197,7 @@ const ArticleModal = ({ article, onClose }: { article: Article | null; onClose: 
             <img
               src={article.image}
               alt={article.title}
-              style={{ objectPosition: "center 5%" }}
+              style={{ objectPosition: "center 85%" }}
               className="h-full w-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent" />
