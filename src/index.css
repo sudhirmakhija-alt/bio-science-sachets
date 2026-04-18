@@ -190,3 +190,11 @@
   -webkit-animation-play-state: paused;
           animation-play-state: paused;
 }
+
+@keyframes tinFadeIn {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; transform: scale(1); }
+}
+.hero-tin-1 { animation: tinFadeIn 0.5s ease-out 0.2s both; }
+.hero-tin-2 { animation: tinFadeIn 0.5s ease-out 0.45s both; }
+.hero-tin-3 { animation: tinFadeIn 0.5s ease-out 0.7s both; }
