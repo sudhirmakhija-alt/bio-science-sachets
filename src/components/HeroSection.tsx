@@ -124,61 +124,47 @@ const HeroSection = () => {
         </section>
       )}
 
-      {/* DESKTOP/TABLET: scroll-driven reveal */}
+      {/* DESKTOP/TABLET: static 3-column layout */}
       {!isMobile && (
-        <div ref={wrapperRef} className="relative hidden md:block" style={{ height: "130vh" }}>
-          <div className="sticky top-0 h-screen overflow-hidden bg-background">
-            {/* HERO CONTENT — scrolls up & fades out */}
-            <motion.section
-              style={{ opacity: heroOpacity, y: heroY }}
-              className="relative flex flex-col items-center justify-center min-h-screen pt-20"
-            >
-              <div
-                className="absolute inset-0 -z-10"
-                style={{
-                  background:
-                    "radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)",
-                }}
-              />
-              <div className="px-6 md:px-12 w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
-                {heroCopy}
-                <div className="hidden md:flex items-center justify-center mt-4 lg:mt-0">
-                  <SpotlightCard variant="notify" />
-                </div>
-              </div>
-            </motion.section>
+        <section className="relative hidden md:flex flex-col items-center overflow-hidden min-h-screen pt-20 pb-8 bg-background">
+          <div
+            className="absolute inset-0 -z-10"
+            style={{
+              background:
+                "radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)",
+            }}
+          />
+          <div className="px-6 md:px-10 w-full max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.3fr)_minmax(0,1fr)] gap-6 lg:gap-8 items-center relative z-10">
+            {heroCopy}
 
-            {/* PRODUCT TINS — parallax rise on clean white bg, centered with tight whitespace */}
-            <motion.div
-              className="absolute inset-0 flex items-center justify-center pointer-events-none px-6 md:px-12"
-              style={{ y: tinsY, opacity: tinsOpacity, scale: tinsScale }}
-            >
-              <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-6 items-end">
-                {tins.map((tin, i) => (
-                  <div key={tin.alt} className="flex flex-col items-center gap-4">
-                    <img
-                      src={tin.src}
-                      alt={tin.alt}
-                      className="object-contain opacity-100"
-                      style={{
-                        height: "280px",
-                        width: "auto",
-                        filter:
-                          "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
-                      }}
-                    />
-                    <motion.span
-                      className="text-xs tracking-widest uppercase text-muted-foreground text-center"
-                      style={{ opacity: labelOpacities[i] }}
-                    >
-                      {tin.label}
-                    </motion.span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+            {/* PRODUCT TINS — center column, static */}
+            <div className="flex items-end justify-center gap-2 lg:gap-3 mt-2 lg:mt-0">
+              {tins.map((tin) => (
+                <div key={tin.alt} className="flex flex-col items-center gap-3 min-w-0">
+                  <img
+                    src={tin.src}
+                    alt={tin.alt}
+                    className="object-contain"
+                    style={{
+                      height: "300px",
+                      width: "auto",
+                      filter:
+                        "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
+                    }}
+                  />
+                  <span className="text-[10px] lg:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
+                    {tin.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* SIGNUP — right column */}
+            <div className="flex items-center justify-center mt-4 lg:mt-0">
+              <SpotlightCard variant="notify" />
+            </div>
           </div>
-        </div>
+        </section>
       )}
     </>
   );
