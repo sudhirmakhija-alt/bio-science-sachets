@@ -139,10 +139,14 @@ const HeroSection = () => {
 
             {/* PRODUCT TINS — center column with scroll-in animation */}
             <div className="flex items-end justify-center gap-12 mt-2 lg:mt-0">
-              {tins.map((tin) => (
-                <div
+              {tins.map((tin, i) => (
+                <motion.div
                   key={tin.alt}
                   className="flex flex-col items-center gap-3 min-w-0"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
                 >
                   <img
                     src={tin.src}
@@ -158,7 +162,7 @@ const HeroSection = () => {
                   <span className="text-[10px] lg:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
                     {tin.label}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
 
