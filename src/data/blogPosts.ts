@@ -5,6 +5,7 @@ export type BlogPost = {
   pageTitle: string;
   metaDescription: string;
   heroImage: string;
+  heroImagePosition?: string;
   category: string;
   title: string;
   content: string[];
