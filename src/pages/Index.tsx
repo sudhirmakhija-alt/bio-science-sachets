@@ -29,7 +29,7 @@ const Index = () => {
     const timer = setTimeout(() => {
       const el = document.getElementById(id);
       if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+    }, 200);
     return () => clearTimeout(timer);
   }, []);
 

@@ -1,6 +1,35 @@
 import { ArrowRight } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleAnchorClick = (e: React.MouseEvent, hash: string) => {
+    e.preventDefault();
+    if (location.pathname === "/") {
+      const el = document.getElementById(hash);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+      window.history.replaceState(null, "", `/#${hash}`);
+    } else {
+      navigate(`/#${hash}`);
+    }
+  };
+
+  const productLinks = [
+    { label: "Omega", hash: "omega", dot: "bg-omega" },
+    { label: "Organ", hash: "organ", dot: "bg-organ" },
+    { label: "Gut", hash: "gut", dot: "bg-gut" },
+  ];
+
+  const siteLinks = [
+    { label: "Science", hash: "science" },
+    { label: "Dosing", hash: "dosing" },
+    { label: "Origin", hash: "origin" },
+    { label: "Blog", hash: "journal" },
+    { label: "Reviews", hash: "reviews" },
+  ];
+
   return (
     <footer className="section-padding bg-foreground text-background border-t border-border/20">
       <div className="max-w-[1400px] mx-auto">
@@ -16,14 +45,11 @@ const Footer = () => {
           </div>
 
           <nav className="flex flex-col gap-[12px] px-0">
-            {[
-              { label: "Omega", href: "#omega", dot: "bg-omega" },
-              { label: "Organ", href: "#organ", dot: "bg-organ" },
-              { label: "Gut", href: "#gut", dot: "bg-gut" },
-            ].map((link) => (
+            {productLinks.map((link) => (
               <a
                 key={link.label}
-                href={link.href}
+                href={`/#${link.hash}`}
+                onClick={(e) => handleAnchorClick(e, link.hash)}
                 className="inline-flex items-center text-xs font-medium tracking-widest uppercase text-background/50 hover:text-background transition-colors"
               >
                 {link.dot && (
@@ -35,16 +61,11 @@ const Footer = () => {
           </nav>
 
           <nav className="flex flex-col gap-[12px] px-0">
-            {[
-              { label: "Science", href: "#science" },
-              { label: "Dosing", href: "#dosing" },
-              { label: "Origin", href: "#origin" },
-              { label: "Blog", href: "#journal" },
-              { label: "Reviews", href: "#reviews" },
-            ].map((link) => (
+            {siteLinks.map((link) => (
               <a
                 key={link.label}
-                href={link.href}
+                href={`/#${link.hash}`}
+                onClick={(e) => handleAnchorClick(e, link.hash)}
                 className="inline-flex items-center text-xs font-medium tracking-widest uppercase text-background/50 hover:text-background transition-colors"
               >
                 {link.label}
@@ -58,7 +79,6 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 py-3 bg-background text-foreground font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity px-[30px]">
-              
               Shop on Amazon India
               <ArrowRight className="w-4 h-4" />
             </a>
@@ -71,8 +91,8 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>);
-
+    </footer>
+  );
 };
 
 export default Footer;
