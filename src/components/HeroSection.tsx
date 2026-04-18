@@ -75,7 +75,7 @@ const HeroSection = () => {
               src={tin.src}
               alt={tin.alt}
               className="w-[144px] md:w-[288px] lg:w-[360px] h-auto object-contain mx-auto"
-              style={{ filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))" }}
+              style={{ filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
             />
             <span className="text-xs tracking-widest uppercase text-muted-foreground text-center">
               <span className="md:hidden">{tin.labelLine1}<br />{tin.labelLine2}</span>
@@ -162,7 +162,7 @@ const HeroSection = () => {
                       className="w-[288px] lg:w-[360px] h-auto object-contain"
                       style={{
                         filter:
-                          "drop-shadow(0 20px 40px rgba(0,0,0,0.08)) drop-shadow(0 8px 16px rgba(0,0,0,0.06))",
+                          "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
                       }}
                     />
                     <motion.span
