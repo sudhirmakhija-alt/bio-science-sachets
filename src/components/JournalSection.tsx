@@ -156,7 +156,7 @@ const ArticleCard = ({
         src={article.image}
         alt={article.title}
         loading="lazy"
-        style={{ objectPosition: article.imagePosition ?? "center top" }}
+        style={{ objectPosition: hero ? "center top" : "top" }}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
@@ -232,7 +232,7 @@ const JournalSection = () => {
   const [hero, ...rest] = articles;
 
   return (
-    <section id="journal" className="section-padding bg-gray-950">
+    <section id="journal" className="-mt-px section-padding bg-gray-950">
       <div className="mx-auto max-w-[1400px]">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
