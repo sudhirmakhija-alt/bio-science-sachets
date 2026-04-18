@@ -3,12 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import biologicaLogo from "@/assets/biologica-logo.jpg";
 
 const NAV_LINKS = [
-{ label: "Products", href: "#products" },
-{ label: "Science", href: "#science" },
-{ label: "Dosing", href: "#dosing" },
-{ label: "Origin", href: "#origin" },
-{ label: "Blog", href: "#journal" },
-{ label: "Reviews", href: "#reviews" }];
+{ label: "Products", href: "/#products" },
+{ label: "Science", href: "/#science" },
+{ label: "Dosing", href: "/#dosing" },
+{ label: "Origin", href: "/#origin" },
+{ label: "Blog", href: "/#journal" },
+{ label: "Reviews", href: "/#reviews" }];
 
 
 const Navbar = () => {
@@ -30,7 +30,7 @@ const Navbar = () => {
       
       <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 md:px-12 lg:px-16 h-16">
         {/* Logo */}
-        <a href="#" className="flex items-center">
+        <a href="/" className="flex items-center">
           <img
             src={biologicaLogo}
             alt="BioLogica Pets"
@@ -50,7 +50,7 @@ const Navbar = () => {
             </a>
           )}
           <a
-            href="#products"
+            href="/#products"
             className="inline-flex items-center justify-center px-5 py-2 bg-foreground text-background text-xs font-semibold tracking-wide hover:opacity-90 transition-opacity">
             
             BUY ON AMAZON
@@ -91,7 +91,7 @@ const Navbar = () => {
                 </a>
             )}
               <a
-              href="#products"
+              href="/#products"
               onClick={() => setMobileOpen(false)}
               className="inline-flex items-center justify-center px-5 py-3 bg-foreground text-background text-xs font-semibold tracking-wide mt-2">
               
