@@ -27,7 +27,7 @@ const pillars: Pillar[] = [
     icon: Target,
     title: "Precision Dosing",
     body:
-      "Mathematically calculated sachet weights remove all the dosing guesswork. No scoops, no spills, no under or over-supplementing. ",
+      "Mathematically calculated sachet weights remove dosing guesswork. No scoops, no spills, no under or over-supplementing. Consistent results, every day.",
     stat: "Exact weight per sachet",
   },
 ];
