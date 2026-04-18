@@ -13,6 +13,7 @@ import ProductCatalog from "@/components/ProductCatalog";
 import DosingCalculator from "@/components/DosingCalculator";
 import ScienceGrid from "@/components/ScienceGrid";
 import InsideEverySachet from "@/components/InsideEverySachet";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import FAQSection from "@/components/FAQSection";
 import JournalSection from "@/components/JournalSection";
 import Footer from "@/components/Footer";
@@ -54,6 +55,9 @@ const Index = () => {
 
         {/* INSIDE EVERY SACHET */}
         <InsideEverySachet />
+
+        {/* TESTIMONIALS */}
+        <TestimonialsSection />
 
         {/* FAQ */}
         <FAQSection />
