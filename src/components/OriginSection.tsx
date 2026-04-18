@@ -67,7 +67,7 @@ const OriginSection = () => {
               map((stat, idx) =>
               <div
                 key={stat.label}
-                className={`flex flex-col items-center justify-center text-center ${idx === 1 ? 'border-x border-border' : ''}`}
+                className={`pt-4 flex flex-col items-center text-center ${idx === 1 ? 'border-x border-border' : ''}`}
               >
                   <div className="text-2xl md:text-4xl lg:text-[48px] font-black text-foreground leading-none">{stat.value}</div>
                   <div className="text-muted-foreground mt-2 tracking-widest uppercase text-[9px] md:text-[11px]">
