@@ -29,30 +29,36 @@ const CredentialsMarquee = () => {
   );
 
   return (
-    <div className="mt-0 md:mt-10 w-full bg-black py-3 overflow-hidden">
-      <style>{`
-        @keyframes credentials-marquee {
-          0%   { transform: translate3d(0, 0, 0); }
-          100% { transform: translate3d(-50%, 0, 0); }
-        }
-        .credentials-marquee-track {
-          display: inline-flex;
-          flex-wrap: nowrap;
-          white-space: nowrap;
-          will-change: transform;
-          animation: credentials-marquee 30s linear infinite;
-        }
-        .credentials-marquee-wrapper:hover .credentials-marquee-track {
-          animation-play-state: paused;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .credentials-marquee-track { animation: none; }
-        }
-      `}</style>
-      <div className="credentials-marquee-wrapper w-full overflow-hidden">
-        <div className="credentials-marquee-track">
-          {renderRow("a")}
-          {renderRow("b")}
+    <div className="relative w-full bg-white pt-10 md:pt-14">
+      <div className="w-full bg-black py-3 overflow-hidden">
+        <style>{`
+          @keyframes credentials-marquee {
+            0%   { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-50%, 0, 0); }
+          }
+          .credentials-marquee-track {
+            display: inline-flex;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            will-change: transform;
+            animation: credentials-marquee 30s linear infinite;
+          }
+          .credentials-marquee-wrapper:hover .credentials-marquee-track {
+            animation-play-state: paused;
+          }
+          .credentials-marquee-wrapper {
+            -webkit-mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+                    mask-image: linear-gradient(to right, transparent 0, #000 48px, #000 calc(100% - 48px), transparent 100%);
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .credentials-marquee-track { animation: none; }
+          }
+        `}</style>
+        <div className="credentials-marquee-wrapper w-full overflow-hidden">
+          <div className="credentials-marquee-track">
+            {renderRow("a")}
+            {renderRow("b")}
+          </div>
         </div>
       </div>
     </div>
