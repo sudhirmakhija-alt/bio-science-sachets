@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { ScrollProvider } from "@/components/ScrollContext";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import MolecularNetwork from "@/components/MolecularNetwork";
@@ -20,6 +21,18 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   useScrollReveal();
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const id = hash.slice(1);
+    const timer = setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <ScrollProvider>
       <MolecularNetwork />
