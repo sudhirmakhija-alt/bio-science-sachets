@@ -68,13 +68,13 @@ const HeroSection = () => {
   // Mobile/reduced-motion: render statically with tins below content in normal flow
   const StaticTins = ({ mobileOnly = false }: { mobileOnly?: boolean }) => (
     <div className={`relative w-full max-w-[1400px] mx-auto mt-8 px-0 md:px-12 ${mobileOnly ? "md:hidden" : "md:mt-12"}`}>
-      <div className="flex md:grid md:grid-cols-3 justify-center items-end gap-0 md:gap-6 w-full">
+      <div className="flex md:grid md:grid-cols-3 justify-center items-end gap-4 md:gap-12 w-full">
         {tins.map((tin) => (
           <div key={tin.alt} className="flex flex-col items-center gap-3 min-w-0 flex-1 basis-0 md:flex-initial md:basis-auto">
             <img
               src={tin.src}
               alt={tin.alt}
-              className="h-auto object-contain mx-auto w-full max-w-[158px] md:max-w-[450px] lg:max-w-[564px]"
+              className="w-auto object-contain mx-auto max-w-full h-[280px] md:h-[350px] lg:h-[440px]"
               style={{ filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
             />
             <span className="text-[10px] md:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
@@ -153,13 +153,13 @@ const HeroSection = () => {
               className="absolute inset-0 flex items-center justify-center pointer-events-none px-6 md:px-12"
               style={{ y: tinsY, opacity: tinsOpacity, scale: tinsScale }}
             >
-              <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-6 items-end">
+              <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-12 items-end">
                 {tins.map((tin, i) => (
                   <div key={tin.alt} className="flex flex-col items-center gap-4">
                     <img
                       src={tin.src}
                       alt={tin.alt}
-                      className="w-full max-w-[300px] lg:max-w-[450px] xl:max-w-[564px] h-auto object-contain"
+                      className="w-auto h-[350px] lg:h-[440px] xl:h-[520px] object-contain"
                       style={{
                         filter:
                           "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
