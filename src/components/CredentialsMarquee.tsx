@@ -24,10 +24,13 @@ const CredentialsMarquee = () => {
   );
 
   return (
-    <div className="border-y border-border/40 bg-background/80 backdrop-blur-sm py-3 overflow-hidden w-full">
-      {/* Animated marquee — runs on all screen sizes, paused only when user prefers reduced motion */}
-      <div className="flex w-full overflow-hidden group motion-reduce:[&_.animate-marquee]:animate-none">
-        <div className="flex flex-nowrap whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused] min-w-max">
+    <div className="border-y border-border/40 bg-background/80 backdrop-blur-sm py-3 overflow-hidden w-full relative">
+      {/* Animated marquee — runs on all screen sizes */}
+      <div className="group w-full overflow-hidden">
+        <div
+          className="inline-flex flex-nowrap whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none"
+          style={{ willChange: "transform" }}
+        >
           {renderRow("a")}
           {renderRow("b")}
         </div>
