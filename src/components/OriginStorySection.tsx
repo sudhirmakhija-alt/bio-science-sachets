@@ -10,7 +10,7 @@ const OriginStorySection = () => {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section id="origin-story" className="bg-background py-24 px-6 md:px-12">
+    <section id="origin-story" className="bg-background pt-24 pb-12 px-6 md:px-12">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <span className="text-xs tracking-widest uppercase text-muted-foreground mb-3 block">
