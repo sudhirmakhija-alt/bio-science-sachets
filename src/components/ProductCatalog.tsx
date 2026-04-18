@@ -131,7 +131,7 @@ const ProductCatalog = () => {
               const imageLeft = product.imageSide === "left";
 
               const ImageColumn = (
-                <div className="flex items-center justify-center py-8 md:py-12 px-6 md:px-8">
+                <div className="flex items-center justify-center py-2 md:py-12 px-6 md:px-8">
                   <img
                     src={product.image}
                     alt={product.imageAlt}
