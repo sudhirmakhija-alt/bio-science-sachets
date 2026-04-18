@@ -68,12 +68,9 @@ const products: Product[] = [
 ];
 
 const cardBackground: Record<ProductColor, string> = {
-  omega:
-    "linear-gradient(135deg, rgba(186,230,253,0.25) 0%, rgba(224,242,254,0.12) 100%)",
-  organ:
-    "linear-gradient(135deg, rgba(251,207,232,0.25) 0%, rgba(252,231,243,0.12) 100%)",
-  gut:
-    "linear-gradient(135deg, rgba(187,247,208,0.25) 0%, rgba(220,252,231,0.12) 100%)",
+  omega: "#EFF6FF",
+  organ: "#FDF2F8",
+  gut: "#F0FDF4",
 };
 
 const badgeClasses: Record<ProductColor, string> = {
