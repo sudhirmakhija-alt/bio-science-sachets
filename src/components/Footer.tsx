@@ -17,9 +17,9 @@ const Footer = () => {
 
           <nav className="flex flex-col gap-[12px] px-0">
             {[
-              { label: "Omega", href: "#products", dot: "bg-omega" },
-              { label: "Organ", href: "#products", dot: "bg-organ" },
-              { label: "Gut", href: "#products", dot: "bg-gut" },
+              { label: "Omega", href: "#omega", dot: "bg-omega" },
+              { label: "Organ", href: "#organ", dot: "bg-organ" },
+              { label: "Gut", href: "#gut", dot: "bg-gut" },
               { label: "Science", href: "#science", dot: null },
               { label: "Dosing", href: "#dosing", dot: null },
               { label: "Origin", href: "#origin", dot: null },
