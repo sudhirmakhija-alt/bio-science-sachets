@@ -279,7 +279,7 @@ const HeroCopy = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: prefersReducedMotion ? 0 : statDelayMs / 1000, ease: "easeOut" }}
     >
-      0% Oxidation <span className="mx-1.5 md:mx-2 text-muted-foreground/50">·</span> 3 Feed Systems <span className="mx-1.5 md:mx-2 text-muted-foreground/50">·</span> WHO-GMP+ Certified
+      0% Oxidation <span className="mx-1 text-muted-foreground/50">·</span> 3 Feed Systems <span className="mx-1 text-muted-foreground/50">·</span> WHO-GMP+ Certified
     </motion.div>
 
     <div className="flex flex-wrap gap-2">
