@@ -23,6 +23,8 @@ const Footer = () => {
               { label: "Science", href: "#science", dot: null },
               { label: "Dosing", href: "#dosing", dot: null },
               { label: "Origin", href: "#origin", dot: null },
+              { label: "Blog", href: "#journal", dot: null },
+              { label: "Reviews", href: "#reviews", dot: null },
             ].map((link) => (
               <a
                 key={link.label}
