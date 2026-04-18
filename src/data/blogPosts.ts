@@ -5,6 +5,7 @@ export type BlogPost = {
   pageTitle: string;
   metaDescription: string;
   heroImage: string;
+  heroImagePosition?: string;
   category: string;
   title: string;
   content: string[];
@@ -114,6 +115,7 @@ export const blogPosts: BlogPost[] = [
     metaDescription:
       "Not every dog needs the same thing. Here's how to choose between Omega Balance+, Organ Balance+, and Gut Balance+ based on your dog's specific needs.",
     heroImage: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=1200&q=80",
+    heroImagePosition: "center 30%",
     category: "Getting Started",
     title: "Not Every Dog Needs the Same Thing. Here's How to Figure Out What Yours Does.",
     content: [

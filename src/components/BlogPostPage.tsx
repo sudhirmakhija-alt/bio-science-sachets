@@ -7,6 +7,7 @@ interface BlogPostPageProps {
   title: string;
   heroImage: string;
   heroImageAlt?: string;
+  heroImagePosition?: string;
   children: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ const BlogPostPage = ({
   title,
   heroImage,
   heroImageAlt,
+  heroImagePosition,
   children,
 }: BlogPostPageProps) => {
   return (
@@ -39,6 +41,7 @@ const BlogPostPage = ({
             src={heroImage}
             alt={heroImageAlt || title}
             className="w-full max-h-[480px] object-cover object-top"
+            style={heroImagePosition ? { objectPosition: heroImagePosition } : undefined}
           />
         </div>
 
