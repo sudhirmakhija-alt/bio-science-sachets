@@ -6,7 +6,9 @@ const NAV_LINKS = [
 { label: "Products", href: "#products" },
 { label: "Science", href: "#science" },
 { label: "Dosing", href: "#dosing" },
-{ label: "Origin", href: "#origin" }];
+{ label: "Origin", href: "#origin" },
+{ label: "Journal", href: "#journal" },
+{ label: "Reviews", href: "#testimonials" }];
 
 
 const Navbar = () => {
