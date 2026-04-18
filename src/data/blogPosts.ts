@@ -1,5 +1,4 @@
 import blogToppersHero from "@/assets/blog-toppers-hero.jpg";
-import blogChoosingTopperHero from "@/assets/blog-choosing-topper-hero.jpg";
 
 export type BlogPost = {
   slug: string;
@@ -114,7 +113,7 @@ export const blogPosts: BlogPost[] = [
     pageTitle: "How to Choose the Right Dog Topper for Your Dog | BioLogica Pets",
     metaDescription:
       "Not every dog needs the same thing. Here's how to choose between Omega Balance+, Organ Balance+, and Gut Balance+ based on your dog's specific needs.",
-    heroImage: blogChoosingTopperHero,
+    heroImage: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=1200&q=80",
     category: "Getting Started",
     title: "Not Every Dog Needs the Same Thing. Here's How to Figure Out What Yours Does.",
     content: [
