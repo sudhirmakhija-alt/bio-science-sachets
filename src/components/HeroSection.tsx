@@ -74,8 +74,8 @@ const HeroSection = () => {
             <img
               src={tin.src}
               alt={tin.alt}
-              className="h-auto object-contain mx-auto w-full max-w-[237px] md:max-w-[675px] lg:max-w-[846px]"
-              style={{ filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
+              className="object-contain mx-auto"
+              style={{ height: "160px", width: "auto", filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
             />
             <span className="text-[10px] md:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
               <span className="md:hidden">{tin.labelLine1}<br />{tin.labelLine2}</span>
@@ -159,8 +159,10 @@ const HeroSection = () => {
                     <img
                       src={tin.src}
                       alt={tin.alt}
-                      className="w-full max-w-[450px] lg:max-w-[675px] xl:max-w-[846px] h-auto object-contain opacity-100"
+                      className="object-contain opacity-100"
                       style={{
+                        height: "280px",
+                        width: "auto",
                         filter:
                           "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
                       }}
