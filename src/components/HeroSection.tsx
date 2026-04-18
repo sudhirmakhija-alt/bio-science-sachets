@@ -7,9 +7,9 @@ import gutBalance from "@/assets/gut-balance-new.png";
 import omegaBalance from "@/assets/omega-balance-new.png";
 
 const tins = [
-  { src: omegaBalance, alt: "Omega Balance+ packaging", label: "OMEGA BALANCE+", labelDelay: 0 },
-  { src: organBalance, alt: "Organ Balance+ packaging", label: "ORGAN BALANCE+", labelDelay: 0.1 },
-  { src: gutBalance, alt: "Gut Balance+ packaging", label: "GUT BALANCE+", labelDelay: 0.2 },
+  { src: omegaBalance, alt: "BioLogica Omega Balance+ dog nutrition topper with Green-Lipped Mussel, 30 sachets", label: "OMEGA BALANCE+", labelDelay: 0 },
+  { src: organBalance, alt: "BioLogica Organ Balance+ dehydrated organ topper for dogs, 30 sachets", label: "ORGAN BALANCE+", labelDelay: 0.1 },
+  { src: gutBalance, alt: "BioLogica Gut Balance+ vegetarian gut health topper for dogs, 30 sachets", label: "GUT BALANCE+", labelDelay: 0.2 },
 ];
 
 const badges = [

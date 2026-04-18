@@ -14,6 +14,7 @@ interface Product {
   descriptor: string;
   description: string;
   image: string;
+  imageAlt: string;
   color: ProductColor;
   benefits: string[];
   amazonUrl: string;
@@ -29,6 +30,7 @@ const products: Product[] = [
     description:
       "Omega Balance+ is a marine-derived topper with green-lipped mussel (GLM) and omega fatty acids to support joint comfort, skin and coat health and overall cardiovascular and brain function in dogs.",
     image: omegaProduct,
+    imageAlt: "BioLogica Omega Balance+ dog nutrition topper with Green-Lipped Mussel, 30 sachets",
     color: "omega",
     benefits: ["Joint Mobility", "Skin & Coat", "Brain & Heart"],
     amazonUrl: "https://amazon.in/biologica",
@@ -42,6 +44,7 @@ const products: Product[] = [
     description:
       "Organ Balance+ is a dehydrated, organ-based topper that helps support overall vitality, natural micronutrient intake and immune function in dogs.",
     image: organProduct,
+    imageAlt: "BioLogica Organ Balance+ dehydrated organ topper for dogs, 30 sachets",
     color: "organ",
     benefits: ["Vitality", "Energy", "Immunity"],
     amazonUrl: "https://amazon.in/biologica",
@@ -55,6 +58,7 @@ const products: Product[] = [
     description:
       "Gut Balance+ is a 100% vegetarian, gut-friendly topper formulated to support healthy digestion, stool consistency and gut lining integrity in dogs.",
     image: gutProduct,
+    imageAlt: "BioLogica Gut Balance+ vegetarian gut health topper for dogs, 30 sachets",
     color: "gut",
     benefits: ["Digestion", "Stool Quality", "Gut Lining"],
     amazonUrl: "https://amazon.in/biologica",
@@ -133,7 +137,7 @@ const ProductCatalog = () => {
                 <div className="flex items-center justify-center py-8 md:py-12 px-6 md:px-8">
                   <img
                     src={product.image}
-                    alt={product.name}
+                    alt={product.imageAlt}
                     className="object-contain motion-safe:md:animate-product-float"
                     style={{
                       height: "330px",
