@@ -34,7 +34,7 @@ const BlogPostPage = ({
         </div>
 
         {/* Hero image */}
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mt-[15vh]">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 mt-8">
           <img
             src={heroImage}
             alt={heroImageAlt || title}
