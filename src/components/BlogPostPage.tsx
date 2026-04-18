@@ -7,6 +7,7 @@ interface BlogPostPageProps {
   title: string;
   heroImage: string;
   heroImageAlt?: string;
+  heroImagePosition?: string;
   children: React.ReactNode;
 }
 
@@ -15,6 +16,7 @@ const BlogPostPage = ({
   title,
   heroImage,
   heroImageAlt,
+  heroImagePosition,
   children,
 }: BlogPostPageProps) => {
   return (
