@@ -44,7 +44,7 @@ const articles: Article[] = [
     title: "Toppers vs Supplements. They Are Not the Same Thing.",
     excerpt:
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise, and understanding it will help you make a much better choice for your dog.",
-    image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80&fit=crop&crop=faces",
+    image: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=800&q=80&auto=format",
     imagePosition: "center",
     content: [
       "Dog owners use these words interchangeably. They shouldn't. The difference matters more than most people realise.",
@@ -92,7 +92,7 @@ const articles: Article[] = [
     title: "The Food Your Dog's Ancestors Ate First. And Why Modern Dogs Are Missing It.",
     excerpt:
       "When a wolf makes a kill, the first thing it eats isn't the muscle meat. It's the organs. This isn't random behaviour. It's nutritional intelligence that took thousands of years to develop.",
-    image: "https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=800&q=80&fit=crop&crop=faces",
+    image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&q=80&auto=format",
     content: [
       "When a wolf makes a kill, the first thing it eats is not the muscle meat. It is the organs. Liver first. Then kidney, heart, and spleen. The muscle meat comes last, or gets left for scavengers.",
       "This is not random behaviour. It is nutritional intelligence that took thousands of years to develop.",
