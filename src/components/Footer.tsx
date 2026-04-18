@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="section-padding bg-foreground text-background border-t border-border/20">
       <div className="max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-[1.5fr_auto_auto_1fr] gap-x-12 gap-y-8 items-start mb-12">
           <div className="max-w-md">
             <h3 className="text-2xl font-black tracking-tight mb-2">BioLogica</h3>
             <p className="text-xs text-background/40 mt-2">
