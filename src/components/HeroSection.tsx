@@ -282,14 +282,14 @@ const HeroCopy = ({
       0% Oxidation <span className="mx-1 text-muted-foreground/50">·</span> 3 Feed Systems <span className="mx-1 text-muted-foreground/50">·</span> WHO-GMP+ Certified
     </motion.div>
 
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-nowrap gap-2 overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       {badges.map((badge) => (
         <div
           key={badge.label}
-          className="inline-flex items-center gap-2 px-3 py-1.5 bg-secondary rounded-sm"
+          className="inline-flex shrink-0 items-center gap-2 px-3 py-1.5 bg-secondary rounded-sm whitespace-nowrap"
         >
-          <badge.icon className="w-3.5 h-3.5 text-gut" />
-          <span className="text-xs font-medium text-muted-foreground">{badge.label}</span>
+          <badge.icon className="w-3.5 h-3.5 text-gut shrink-0" />
+          <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">{badge.label}</span>
         </div>
       ))}
     </div>
