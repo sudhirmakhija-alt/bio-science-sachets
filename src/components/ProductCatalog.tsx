@@ -63,25 +63,25 @@ const products: Product[] = [
   },
 ];
 
-const panelBackground: Record<ProductColor, string> = {
+const cardBackground: Record<ProductColor, string> = {
   omega:
-    "radial-gradient(ellipse at center, rgba(147,197,253,0.35) 0%, rgba(219,234,254,0.15) 60%, rgba(255,255,255,0) 100%)",
+    "linear-gradient(135deg, rgba(186,230,253,0.25) 0%, rgba(224,242,254,0.12) 100%)",
   organ:
-    "radial-gradient(ellipse at center, rgba(251,207,232,0.35) 0%, rgba(252,231,243,0.15) 60%, rgba(255,255,255,0) 100%)",
+    "linear-gradient(135deg, rgba(251,207,232,0.25) 0%, rgba(252,231,243,0.12) 100%)",
   gut:
-    "radial-gradient(ellipse at center, rgba(187,247,208,0.35) 0%, rgba(220,252,231,0.15) 60%, rgba(255,255,255,0) 100%)",
+    "linear-gradient(135deg, rgba(187,247,208,0.25) 0%, rgba(220,252,231,0.12) 100%)",
 };
 
 const badgeClasses: Record<ProductColor, string> = {
-  omega: "bg-blue-100 text-blue-700",
-  organ: "bg-pink-100 text-pink-700",
-  gut: "bg-green-100 text-green-700",
+  omega: "bg-blue-200/60 text-blue-800",
+  organ: "bg-pink-200/60 text-pink-800",
+  gut: "bg-green-200/60 text-green-800",
 };
 
-const dotClasses: Record<ProductColor, string> = {
-  omega: "bg-blue-500",
-  organ: "bg-pink-500",
-  gut: "bg-green-500",
+const tagClasses: Record<ProductColor, string> = {
+  omega: "text-blue-700 border-blue-700/20",
+  organ: "text-pink-700 border-pink-700/20",
+  gut: "text-green-700 border-green-700/20",
 };
 
 const ProductCatalog = () => {
@@ -117,138 +117,127 @@ const ProductCatalog = () => {
         </p>
       </div>
 
-      {!allLoaded ? (
-        <div
-          className="section-padding pt-0 max-w-[1400px] mx-auto space-y-12"
-          aria-busy="true"
-          aria-live="polite"
-        >
-          {products.map((p) => (
-            <ProductCardSkeleton key={`skeleton-${p.name}`} />
-          ))}
-        </div>
-      ) : (
-        <div>
-          {products.map((product) => {
-            const imageLeft = product.imageSide === "left";
-            const imageX = imageLeft ? -40 : 40;
+      <div className="px-4 md:px-8 pb-20 max-w-[1400px] mx-auto">
+        {!allLoaded ? (
+          <div className="space-y-6" aria-busy="true" aria-live="polite">
+            {products.map((p) => (
+              <ProductCardSkeleton key={`skeleton-${p.name}`} />
+            ))}
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {products.map((product, idx) => {
+              const imageLeft = product.imageSide === "left";
 
-            const ImagePanel = (
-              <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, x: imageX }}
-                whileInView={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="relative flex items-center justify-center min-h-[320px] md:min-h-[560px] overflow-hidden"
-                style={{ background: panelBackground[product.color] }}
-              >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="object-contain motion-safe:animate-product-float hover:scale-[1.04] transition-transform duration-500 ease-out"
-                  style={{
-                    height: "260px",
-                    maxHeight: "380px",
-                    filter: "drop-shadow(0 24px 48px rgba(0,0,0,0.12))",
-                    animationDelay: prefersReducedMotion ? undefined : product.floatDelay,
-                  }}
-                  // Use responsive height via inline style + class fallback
-                  onLoad={(e) => {
-                    // ensure desktop height
-                    const el = e.currentTarget;
-                    if (window.matchMedia("(min-width: 768px)").matches) {
-                      el.style.height = "380px";
-                    }
-                  }}
-                />
-              </motion.div>
-            );
-
-            const ContentPanel = (
-              <motion.div
-                initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-                whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-                className="bg-background flex items-center p-8 md:p-12"
-              >
-                <div className="max-w-[480px] w-full">
-                  {/* Badge */}
-                  <span
-                    className={`inline-flex ${badgeClasses[product.color]} text-xs font-semibold tracking-[0.15em] uppercase rounded-full px-3 py-1`}
-                  >
-                    {product.badgeLabel}
-                  </span>
-
-                  {/* Name */}
-                  <h3 className="text-3xl font-bold tracking-tight text-foreground mt-3">
-                    {product.name}
-                  </h3>
-
-                  {/* Descriptor */}
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {product.descriptor}
-                  </p>
-
-                  {/* Divider */}
-                  <div className="border-t border-border/40 my-6" />
-
-                  {/* Benefit tags */}
-                  <div className="flex gap-2 flex-wrap">
-                    {product.benefits.map((b) => (
-                      <span
-                        key={b}
-                        className="inline-flex items-center gap-1.5 text-xs font-medium text-foreground/70 border border-border/60 rounded-full px-3 py-1.5"
-                      >
-                        <span className={`w-1.5 h-1.5 rounded-full ${dotClasses[product.color]}`} />
-                        {b}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-6">
-                    {product.description}
-                  </p>
-
-                  {/* CTA */}
-                  <a
-                    href={product.amazonUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-foreground text-background text-xs font-semibold tracking-wide px-6 py-3 hover:opacity-90 transition-opacity mt-8 inline-flex items-center gap-2"
-                  >
-                    View on Amazon India
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+              const ImageColumn = (
+                <div className="flex items-center justify-center py-8 md:py-12 px-6 md:px-8">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="object-contain motion-safe:md:animate-product-float"
+                    style={{
+                      height: "220px",
+                      mixBlendMode: "multiply",
+                      animationDelay: prefersReducedMotion ? undefined : product.floatDelay,
+                    }}
+                    onLoad={(e) => {
+                      const el = e.currentTarget;
+                      if (window.matchMedia("(min-width: 768px)").matches) {
+                        el.style.height = "320px";
+                      }
+                    }}
+                  />
                 </div>
-              </motion.div>
-            );
+              );
 
-            return (
-              <div
-                key={product.name}
-                data-product={product.color}
-                className="grid grid-cols-1 md:grid-cols-2 min-h-[560px]"
-              >
-                {imageLeft ? (
-                  <>
-                    {ImagePanel}
-                    {ContentPanel}
-                  </>
-                ) : (
-                  <>
-                    {/* On mobile, image still appears first (DOM order) */}
-                    <div className="md:hidden">{ImagePanel}</div>
-                    {ContentPanel}
-                    <div className="hidden md:block">{ImagePanel}</div>
-                  </>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+              const ContentColumn = (
+                <div className="flex items-center py-8 md:py-12 px-6 md:px-10">
+                  <div className="w-full max-w-[480px]">
+                    {/* Badge */}
+                    <span
+                      className={`inline-flex ${badgeClasses[product.color]} text-xs font-semibold tracking-[0.15em] uppercase rounded-full px-3 py-1 mb-4`}
+                    >
+                      {product.badgeLabel}
+                    </span>
+
+                    {/* Name */}
+                    <h3 className="text-3xl font-bold tracking-tight text-foreground">
+                      {product.name}
+                    </h3>
+
+                    {/* Descriptor */}
+                    <p className="text-sm text-muted-foreground mt-1 mb-6">
+                      {product.descriptor}
+                    </p>
+
+                    {/* Benefit tags */}
+                    <div className="flex gap-2 flex-wrap">
+                      {product.benefits.map((b) => (
+                        <span
+                          key={b}
+                          className={`inline-flex items-center text-xs font-medium border rounded-full px-3 py-1.5 ${tagClasses[product.color]}`}
+                        >
+                          {b}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-sm text-foreground/70 leading-relaxed mt-6">
+                      {product.description}
+                    </p>
+
+                    {/* CTA */}
+                    <a
+                      href={product.amazonUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-foreground text-background text-xs font-semibold tracking-wide px-6 py-3 rounded-lg hover:opacity-90 transition-opacity mt-8 inline-flex items-center gap-2"
+                    >
+                      View on Amazon India
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              );
+
+              return (
+                <motion.div
+                  key={product.name}
+                  data-product={product.color}
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
+                  whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut",
+                    delay: prefersReducedMotion ? 0 : idx * 0.15,
+                  }}
+                  className="rounded-2xl overflow-hidden border border-border/30 grid grid-cols-1 md:grid-cols-2"
+                  style={{
+                    background: cardBackground[product.color],
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+                  }}
+                >
+                  {imageLeft ? (
+                    <>
+                      {ImageColumn}
+                      {ContentColumn}
+                    </>
+                  ) : (
+                    <>
+                      {/* Mobile: image first */}
+                      <div className="md:hidden">{ImageColumn}</div>
+                      {ContentColumn}
+                      <div className="hidden md:block">{ImageColumn}</div>
+                    </>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+      </div>
     </section>
   );
 };
