@@ -99,19 +99,23 @@ const HeroSection = () => {
     );
   }
 
+  const heroCopy = (
+    <HeroCopy
+      headlineLines={headlineLines}
+      badges={badges}
+      prefersReducedMotion={false}
+      wordStaggerMs={wordStaggerMs}
+      wordDurationMs={wordDurationMs}
+      statDelayMs={statDelayMs}
+    />
+  );
+
   return (
     <>
       {/* MOBILE: static hero + tins in normal flow, no parallax */}
       <section className="md:hidden relative flex flex-col items-center overflow-hidden min-h-screen pt-20 pb-2 bg-background">
         <div className="px-6 w-full max-w-[1400px] mx-auto relative z-10">
-          <HeroCopy
-            headlineLines={headlineLines}
-            badges={badges}
-            prefersReducedMotion={false}
-            wordStaggerMs={wordStaggerMs}
-            wordDurationMs={wordDurationMs}
-            statDelayMs={statDelayMs}
-          />
+          {heroCopy}
         </div>
         <StaticTins mobileOnly />
       </section>
@@ -132,14 +136,7 @@ const HeroSection = () => {
               }}
             />
             <div className="px-6 md:px-12 w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-center relative z-10">
-              <HeroCopy
-                headlineLines={headlineLines}
-                badges={badges}
-                prefersReducedMotion={false}
-                wordStaggerMs={wordStaggerMs}
-                wordDurationMs={wordDurationMs}
-                statDelayMs={statDelayMs}
-              />
+              {heroCopy}
               <div className="hidden md:flex items-center justify-center mt-4 lg:mt-0">
                 <SpotlightCard variant="notify" />
               </div>
