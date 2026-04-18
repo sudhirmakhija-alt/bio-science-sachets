@@ -67,35 +67,19 @@ const HeroSection = () => {
 
   // Mobile/reduced-motion: render statically with tins below content in normal flow
   const StaticTins = ({ mobileOnly = false }: { mobileOnly?: boolean }) => (
-    <div className={`relative w-full max-w-[1400px] mx-auto mt-8 ${mobileOnly ? "md:hidden" : "md:mt-12 px-6 md:px-12"}`}>
-      {/* Mobile: horizontal scroll so each tin can render at full size */}
-      <div className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory px-6 pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className={`relative w-full max-w-[1400px] mx-auto mt-8 px-3 md:px-12 ${mobileOnly ? "md:hidden" : "md:mt-12"}`}>
+      <div className="grid grid-cols-3 gap-2 md:gap-6 items-end">
         {tins.map((tin) => (
-          <div key={tin.alt} className="flex flex-col items-center gap-3 shrink-0 snap-center">
+          <div key={tin.alt} className="flex flex-col items-center gap-3 min-w-0">
             <img
               src={tin.src}
               alt={tin.alt}
-              className="w-[280px] h-auto object-contain"
+              className="w-full max-w-[450px] lg:max-w-[564px] h-auto object-contain mx-auto"
               style={{ filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
             />
-            <span className="text-[11px] tracking-widest uppercase text-muted-foreground text-center leading-tight">
-              {tin.labelLine1}<br />{tin.labelLine2}
-            </span>
-          </div>
-        ))}
-      </div>
-      {/* Desktop/tablet: 3-column grid */}
-      <div className="hidden md:grid grid-cols-3 gap-6 items-end">
-        {tins.map((tin) => (
-          <div key={tin.alt} className="flex flex-col items-center gap-3">
-            <img
-              src={tin.src}
-              alt={tin.alt}
-              className="w-[450px] lg:w-[564px] h-auto object-contain mx-auto"
-              style={{ filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
-            />
-            <span className="text-xs tracking-widest uppercase text-muted-foreground text-center">
-              {tin.label}
+            <span className="text-[10px] md:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
+              <span className="md:hidden">{tin.labelLine1}<br />{tin.labelLine2}</span>
+              <span className="hidden md:inline">{tin.label}</span>
             </span>
           </div>
         ))}
