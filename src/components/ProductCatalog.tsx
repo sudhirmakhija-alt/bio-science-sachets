@@ -137,7 +137,7 @@ const ProductCatalog = () => {
                 <div className="flex items-center justify-center py-8 md:py-12 px-6 md:px-8">
                   <img
                     src={product.image}
-                    alt={product.name}
+                    alt={product.imageAlt}
                     className="object-contain motion-safe:md:animate-product-float"
                     style={{
                       height: "330px",
