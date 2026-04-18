@@ -190,9 +190,3 @@
   -webkit-animation-play-state: paused;
           animation-play-state: paused;
 }
-@media (prefers-reduced-motion: reduce) {
-  .credentials-marquee-track {
-    -webkit-animation: none;
-            animation: none;
-  }
-}
