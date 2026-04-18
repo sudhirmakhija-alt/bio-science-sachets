@@ -27,6 +27,26 @@ const faqs = [
     q: "Where can I buy BioLogica?",
     a: "You can purchase BioLogica toppers on Amazon India. For questions, reach our team via the contact details on our Amazon store page.",
   },
+  {
+    q: "What is a dog food topper?",
+    a: "A topper is a nutrient-dense addition mixed into your dog's regular food. It fills nutritional gaps without replacing their main meal — think of it as a daily vitamin in real-food form.",
+  },
+  {
+    q: "What is Green-Lipped Mussel (GLM) and why is it in Omega Balance+?",
+    a: "GLM is a New Zealand shellfish clinically proven to reduce joint inflammation, improve mobility, and support heart and brain health in dogs. It's one of the most bioavailable marine omega sources available.",
+  },
+  {
+    q: "Are BioLogica products vet recommended?",
+    a: "Yes. All three BioLogica toppers — Omega Balance+, Organ Balance+, and Gut Balance+ — are vet recommended and formulated with ingredients backed by clinical research.",
+  },
+  {
+    q: "Can I give my dog multiple BioLogica products at the same time?",
+    a: "Yes. The three products target different systems — joints and coat, immunity and energy, and gut health — and are designed to complement each other. Many dog parents use all three in rotation.",
+  },
+  {
+    q: "Is Gut Balance+ safe for dogs with sensitive stomachs?",
+    a: "Yes — it's 100% vegetarian and specifically formulated for dogs with nausea, loose stools, or gut lining issues. The ingredients soothe rather than stress the digestive system.",
+  },
 ];
 
 const FAQSection = () => {
