@@ -41,6 +41,7 @@ const BlogPostPage = ({
             src={heroImage}
             alt={heroImageAlt || title}
             className="w-full max-h-[480px] object-cover object-top"
+            style={heroImagePosition ? { objectPosition: heroImagePosition } : undefined}
           />
         </div>
 
