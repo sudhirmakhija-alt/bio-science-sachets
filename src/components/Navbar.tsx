@@ -7,7 +7,7 @@ const NAV_LINKS = [
 { label: "Science", href: "#science" },
 { label: "Dosing", href: "#dosing" },
 { label: "Origin", href: "#origin" },
-{ label: "Journal", href: "#journal" },
+{ label: "Blog", href: "#journal" },
 { label: "Reviews", href: "#testimonials" }];
 
 
