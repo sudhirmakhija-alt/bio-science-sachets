@@ -15,6 +15,7 @@ import ScienceGrid from "@/components/ScienceGrid";
 import InsideEverySachet from "@/components/InsideEverySachet";
 import FAQSection from "@/components/FAQSection";
 import OriginStorySection from "@/components/OriginStorySection";
+import JournalSection from "@/components/JournalSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -60,6 +61,9 @@ const Index = () => {
 
         {/* ORIGIN STORY (timeline) */}
         <OriginStorySection />
+
+        {/* JOURNAL */}
+        <JournalSection />
 
         {/* FOOTER */}
         <Footer />
