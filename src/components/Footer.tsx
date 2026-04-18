@@ -64,7 +64,6 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        </div>
 
         <div className="pt-8 border-t border-background/10">
           <p className="text-xs text-background/40 leading-relaxed max-w-3xl">
