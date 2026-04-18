@@ -9,6 +9,7 @@ type Article = {
   title: string;
   excerpt: string;
   image: string;
+  imagePosition?: string;
   content: string[];
 };
 
