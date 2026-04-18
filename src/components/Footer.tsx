@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="section-padding bg-foreground text-background border-t border-border/20">
       <div className="max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start mb-12">
           <div className="max-w-md">
             <h3 className="text-2xl font-black tracking-tight mb-2">BioLogica</h3>
             <p className="text-xs text-background/40 mt-2">
@@ -20,11 +20,6 @@ const Footer = () => {
               { label: "Omega", href: "#omega", dot: "bg-omega" },
               { label: "Organ", href: "#organ", dot: "bg-organ" },
               { label: "Gut", href: "#gut", dot: "bg-gut" },
-              { label: "Science", href: "#science", dot: null },
-              { label: "Dosing", href: "#dosing", dot: null },
-              { label: "Origin", href: "#origin", dot: null },
-              { label: "Blog", href: "#journal", dot: null },
-              { label: "Reviews", href: "#reviews", dot: null },
             ].map((link) => (
               <a
                 key={link.label}
@@ -34,6 +29,24 @@ const Footer = () => {
                 {link.dot && (
                   <span className={`w-2 h-2 rounded-full ${link.dot} inline-block mr-2`} />
                 )}
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          <nav className="flex flex-col gap-[12px] px-0">
+            {[
+              { label: "Science", href: "#science" },
+              { label: "Dosing", href: "#dosing" },
+              { label: "Origin", href: "#origin" },
+              { label: "Blog", href: "#journal" },
+              { label: "Reviews", href: "#reviews" },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="inline-flex items-center text-xs font-medium tracking-widest uppercase text-background/50 hover:text-background transition-colors"
+              >
                 {link.label}
               </a>
             ))}
