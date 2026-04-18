@@ -194,7 +194,12 @@ const ArticleModal = ({ article, onClose }: { article: Article | null; onClose: 
             <X className="h-5 w-5" />
           </button>
           <div className="relative h-64 w-full overflow-hidden md:h-80">
-            <img src={article.image} alt={article.title} className="h-full w-full object-cover" />
+            <img
+              src={article.image}
+              alt={article.title}
+              style={{ objectPosition: article.imagePosition ?? "center top" }}
+              className="h-full w-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent" />
           </div>
           <article className="px-6 pb-12 pt-2 md:px-12">
