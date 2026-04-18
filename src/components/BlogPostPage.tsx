@@ -38,7 +38,7 @@ const BlogPostPage = ({
           <img
             src={heroImage}
             alt={heroImageAlt || title}
-            className="w-full max-h-[480px] object-cover"
+            className="w-full max-h-[480px] object-cover object-top"
           />
         </div>
 
