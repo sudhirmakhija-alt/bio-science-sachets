@@ -144,9 +144,8 @@ const HeroSection = () => {
                   key={tin.alt}
                   className="flex flex-col items-center gap-3 min-w-0"
                   initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 + i * 0.2, ease: "easeOut" }}
                 >
                   <img
                     src={tin.src}
