@@ -14,6 +14,7 @@ interface Product {
   descriptor: string;
   description: string;
   image: string;
+  imageAlt: string;
   color: ProductColor;
   benefits: string[];
   amazonUrl: string;
