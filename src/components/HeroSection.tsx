@@ -75,7 +75,7 @@ const HeroSection = () => {
               src={tin.src}
               alt={tin.alt}
               className="object-contain mx-auto"
-              style={{ height: "240px", width: "auto", filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
+              style={{ height: "120px", width: "auto", filter: "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))" }}
             />
             <span className="text-[10px] md:text-xs tracking-widest uppercase text-muted-foreground text-center leading-tight">
               <span className="md:hidden">{tin.labelLine1}<br />{tin.labelLine2}</span>
@@ -146,7 +146,7 @@ const HeroSection = () => {
                     alt={tin.alt}
                     className="object-contain"
                     style={{
-                      height: "450px",
+                      height: "225px",
                       width: "auto",
                       filter:
                         "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
