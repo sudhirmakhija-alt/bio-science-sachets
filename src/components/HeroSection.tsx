@@ -27,6 +27,7 @@ const TinLabel = ({ progress, delay }: { progress: MotionValue<number>; delay: n
 const HeroSection = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: wrapperRef,
