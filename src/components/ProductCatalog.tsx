@@ -30,6 +30,7 @@ const products: Product[] = [
     description:
       "Omega Balance+ is a marine-derived topper with green-lipped mussel (GLM) and omega fatty acids to support joint comfort, skin and coat health and overall cardiovascular and brain function in dogs.",
     image: omegaProduct,
+    imageAlt: "BioLogica Omega Balance+ dog nutrition topper with Green-Lipped Mussel, 30 sachets",
     color: "omega",
     benefits: ["Joint Mobility", "Skin & Coat", "Brain & Heart"],
     amazonUrl: "https://amazon.in/biologica",
