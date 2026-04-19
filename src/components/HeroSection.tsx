@@ -66,7 +66,7 @@ const HeroSection = () => {
 
   // Mobile/reduced-motion: render statically with tins below content in normal flow
   const StaticTins = ({ mobileOnly = false }: { mobileOnly?: boolean }) => (
-    <div className={`relative w-full max-w-[1400px] mx-auto py-8 mt-0 md:py-0 md:mt-8 px-0 md:px-12 ${mobileOnly ? "md:hidden" : "md:mt-12"}`}>
+    <div className={`relative w-full max-w-[1400px] mx-auto pt-8 pb-2 mt-0 md:py-0 md:mt-8 px-0 md:px-12 ${mobileOnly ? "md:hidden" : "md:mt-12"}`}>
       <div className="flex md:grid md:grid-cols-3 justify-center items-end gap-4 md:gap-12 w-full">
         {tins.map((tin) => (
           <div key={tin.alt} className="flex flex-col items-center gap-3 min-w-0 flex-1 basis-0 md:flex-initial md:basis-auto">
@@ -114,7 +114,7 @@ const HeroSection = () => {
   return (
     <>
       <section
-        className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-16"
+        className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-6"
         style={{
           background:
             "radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,1) 0%, rgba(244,247,244,1) 100%)",
