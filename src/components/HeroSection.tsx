@@ -114,7 +114,7 @@ const HeroSection = () => {
   return (
     <>
       <section
-        className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-16"
+        className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-6"
         style={{
           background:
             "radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,1) 0%, rgba(244,247,244,1) 100%)",
