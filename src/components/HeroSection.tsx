@@ -153,7 +153,7 @@ const HeroSection = () => {
               className="absolute inset-0 flex items-center justify-center pointer-events-none px-6 md:px-12"
               style={{ y: tinsY, opacity: tinsOpacity, scale: tinsScale }}
             >
-              <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-12 items-end">
+              <div className="w-full max-w-[1400px] mx-auto grid grid-cols-3 gap-12 items-center">
                 {tins.map((tin, i) => (
                   <div key={tin.alt} className="flex flex-col items-center gap-4">
                     <img
