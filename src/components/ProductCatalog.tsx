@@ -135,7 +135,7 @@ const ProductCatalog = () => {
                   <img
                     src={product.image}
                     alt={product.imageAlt}
-                    className="object-contain motion-safe:md:animate-product-float my-auto"
+                    className="object-contain motion-safe:md:animate-product-float block"
                     style={{
                       height: "254px",
                       mixBlendMode: "multiply",
