@@ -29,7 +29,7 @@ const CredentialsMarquee = () => {
   );
 
   return (
-    <div className="relative w-full pt-0 md:bg-white md:pt-14">
+    <div className="relative w-full bg-white pt-10 md:pt-14">
       <div className="w-full bg-black py-3 overflow-hidden">
         <div className="credentials-marquee-wrapper">
           <div className="credentials-marquee-track">
