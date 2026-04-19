@@ -27,13 +27,13 @@ const BlogPostPage = ({
       <main className="flex-1 pt-16">
         {/* Back button */}
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 pt-8">
-          <a
-            href="/#journal"
+          <Link
+            to="/#journal"
             className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to BioLogica
-          </a>
+          </Link>
         </div>
 
         {/* Hero image */}
