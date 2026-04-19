@@ -66,7 +66,7 @@ const HeroSection = () => {
 
   // Mobile/reduced-motion: render statically with tins below content in normal flow
   const StaticTins = ({ mobileOnly = false }: { mobileOnly?: boolean }) => (
-    <div className={`relative w-full max-w-[1400px] mx-auto py-8 mt-0 md:py-0 md:mt-8 px-0 md:px-12 ${mobileOnly ? "md:hidden" : "md:mt-12"}`}>
+    <div className={`relative w-full max-w-[1400px] mx-auto pt-8 pb-2 mt-0 md:py-0 md:mt-8 px-0 md:px-12 ${mobileOnly ? "md:hidden" : "md:mt-12"}`}>
       <div className="flex md:grid md:grid-cols-3 justify-center items-end gap-4 md:gap-12 w-full">
         {tins.map((tin) => (
           <div key={tin.alt} className="flex flex-col items-center gap-3 min-w-0 flex-1 basis-0 md:flex-initial md:basis-auto">
