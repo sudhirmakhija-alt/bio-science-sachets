@@ -137,14 +137,14 @@ const ProductCatalog = () => {
                     alt={product.imageAlt}
                     className="object-contain motion-safe:md:animate-product-float"
                     style={{
-                      height: "540px",
+                      height: "675px",
                       mixBlendMode: "multiply",
                       animationDelay: prefersReducedMotion ? undefined : product.floatDelay,
                     }}
                     onLoad={(e) => {
                       const el = e.currentTarget;
                       if (window.matchMedia("(min-width: 768px)").matches) {
-                        el.style.height = "576px";
+                        el.style.height = "720px";
                       }
                     }}
                   />
