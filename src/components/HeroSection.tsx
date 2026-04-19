@@ -113,7 +113,7 @@ const HeroSection = () => {
 
   return (
     <>
-      <section className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-0 bg-background">
+      <section className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-16 bg-background">
         <div
           className="absolute inset-0 -z-0 pointer-events-none"
           style={{
