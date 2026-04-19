@@ -126,7 +126,7 @@ const HeroSection = () => {
 
       {/* DESKTOP/TABLET: scroll-driven reveal */}
       {!isMobile && (
-        <div ref={wrapperRef} className="relative hidden md:block" style={{ height: "130vh" }}>
+        <div ref={wrapperRef} className="relative hidden md:block" style={{ height: "160vh" }}>
           <div className="sticky top-0 h-screen overflow-hidden bg-background">
             {/* HERO CONTENT — scrolls up & fades out */}
             <motion.section
