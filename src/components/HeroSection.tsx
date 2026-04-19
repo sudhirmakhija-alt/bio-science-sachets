@@ -113,7 +113,7 @@ const HeroSection = () => {
 
   return (
     <>
-      <section className="md:hidden relative flex flex-col items-center overflow-hidden min-h-screen pt-20 pb-2 bg-background">
+      <section className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-2 bg-background">
         <div className="px-6 w-full max-w-[1400px] mx-auto relative z-10">
           {heroCopy}
         </div>
