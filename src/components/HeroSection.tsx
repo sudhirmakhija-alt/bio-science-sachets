@@ -126,7 +126,7 @@ const HeroSection = () => {
 
       {/* DESKTOP/TABLET: scroll-driven reveal */}
       {!isMobile && (
-        <div ref={wrapperRef} className="relative hidden md:block" style={{ height: "160vh" }}>
+        <div ref={wrapperRef} className="relative hidden md:block" style={{ height: "200vh" }}>
           <div className="sticky top-0 h-screen overflow-hidden bg-background">
             {/* HERO CONTENT — scrolls up & fades out */}
             <motion.section
@@ -159,7 +159,7 @@ const HeroSection = () => {
                     <img
                       src={tin.src}
                       alt={tin.alt}
-                      className="w-auto h-[350px] lg:h-[440px] xl:h-[520px] object-contain"
+                      className="w-auto h-[612px] lg:h-[770px] xl:h-[910px] object-contain"
                       style={{
                         filter:
                           "drop-shadow(0 28px 18px rgba(0,0,0,0.18)) drop-shadow(0 50px 40px rgba(0,0,0,0.10))",
