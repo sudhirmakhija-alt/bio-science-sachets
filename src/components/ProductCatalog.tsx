@@ -137,7 +137,7 @@ const ProductCatalog = () => {
                     alt={product.imageAlt}
                     className="object-contain motion-safe:md:animate-product-float block"
                     style={{
-                      height: "229px",
+                      height: "254px",
                       mixBlendMode: "multiply",
                       animationDelay: prefersReducedMotion ? undefined : product.floatDelay,
                     }}
