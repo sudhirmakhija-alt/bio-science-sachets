@@ -114,10 +114,19 @@ const HeroSection = () => {
   return (
     <>
       <section className="md:hidden relative flex flex-col items-center overflow-hidden pt-20 pb-2 bg-background">
+        <div
+          className="absolute inset-0 -z-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 30% 50%, rgba(255,182,193,0.12) 0%, transparent 55%), radial-gradient(ellipse at 70% 40%, rgba(144,238,144,0.10) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(173,216,230,0.12) 0%, transparent 45%), linear-gradient(160deg, rgba(250,251,255,0.42) 0%, rgba(244,247,244,0.42) 100%)",
+          }}
+        />
         <div className="px-6 w-full max-w-[1400px] mx-auto relative z-10">
           {heroCopy}
         </div>
-        <StaticTins mobileOnly />
+        <div className="relative z-10 w-full">
+          <StaticTins mobileOnly />
+        </div>
       </section>
 
       <div ref={wrapperRef} className="relative hidden md:block" style={{ height: "220vh" }}>
