@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import organProduct from "@/assets/organ-product.png";
-import gutProduct from "@/assets/gut-product.png";
-import omegaProduct from "@/assets/omega-product.png";
+import organProduct from "@/assets/BLP_Organ_Balance_Catalog.png";
+import gutProduct from "@/assets/BLP_Gut_Balance_Catalog.png";
+import omegaProduct from "@/assets/BLP_Omega_Balance_Catalog.png";
 import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 
 type ProductColor = "omega" | "organ" | "gut";
