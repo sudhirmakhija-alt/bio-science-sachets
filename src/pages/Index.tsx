@@ -26,11 +26,34 @@ const Index = () => {
     const hash = window.location.hash;
     if (!hash) return;
     const id = hash.slice(1);
-    const timer = setTimeout(() => {
+
+    let cancelled = false;
+    let attempts = 0;
+    const maxAttempts = 40; // ~4s at 100ms
+
+    const tryScroll = () => {
+      if (cancelled) return;
       const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 200);
-    return () => clearTimeout(timer);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Re-confirm after layout shifts (images, animations)
+        setTimeout(() => {
+          if (cancelled) return;
+          const el2 = document.getElementById(id);
+          if (el2) el2.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 600);
+        return;
+      }
+      attempts += 1;
+      if (attempts < maxAttempts) {
+        setTimeout(tryScroll, 100);
+      }
+    };
+
+    tryScroll();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
