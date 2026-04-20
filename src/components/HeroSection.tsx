@@ -228,12 +228,7 @@ const HeroCopy = ({
                   className={`inline-block ${line.muted && !isPrecision ? "text-muted-foreground" : ""} ${i < line.words.length - 1 ? "mr-[0.25em]" : ""}`}
                   style={
                     isPrecision
-                      ? {
-                          background: "linear-gradient(135deg, #0EA5E9, #059669)",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                          backgroundClip: "text",
-                        }
+                      ? { color: "hsl(var(--omega))" }
                       : undefined
                   }
                   initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
