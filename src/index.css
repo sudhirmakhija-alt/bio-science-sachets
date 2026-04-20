@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Onest:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800;900&family=Onest:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -83,9 +83,9 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
-    letter-spacing: -0.03em;
-    font-weight: 800;
+    font-family: 'Hanken Grotesk', system-ui, sans-serif;
+    letter-spacing: -0.025em;
+    font-weight: 900;
   }
 }
 

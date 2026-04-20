@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Onest', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+        display: ['Hanken Grotesk', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
