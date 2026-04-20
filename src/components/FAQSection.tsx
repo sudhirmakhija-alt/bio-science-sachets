@@ -54,12 +54,13 @@ const FAQSection = () => {
     <section id="faq" className="section-padding backdrop-blur-sm" style={{ backgroundColor: '#f5f7f2' }}>
       <div className="max-w-[900px] mx-auto">
         <motion.div
-          initial={false}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={{ opacity: 0, transform: "translateY(16px)" }}
+          whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="mb-16"
         >
-          <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
+          <span className="text-[11px] font-medium tracking-[0.25em] uppercase text-muted-foreground/50 block mb-4">
             Reassurance
           </span>
           <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground">
@@ -68,14 +69,19 @@ const FAQSection = () => {
         </motion.div>
 
         <motion.div
-          initial={false}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={{ opacity: 0, transform: "translateY(12px)" }}
+          whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           <Accordion type="single" collapsible className="space-y-0">
             {faqs.map((faq, i) => (
-              <AccordionItem key={i} value={`faq-${i}`} className="border-b border-border group/faq rounded-sm transition-colors hover:bg-gut/[0.04]">
-                <AccordionTrigger className="py-6 px-3 text-sm md:text-base font-semibold text-foreground text-left hover:no-underline group-hover/faq:text-gut transition-colors">
+              <AccordionItem
+                key={i}
+                value={`faq-${i}`}
+                className="border-b border-border group/faq rounded-sm transition-colors duration-150 hover:bg-gut/[0.04]"
+              >
+                <AccordionTrigger className="py-6 px-3 text-sm md:text-base font-semibold text-foreground text-left hover:no-underline group-hover/faq:text-gut transition-colors duration-150">
                   {faq.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-6 px-3">

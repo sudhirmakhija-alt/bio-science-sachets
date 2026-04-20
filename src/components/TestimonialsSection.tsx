@@ -30,13 +30,13 @@ const TestimonialsSection = () => {
     >
       <div className="max-w-[1200px] mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0, transform: "translateY(16px)" }}
+          whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="mb-16"
         >
-          <span className="text-xs font-medium tracking-[0.3em] uppercase text-muted-foreground block mb-4">
+          <span className="text-[11px] font-medium tracking-[0.25em] uppercase text-muted-foreground/50 block mb-4">
             Feedback from our trials
           </span>
           <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] text-foreground">
@@ -48,14 +48,14 @@ const TestimonialsSection = () => {
           {testimonials.map((t, i) => (
             <motion.figure
               key={i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="relative flex flex-col h-full bg-white border border-border rounded-lg p-8 shadow-sm"
+              initial={{ opacity: 0, transform: "translateY(24px)" }}
+              whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="relative flex flex-col h-full bg-white border border-border rounded-lg p-8 shadow-sm card-lift"
             >
               <Quote
-                className="absolute top-6 right-6 w-10 h-10 text-gut/30"
+                className="absolute top-6 right-6 w-10 h-10 text-gut/20"
                 strokeWidth={1.5}
                 aria-hidden="true"
               />
@@ -77,7 +77,7 @@ const TestimonialsSection = () => {
                 <div className="text-sm font-semibold text-foreground">
                   {t.author}
                 </div>
-                <div className="text-xs text-muted-foreground mt-0.5">
+                <div className="text-xs text-muted-foreground/60 mt-0.5">
                   {t.dog}
                 </div>
               </figcaption>
@@ -85,7 +85,7 @@ const TestimonialsSection = () => {
           ))}
         </div>
 
-        <p className="text-xs text-muted-foreground text-center mt-8">
+        <p className="text-xs text-muted-foreground/40 text-center mt-8">
           Complementary feed only. No therapeutic claims.
         </p>
       </div>

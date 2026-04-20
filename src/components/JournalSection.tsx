@@ -61,15 +61,17 @@ const articles: Article[] = [
   },
 ];
 
-const ArticleCard = ({ article, hero = false }: { article: Article; hero?: boolean }) => (
+const ArticleCard = ({ article, hero = false, delay = 0 }: { article: Article; hero?: boolean; delay?: number }) => (
   <motion.div
-    whileHover={{ y: -4 }}
-    transition={{ type: "spring", stiffness: 300, damping: 24 }}
+    initial={{ opacity: 0, transform: "translateY(20px)" }}
+    whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+    viewport={{ once: true, margin: "-60px" }}
+    transition={{ duration: 0.55, delay, ease: [0.16, 1, 0.3, 1] }}
     className="group"
   >
     <Link
       to={`/blog/${article.slug}`}
-      className={`relative flex flex-col overflow-hidden rounded-2xl bg-gray-900 text-left shadow-md transition-shadow hover:shadow-2xl hover:shadow-black/40 ${
+      className={`relative flex flex-col overflow-hidden rounded-2xl bg-gray-900 text-left shadow-md transition-shadow duration-300 hover:shadow-2xl hover:shadow-black/40 ${
         hero ? "" : "h-[480px]"
       }`}
     >
@@ -81,9 +83,9 @@ const ArticleCard = ({ article, hero = false }: { article: Article; hero?: boole
           alt={article.title}
           loading="lazy"
           style={{ objectPosition: article.imagePosition ?? (hero ? "center top" : "top") }}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent" />
       </div>
       <div className="flex flex-1 flex-col gap-3 p-6 md:p-8">
         <span className="inline-flex w-fit items-center rounded-full bg-gut/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-gut">
@@ -97,9 +99,9 @@ const ArticleCard = ({ article, hero = false }: { article: Article; hero?: boole
           {article.title}
         </h3>
         <p className="line-clamp-2 text-sm leading-relaxed text-gray-400">{article.excerpt}</p>
-        <span className="mt-auto inline-flex items-center gap-2 pt-2 text-sm font-semibold text-gut transition-colors group-hover:text-gut/80">
+        <span className="mt-auto inline-flex items-center gap-2 pt-2 text-sm font-semibold text-gut transition-colors duration-150 group-hover:text-gut/70">
           Read article
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-1" />
         </span>
       </div>
     </Link>
@@ -113,27 +115,28 @@ const JournalSection = () => {
     <section id="journal" className="-mt-px section-padding bg-gray-950">
       <div className="mx-auto max-w-[1400px]">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          initial={{ opacity: 0, transform: "translateY(20px)" }}
+          whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="mb-6 md:mb-8"
         >
-          <span className="mb-4 block text-xs font-medium uppercase tracking-[0.3em] text-gray-500">
+          <span className="mb-4 block text-[11px] font-medium uppercase tracking-[0.25em] text-gray-500/70">
             From the Journal
           </span>
           <h2 className="text-4xl font-black tracking-[-0.03em] text-white md:text-5xl">
             Things worth knowing about your dog
           </h2>
-          <p className="mt-4 text-base text-gray-400 md:text-lg">
+          <p className="mt-4 text-base text-gray-500 md:text-lg">
             No jargon. No fluff. Just useful things.
           </p>
         </motion.div>
 
         <div className="grid gap-6 md:gap-8">
-          <ArticleCard article={hero} hero />
+          <ArticleCard article={hero} hero delay={0} />
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
-            {rest.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+            {rest.map((article, i) => (
+              <ArticleCard key={article.id} article={article} delay={i * 0.06} />
             ))}
           </div>
         </div>

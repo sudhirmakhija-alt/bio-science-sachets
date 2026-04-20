@@ -106,17 +106,23 @@ const ProductCatalog = () => {
       </div>
 
       {/* Section header */}
-      <div className="py-16 px-6 text-center max-w-[1400px] mx-auto">
-        <span className="text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground block">
-          THE RANGE
+      <motion.div
+        initial={{ opacity: 0, transform: "translateY(20px)" }}
+        whileInView={{ opacity: 1, transform: "translateY(0px)" }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="py-16 px-6 text-center max-w-[1400px] mx-auto"
+      >
+        <span className="text-[11px] font-medium tracking-[0.25em] uppercase text-muted-foreground/50 block">
+          The Range
         </span>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mt-2">
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mt-3">
           Three systems. One daily routine.
         </h2>
-        <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
+        <p className="text-sm text-muted-foreground mt-3 max-w-md mx-auto leading-relaxed">
           Each topper targets a specific area. Use one or combine all three.
         </p>
-      </div>
+      </motion.div>
 
       <div className="px-4 md:px-8 pb-20 max-w-[1400px] mx-auto">
         {!allLoaded ? (
@@ -131,11 +137,11 @@ const ProductCatalog = () => {
               const imageLeft = product.imageSide === "left";
 
               const ImageColumn = (
-                <div className="flex items-center justify-center self-stretch h-full py-16 md:py-12 px-6 md:px-8 min-h-[420px] md:min-h-0">
+                <div className="flex items-center justify-center self-stretch h-full py-16 md:py-12 px-6 md:px-8 min-h-[420px] md:min-h-0 overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.imageAlt}
-                    className="object-contain motion-safe:md:animate-product-float block"
+                    className="object-contain motion-safe:md:animate-product-float block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                     style={{
                       height: "254px",
                       mixBlendMode: "multiply",
@@ -193,7 +199,7 @@ const ProductCatalog = () => {
                       href={product.amazonUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="bg-foreground text-background text-xs font-semibold tracking-wide px-6 py-3 rounded-lg hover:opacity-90 transition-opacity mt-8 inline-flex items-center gap-2"
+                      className="btn-press bg-foreground text-background text-xs font-semibold tracking-wide px-6 py-3 rounded-lg mt-8 inline-flex items-center gap-2"
                     >
                       View on Amazon India
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -207,15 +213,15 @@ const ProductCatalog = () => {
                   key={product.name}
                   id={product.color}
                   data-product={product.color}
-                  initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
-                  whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                  initial={prefersReducedMotion ? false : { opacity: 0, transform: "translateY(24px)" }}
+                  whileInView={prefersReducedMotion ? undefined : { opacity: 1, transform: "translateY(0px)" }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{
-                    duration: 0.5,
-                    ease: "easeOut",
-                    delay: prefersReducedMotion ? 0 : idx * 0.15,
+                    duration: 0.6,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: prefersReducedMotion ? 0 : idx * 0.1,
                   }}
-                  className="rounded-2xl overflow-hidden border border-border/30 grid grid-cols-1 md:grid-cols-2"
+                  className="group rounded-2xl overflow-hidden border border-border/30 grid grid-cols-1 md:grid-cols-2 card-lift"
                   style={{
                     background: cardBackground[product.color],
                     boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
@@ -228,7 +234,6 @@ const ProductCatalog = () => {
                     </>
                   ) : (
                     <>
-                      {/* Mobile: image first */}
                       <div className="md:hidden">{ImageColumn}</div>
                       {ContentColumn}
                       <div className="hidden md:block">{ImageColumn}</div>
