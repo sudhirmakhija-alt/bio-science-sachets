@@ -4,7 +4,6 @@ import { ArrowRight } from "lucide-react";
 import organProduct from "@/assets/BLP_Organ_Balance_Catalog.png";
 import gutProduct from "@/assets/BLP_Gut_Balance_Catalog.png";
 import omegaProduct from "@/assets/BLP_Omega_Balance_Catalog.png";
-import ProductCardSkeleton from "@/components/ProductCardSkeleton";
 
 type ProductColor = "omega" | "organ" | "gut";
 
@@ -18,8 +17,6 @@ interface Product {
   color: ProductColor;
   benefits: string[];
   amazonUrl: string;
-  imageSide: "left" | "right";
-  floatDelay: string;
 }
 
 const products: Product[] = [
@@ -34,8 +31,6 @@ const products: Product[] = [
     color: "omega",
     benefits: ["Joint Mobility", "Skin & Coat", "Brain & Heart"],
     amazonUrl: "https://amazon.in/biologica",
-    imageSide: "left",
-    floatDelay: "0s",
   },
   {
     name: "Organ Balance+",
@@ -48,8 +43,6 @@ const products: Product[] = [
     color: "organ",
     benefits: ["Vitality", "Energy", "Immunity"],
     amazonUrl: "https://amazon.in/biologica",
-    imageSide: "right",
-    floatDelay: "1.8s",
   },
   {
     name: "Gut Balance+",
@@ -62,28 +55,135 @@ const products: Product[] = [
     color: "gut",
     benefits: ["Digestion", "Stool Quality", "Gut Lining"],
     amazonUrl: "https://amazon.in/biologica",
-    imageSide: "left",
-    floatDelay: "0.9s",
   },
 ];
 
-const cardBackground: Record<ProductColor, string> = {
-  omega: "#EFF6FF",
-  organ: "#FDF2F8",
-  gut: "#F0FDF4",
+// Dark, rich image area backgrounds — product gets to be the hero
+const imageAreaBg: Record<ProductColor, string> = {
+  omega: "#0b2235",
+  organ: "#231308",
+  gut: "#0b2016",
 };
 
-const badgeClasses: Record<ProductColor, string> = {
-  omega: "bg-blue-200/60 text-blue-800",
-  organ: "bg-pink-200/60 text-pink-800",
-  gut: "bg-green-200/60 text-green-800",
+// Product accent colors for badges, dots, and glow
+const accentHsl: Record<ProductColor, string> = {
+  omega: "hsl(var(--omega))",
+  organ: "hsl(var(--organ))",
+  gut: "hsl(var(--gut))",
 };
 
-const tagClasses: Record<ProductColor, string> = {
-  omega: "text-blue-700 border-blue-700/20",
-  organ: "text-pink-700 border-pink-700/20",
-  gut: "text-green-700 border-green-700/20",
-};
+const ProductCard = ({
+  product,
+  idx,
+  prefersReducedMotion,
+}: {
+  product: Product;
+  idx: number;
+  prefersReducedMotion: boolean | null;
+}) => (
+  <motion.div
+    id={product.color}
+    data-product={product.color}
+    initial={prefersReducedMotion ? false : { opacity: 0, transform: "translateY(28px)" }}
+    whileInView={prefersReducedMotion ? undefined : { opacity: 1, transform: "translateY(0px)" }}
+    viewport={{ once: true, margin: "-60px" }}
+    transition={{
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1],
+      delay: prefersReducedMotion ? 0 : idx * 0.1,
+    }}
+    className="group flex flex-col overflow-hidden rounded-2xl border border-border/20 card-lift"
+    style={{ boxShadow: "0 4px 32px rgba(0,0,0,0.07)" }}
+  >
+    {/* ── Image area ── */}
+    <div
+      className="relative flex items-end justify-center overflow-hidden"
+      style={{
+        background: imageAreaBg[product.color],
+        minHeight: "300px",
+        paddingTop: "40px",
+        paddingBottom: "0",
+      }}
+    >
+      {/* Soft radial glow behind the tin */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at 50% 90%, ${accentHsl[product.color]}33 0%, transparent 65%)`,
+        }}
+      />
+
+      {/* Thin accent line at top */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[3px]"
+        style={{ background: accentHsl[product.color] }}
+      />
+
+      <img
+        src={product.image}
+        alt={product.imageAlt}
+        className="relative z-10 object-contain transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+        style={{
+          height: "240px",
+          filter: "drop-shadow(0 24px 32px rgba(0,0,0,0.35)) drop-shadow(0 8px 12px rgba(0,0,0,0.2))",
+        }}
+      />
+    </div>
+
+    {/* ── Content area ── */}
+    <div className="flex flex-col flex-1 p-6 bg-background">
+
+      {/* Category */}
+      <span
+        className="text-[10px] font-semibold tracking-[0.2em] uppercase mb-3 block"
+        style={{ color: accentHsl[product.color] }}
+      >
+        {product.badgeLabel}
+      </span>
+
+      {/* Product name */}
+      <h3
+        className="text-2xl font-black text-foreground mb-1.5 leading-tight"
+      >
+        {product.name}
+      </h3>
+
+      {/* Descriptor */}
+      <p className="text-xs text-muted-foreground leading-relaxed mb-5">
+        {product.descriptor}
+      </p>
+
+      {/* Benefits — clean dot list, not pill tags */}
+      <div className="flex flex-col gap-2.5 mb-5">
+        {product.benefits.map((b) => (
+          <div key={b} className="flex items-center gap-2.5">
+            <span
+              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+              style={{ background: accentHsl[product.color] }}
+            />
+            <span className="text-xs font-medium text-foreground/75">{b}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Description */}
+      <p className="text-xs text-foreground/55 leading-relaxed flex-1 mb-6">
+        {product.description}
+      </p>
+
+      {/* CTA */}
+      <a
+        href={product.amazonUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn-press w-full flex items-center justify-center gap-2 py-3 bg-foreground text-background text-xs font-semibold tracking-wide"
+      >
+        View on Amazon India
+        <ArrowRight className="w-3.5 h-3.5" />
+      </a>
+    </div>
+  </motion.div>
+);
 
 const ProductCatalog = () => {
   const prefersReducedMotion = useReducedMotion();
@@ -116,7 +216,7 @@ const ProductCatalog = () => {
         <span className="text-[11px] font-medium tracking-[0.25em] uppercase text-muted-foreground/50 block">
           The Range
         </span>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mt-3">
+        <h2 className="text-3xl md:text-4xl font-black text-foreground mt-3">
           Three systems. One daily routine.
         </h2>
         <p className="text-sm text-muted-foreground mt-3 max-w-md mx-auto leading-relaxed">
@@ -124,124 +224,40 @@ const ProductCatalog = () => {
         </p>
       </motion.div>
 
+      {/* Cards grid */}
       <div className="px-4 md:px-8 pb-20 max-w-[1400px] mx-auto">
         {!allLoaded ? (
-          <div className="space-y-6" aria-busy="true" aria-live="polite">
+          // Skeleton placeholders while images load
+          <div
+            className="grid grid-cols-1 md:grid-cols-3 gap-5"
+            aria-busy="true"
+            aria-live="polite"
+          >
             {products.map((p) => (
-              <ProductCardSkeleton key={`skeleton-${p.name}`} />
+              <div
+                key={`skeleton-${p.name}`}
+                className="rounded-2xl border border-border/20 overflow-hidden animate-pulse"
+              >
+                <div className="h-[300px] bg-muted" />
+                <div className="p-6 space-y-3">
+                  <div className="h-3 w-24 bg-muted rounded" />
+                  <div className="h-6 w-40 bg-muted rounded" />
+                  <div className="h-3 w-full bg-muted rounded" />
+                  <div className="h-3 w-3/4 bg-muted rounded" />
+                </div>
+              </div>
             ))}
           </div>
         ) : (
-          <div className="space-y-6">
-            {products.map((product, idx) => {
-              const imageLeft = product.imageSide === "left";
-
-              const ImageColumn = (
-                <div className="flex items-center justify-center self-stretch h-full py-16 md:py-12 px-6 md:px-8 min-h-[420px] md:min-h-0 overflow-hidden">
-                  <img
-                    src={product.image}
-                    alt={product.imageAlt}
-                    className="object-contain motion-safe:md:animate-product-float block transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                    style={{
-                      height: "254px",
-                      mixBlendMode: "multiply",
-                      animationDelay: prefersReducedMotion ? undefined : product.floatDelay,
-                    }}
-                    onLoad={(e) => {
-                      const el = e.currentTarget;
-                      if (window.matchMedia("(min-width: 768px)").matches) {
-                        el.style.height = "360px";
-                      }
-                    }}
-                  />
-                </div>
-              );
-
-              const ContentColumn = (
-                <div className="flex items-center py-8 md:py-12 px-6 md:px-10">
-                  <div className="w-full max-w-[480px]">
-                    {/* Badge */}
-                    <span
-                      className={`inline-flex ${badgeClasses[product.color]} text-xs font-semibold tracking-[0.15em] uppercase rounded-full px-3 py-1 mb-4`}
-                    >
-                      {product.badgeLabel}
-                    </span>
-
-                    {/* Name */}
-                    <h3 className="text-3xl font-bold tracking-tight text-foreground">
-                      {product.name}
-                    </h3>
-
-                    {/* Descriptor */}
-                    <p className="text-sm text-muted-foreground mt-1 mb-6">
-                      {product.descriptor}
-                    </p>
-
-                    {/* Benefit tags */}
-                    <div className="flex gap-2 flex-wrap">
-                      {product.benefits.map((b) => (
-                        <span
-                          key={b}
-                          className={`inline-flex items-center text-xs font-medium border rounded-full px-3 py-1.5 ${tagClasses[product.color]}`}
-                        >
-                          {b}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-foreground/70 leading-relaxed mt-6">
-                      {product.description}
-                    </p>
-
-                    {/* CTA */}
-                    <a
-                      href={product.amazonUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-press bg-foreground text-background text-xs font-semibold tracking-wide px-6 py-3 rounded-lg mt-8 inline-flex items-center gap-2"
-                    >
-                      View on Amazon India
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
-              );
-
-              return (
-                <motion.div
-                  key={product.name}
-                  id={product.color}
-                  data-product={product.color}
-                  initial={prefersReducedMotion ? false : { opacity: 0, transform: "translateY(24px)" }}
-                  whileInView={prefersReducedMotion ? undefined : { opacity: 1, transform: "translateY(0px)" }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={{
-                    duration: 0.6,
-                    ease: [0.16, 1, 0.3, 1],
-                    delay: prefersReducedMotion ? 0 : idx * 0.1,
-                  }}
-                  className="group rounded-2xl overflow-hidden border border-border/30 grid grid-cols-1 md:grid-cols-2 card-lift"
-                  style={{
-                    background: cardBackground[product.color],
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-                  }}
-                >
-                  {imageLeft ? (
-                    <>
-                      {ImageColumn}
-                      {ContentColumn}
-                    </>
-                  ) : (
-                    <>
-                      <div className="md:hidden">{ImageColumn}</div>
-                      {ContentColumn}
-                      <div className="hidden md:block">{ImageColumn}</div>
-                    </>
-                  )}
-                </motion.div>
-              );
-            })}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {products.map((product, idx) => (
+              <ProductCard
+                key={product.name}
+                product={product}
+                idx={idx}
+                prefersReducedMotion={prefersReducedMotion}
+              />
+            ))}
           </div>
         )}
       </div>
