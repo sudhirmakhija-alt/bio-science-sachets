@@ -59,14 +59,14 @@ const Navbar = () => {
               key={link.hash}
               href={`/#${link.hash}`}
               onClick={(e) => handleNavClick(e, link.hash)}
-              className="text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors px-0">
+              className="nav-link text-xs font-semibold tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-150 px-0">
               {link.label}
             </a>
           )}
           <a
             href="/#products"
             onClick={(e) => handleNavClick(e, "products")}
-            className="inline-flex items-center justify-center px-5 py-2 bg-foreground text-background text-xs font-semibold tracking-wide hover:opacity-90 transition-opacity">
+            className="btn-press inline-flex items-center justify-center px-5 py-2 bg-foreground text-background text-xs font-semibold tracking-wide">
             BUY ON AMAZON
           </a>
         </div>
@@ -90,7 +90,7 @@ const Navbar = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}>
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
             <div className="flex flex-col gap-4 px-6 py-6">
               {NAV_LINKS.map((link) =>
                 <a
@@ -104,7 +104,7 @@ const Navbar = () => {
               <a
                 href="/#products"
                 onClick={(e) => handleNavClick(e, "products")}
-                className="inline-flex items-center justify-center px-5 py-3 bg-foreground text-background text-xs font-semibold tracking-wide mt-2">
+                className="btn-press inline-flex items-center justify-center px-5 py-3 bg-foreground text-background text-xs font-semibold tracking-wide mt-2">
                 BUY ON AMAZON
               </a>
             </div>

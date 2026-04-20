@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Emil-grade easing tokens ─────────────────────────────────────────── */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -140,6 +147,77 @@
     box-shadow: 0 2px 6px hsl(var(--foreground) / 0.2);
   }
 
+  /* ─── Button press feedback ─────────────────────────────────────────────
+     Every pressable CTA gets a subtle scale-down on :active.
+     Scoped to pointer-capable devices only.                               */
+  @media (hover: hover) and (pointer: fine) {
+    .btn-press {
+      transition: transform 160ms var(--ease-out-expo), opacity 160ms ease;
+    }
+    .btn-press:hover {
+      opacity: 0.88;
+    }
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+  }
+
+  /* Touch devices: just the active scale, no hover */
+  @media (hover: none) {
+    .btn-press:active {
+      transform: scale(0.97);
+      transition: transform 120ms var(--ease-out-expo);
+    }
+  }
+
+  /* ─── Input focus polish ─────────────────────────────────────────────── */
+  .input-clean {
+    @apply w-full px-4 py-3 bg-background border border-border rounded-lg text-sm;
+    outline: none;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+  .input-clean:focus {
+    border-color: hsl(var(--foreground) / 0.4);
+    box-shadow: 0 0 0 3px hsl(var(--foreground) / 0.06);
+  }
+  .input-clean::placeholder {
+    color: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* ─── Nav underline reveal ───────────────────────────────────────────── */
+  .nav-link {
+    position: relative;
+    display: inline-block;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 200ms var(--ease-out-expo);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .nav-link:hover::after {
+      clip-path: inset(0 0% 0 0);
+    }
+  }
+
+  /* ─── Product card hover lift ────────────────────────────────────────── */
+  .card-lift {
+    transition: transform 250ms var(--ease-out-expo), box-shadow 250ms var(--ease-out-expo);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .card-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  /* ─── Section reveal ─────────────────────────────────────────────────── */
   /* Scroll-reveal — see src/hooks/use-scroll-reveal.ts */
   [data-reveal] {
     opacity: 0;

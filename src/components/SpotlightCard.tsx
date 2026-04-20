@@ -15,10 +15,9 @@ const cardStyle: React.CSSProperties = {
   borderTop: "1px solid rgba(255,255,255,0.6)",
 };
 
-const inputClass =
-  "w-full px-4 py-3 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-foreground/20";
+const inputClass = "input-clean";
 const primaryBtn =
-  "w-full inline-flex items-center justify-center gap-2 bg-foreground text-background text-sm font-semibold tracking-wide py-3 rounded-lg hover:opacity-90 transition-opacity mt-1";
+  "btn-press w-full inline-flex items-center justify-center gap-2 bg-foreground text-background text-sm font-semibold tracking-wide py-3 rounded-lg mt-1";
 
 const NotifyVariant = () => {
   const prefersReducedMotion = useReducedMotion();

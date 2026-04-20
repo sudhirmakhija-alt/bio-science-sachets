@@ -33,8 +33,8 @@ const HeroSection = () => {
     offset: ["start start", "end end"],
   });
 
-  // Smooth spring-based progress
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  // Smooth spring-based progress — higher stiffness = snappier, more premium feel
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: 0.001 });
 
   // Hero content: scrolls up & fades out
   const heroOpacity = useTransform(smoothProgress, [0, 0.4], [1, 0]);
@@ -200,9 +200,9 @@ const HeroCopy = ({
   statDelayMs: number;
 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 40 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+    initial={{ opacity: 0, transform: "translateY(40px)" }}
+    animate={{ opacity: 1, transform: "translateY(0px)" }}
+    transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
   >
     {/* Pill */}
     <div className="inline-flex items-center gap-2 px-3 py-1.5 border border-border rounded-sm mb-4 mt-2 md:mt-0">
@@ -266,14 +266,14 @@ const HeroCopy = ({
         href="https://amazon.in/biologica"
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-foreground text-background font-semibold text-sm tracking-wide hover:opacity-90 transition-opacity"
+        className="btn-press group inline-flex items-center justify-center gap-2 px-6 py-3 bg-foreground text-background font-semibold text-sm tracking-wide"
       >
         SHOP ON AMAZON INDIA
         <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
       </a>
       <a
         href="#science"
-        className="group inline-flex items-center justify-center gap-2 px-6 py-3 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors"
+        className="btn-press group inline-flex items-center justify-center gap-2 px-6 py-3 border border-foreground text-foreground font-semibold text-sm tracking-wide hover:bg-foreground hover:text-background transition-colors duration-200"
       >
         HOW BIOLOGICA HELPS YOUR DOG
         <ArrowRight size={14} className="transition-transform duration-150 ease-out group-hover:translate-x-1" />
