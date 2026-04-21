@@ -97,19 +97,17 @@ const ProductCard = ({
   >
     {/* ── Image area ── */}
     <div
-      className="relative flex items-end justify-center overflow-hidden"
+      className="relative flex items-center justify-center overflow-hidden"
       style={{
         background: imageAreaBg[product.color],
-        minHeight: "494px",
-        paddingTop: "40px",
-        paddingBottom: "0",
+        height: "420px",
       }}
     >
       {/* Soft radial glow behind the tin */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at 50% 90%, ${accentHsl[product.color]}33 0%, transparent 65%)`,
+          background: `radial-gradient(ellipse at 50% 60%, ${accentHsl[product.color]}44 0%, transparent 65%)`,
         }}
       />
 
@@ -122,9 +120,11 @@ const ProductCard = ({
       <img
         src={product.image}
         alt={product.imageAlt}
-        className="relative z-10 object-contain transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+        className="relative z-10 transition-transform duration-700 ease-out group-hover:scale-[1.05]"
         style={{
-          height: "416px",
+          width: "90%",
+          height: "100%",
+          objectFit: "contain",
           filter: "drop-shadow(0 24px 32px rgba(0,0,0,0.35)) drop-shadow(0 8px 12px rgba(0,0,0,0.2))",
         }}
       />
@@ -238,7 +238,7 @@ const ProductCatalog = () => {
                 key={`skeleton-${p.name}`}
                 className="rounded-2xl border border-border/20 overflow-hidden animate-pulse"
               >
-                <div className="h-[494px] bg-muted" />
+                <div className="h-[420px] bg-muted" />
                 <div className="p-6 space-y-3">
                   <div className="h-3 w-24 bg-muted rounded" />
                   <div className="h-6 w-40 bg-muted rounded" />
