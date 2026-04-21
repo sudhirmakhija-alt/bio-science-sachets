@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Onest:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Onest:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -83,10 +83,10 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Barlow Condensed', system-ui, sans-serif;
-    /* Positive tracking on condensed letterforms — adds air between tight glyphs
-       for the clinical, precise feel. !important overrides per-component classes. */
-    letter-spacing: 0.04em !important;
+    font-family: 'Barlow', system-ui, sans-serif;
+    /* Zero tracking enforced — Barlow 900 is designed to breathe at natural spacing.
+       !important overrides per-component Tailwind tracking-tight / tracking-[-0.03em] classes. */
+    letter-spacing: 0 !important;
     font-weight: 900;
   }
 }
