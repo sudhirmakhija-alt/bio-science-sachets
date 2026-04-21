@@ -72,7 +72,34 @@ const AnimatedNumber = ({ value, duration = 600 }: { value: number; duration?: n
 const DosingCalculator = () => {
   const prefersReducedMotion = useReducedMotion();
   const [weight, setWeight] = useState(12);
+  const [inputVal, setInputVal] = useState("12");
   const [selected, setSelected] = useState<ProductKey[]>([]);
+
+  // When slider moves, keep input in sync
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseInt(e.target.value, 10);
+    setWeight(val);
+    setInputVal(String(val));
+  };
+
+  // While typing — allow empty/partial input without clamping yet
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/[^0-9]/g, "");
+    setInputVal(raw);
+    const num = parseInt(raw, 10);
+    if (!isNaN(num)) {
+      const clamped = Math.min(60, Math.max(1, num));
+      setWeight(clamped);
+    }
+  };
+
+  // On blur — clamp and normalise display
+  const handleInputBlur = () => {
+    const num = parseInt(inputVal, 10);
+    const clamped = isNaN(num) ? 12 : Math.min(60, Math.max(1, num));
+    setWeight(clamped);
+    setInputVal(String(clamped));
+  };
 
   const toggleProduct = (key: ProductKey) => {
     setSelected((curr) =>
@@ -99,8 +126,18 @@ const DosingCalculator = () => {
           <label className="text-sm font-medium mb-2 block text-foreground">
             Dog's weight
           </label>
-          <div className="text-2xl font-bold text-foreground mb-3">
-            {weight} kg
+          <div className="flex items-baseline gap-2 mb-3">
+            <input
+              type="text"
+              inputMode="numeric"
+              value={inputVal}
+              onChange={handleInputChange}
+              onBlur={handleInputBlur}
+              onFocus={(e) => e.target.select()}
+              aria-label="Dog weight in kilograms"
+              className="text-2xl font-bold text-foreground bg-transparent border-b-2 border-foreground/20 focus:border-foreground outline-none w-16 text-center transition-colors duration-150"
+            />
+            <span className="text-2xl font-bold text-foreground">kg</span>
           </div>
           <input
             type="range"
@@ -108,7 +145,7 @@ const DosingCalculator = () => {
             max={60}
             step={1}
             value={weight}
-            onChange={(e) => setWeight(parseInt(e.target.value, 10))}
+            onChange={handleSliderChange}
             className="dosing-range w-full"
             aria-label="Dog weight in kilograms"
           />
