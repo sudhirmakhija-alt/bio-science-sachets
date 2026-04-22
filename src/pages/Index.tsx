@@ -11,7 +11,7 @@ import AboutSection from "@/components/AboutSection";
 import WhyNutritionSection from "@/components/WhyNutritionSection";
 import DifferentiatorSection from "@/components/DifferentiatorSection";
 import ProductCatalog from "@/components/ProductCatalog";
-import DosingCalculator from "@/components/DosingCalculator";
+import DiagnosticTool from "@/components/DiagnosticTool";
 import ScienceGrid from "@/components/ScienceGrid";
 import InsideEverySachet from "@/components/InsideEverySachet";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -83,8 +83,8 @@ const Index = () => {
         {/* PRODUCTS */}
         <ProductCatalog />
 
-        {/* DOSING */}
-        <DosingCalculator />
+        {/* DIAGNOSTIC / FORMULA FINDER + DOSING */}
+        <DiagnosticTool />
 
         {/* EVIDENCE & SAFETY */}
         <ScienceGrid />

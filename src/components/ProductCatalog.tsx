@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import organProduct from "@/assets/BLP_Organ_Balance_Catalog.png";
 import gutProduct from "@/assets/BLP_Gut_Balance_Catalog.png";
@@ -60,9 +60,9 @@ const products: Product[] = [
 
 // Dark, rich image area backgrounds — product gets to be the hero
 const imageAreaBg: Record<ProductColor, string> = {
-  omega: "#0b2235",
-  organ: "#231308",
-  gut: "#0b2016",
+  omega: "#2a5a7a", // dark powder blue — same family as pack
+  organ: "#7a2840", // dark blush rose  — same family as pack
+  gut:   "#2a6040", // dark sage green  — same family as pack
 };
 
 // Product accent colors for badges, dots, and glow
@@ -72,6 +72,28 @@ const accentHsl: Record<ProductColor, string> = {
   gut: "hsl(var(--gut))",
 };
 
+// Resolved hex values — pack colours, used in gradients where CSS var opacity syntax breaks
+const accentHex: Record<ProductColor, string> = {
+  omega: "#A8D8F0", // light powder blue
+  organ: "#F0A8B8", // light blush rose
+  gut:   "#A0E0B0", // light sage green
+};
+
+// ── Lamp effect ── simple pastel wash, pack colour fading top to bottom
+const LampEffect = ({
+  colorHex,
+  bgColor,
+  prefersReducedMotion,
+}: {
+  colorHex: string;
+  bgColor: string;
+  prefersReducedMotion: boolean | null;
+}) => (
+  <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2, overflow: "hidden" }}>
+    {/* lamp off — plain flat bg */}
+  </div>
+);
+
 const ProductCard = ({
   product,
   idx,
@@ -80,8 +102,18 @@ const ProductCard = ({
   product: Product;
   idx: number;
   prefersReducedMotion: boolean | null;
-}) => (
+}) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: imgRef,
+    offset: ["start end", "end end"],
+  });
+  const tinScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+
+  return (
   <motion.div
+    ref={cardRef}
     id={product.color}
     data-product={product.color}
     initial={prefersReducedMotion ? false : { opacity: 0, transform: "translateY(28px)" }}
@@ -105,27 +137,22 @@ const ProductCard = ({
         paddingBottom: "0",
       }}
     >
-      {/* Soft radial glow behind the tin */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `radial-gradient(ellipse at 50% 90%, ${accentHsl[product.color]}44 0%, transparent 65%)`,
-        }}
+      {/* Lamp — pastel pack colour wash, top to bottom */}
+      <LampEffect
+        colorHex={accentHex[product.color]}
+        bgColor={imageAreaBg[product.color]}
+        prefersReducedMotion={prefersReducedMotion}
       />
 
-      {/* Thin accent line at top */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[3px]"
-        style={{ background: accentHsl[product.color] }}
-      />
-
-      <img
+      <motion.img
+        ref={imgRef}
         src={product.image}
         alt={product.imageAlt}
-        className="relative z-10 object-contain transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+        className="relative z-10 object-contain"
         style={{
           height: "300px",
           filter: "drop-shadow(0 24px 32px rgba(0,0,0,0.35)) drop-shadow(0 8px 12px rgba(0,0,0,0.2))",
+          scale: prefersReducedMotion ? 1 : tinScale,
         }}
       />
     </div>
@@ -183,7 +210,8 @@ const ProductCard = ({
       </a>
     </div>
   </motion.div>
-);
+  );
+};
 
 const ProductCatalog = () => {
   const prefersReducedMotion = useReducedMotion();

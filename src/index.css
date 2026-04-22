@@ -44,12 +44,12 @@
 
     --radius: 0.25rem;
 
-    /* BioLogica Tier Accents */
-    --omega: 201 94% 40%;
+    /* BioLogica Tier Accents — matched to pack colours */
+    --omega: 205 55% 60%;   /* powder blue  #5BA8D4 */
     --omega-foreground: 0 0% 100%;
-    --organ: 21 90% 48%;
+    --organ: 348 52% 64%;   /* blush rose   #D46878 */
     --organ-foreground: 0 0% 100%;
-    --gut: 142 76% 36%;
+    --gut: 136 40% 54%;     /* sage green   #5CB875 */
     --gut-foreground: 0 0% 100%;
 
     /* Glassmorphism */
