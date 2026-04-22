@@ -6,7 +6,7 @@ import biologicaLogo from "@/assets/biologica-logo.jpg";
 const NAV_LINKS = [
   { label: "Products", hash: "products" },
   { label: "Science", hash: "science" },
-  { label: "Dosing", hash: "dosing" },
+  { label: "Dosing", hash: "find-your-formula" },
   { label: "Origin", hash: "origin" },
   { label: "Blog", hash: "journal" },
   { label: "Reviews", hash: "reviews" },

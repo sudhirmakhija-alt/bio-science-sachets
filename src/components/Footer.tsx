@@ -24,7 +24,7 @@ const Footer = () => {
 
   const siteLinks = [
     { label: "Science", hash: "science" },
-    { label: "Dosing", hash: "dosing" },
+    { label: "Dosing", hash: "find-your-formula" },
     { label: "Origin", hash: "origin" },
     { label: "Blog", hash: "journal" },
     { label: "Reviews", hash: "reviews" },
