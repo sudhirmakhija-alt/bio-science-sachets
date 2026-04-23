@@ -34,7 +34,8 @@ const R = {
   surf:    "rgba(255,255,255,0.05)",
 } as const;
 
-const BC = "'Barlow Condensed', sans-serif"; // shorthand
+const BC = "'Barlow', sans-serif";           // matches site heading font
+const BN = "'Barlow Condensed', sans-serif"; // condensed — numbers & data only
 
 // ── Dosing ─────────────────────────────────────────────────────────────────
 const WEIGHT_RANGES = [
@@ -163,8 +164,8 @@ const MorphWord = ({
       fontFamily: BC,
       fontSize,
       fontWeight: 900,
-      letterSpacing: "-0.025em",
-      lineHeight: 0.88,
+      letterSpacing: "-0.02em",
+      lineHeight: 1,
       color,
       display: "block",
       position: "absolute",
@@ -215,9 +216,9 @@ const DiagnosticTool = () => {
       : `${primaryCount} of ${rec.matched.length} symptoms point here`
     : "";
 
-  // Headline font size tokens
-  const FS_LARGE  = "clamp(68px, 6.8vw, 104px)";
-  const FS_MEDIUM = "clamp(50px, 5vw, 76px)";
+  // Headline font size tokens — calibrated for non-condensed Barlow 900
+  const FS_LARGE  = "clamp(52px, 5.2vw, 80px)";   // FIND / FOUND
+  const FS_MEDIUM = "clamp(36px, 3.6vw, 55px)";   // MY / YOUR / FORMULA (same size)
 
   return (
     <section
@@ -363,7 +364,7 @@ const DiagnosticTool = () => {
           </AnimatePresence>
 
           {/* ── Word 1: FIND → FOUND ── */}
-          <div style={{ position: "relative", height: `clamp(68px, 6.8vw, 104px)`, overflow: "hidden" }}>
+          <div style={{ position: "relative", height: `clamp(52px, 5.2vw, 80px)`, overflow: "hidden" }}>
             <AnimatePresence mode="popLayout">
               {slideState === "input"
                 ? <MorphWord key="find"  word="FIND"  color={W.text}      fontSize={FS_LARGE} delay={0} />
@@ -373,7 +374,7 @@ const DiagnosticTool = () => {
           </div>
 
           {/* ── Word 2: MY → YOUR  (same size as FORMULA) ── */}
-          <div style={{ position: "relative", height: `clamp(50px, 5vw, 76px)`, overflow: "hidden", marginTop: "4px" }}>
+          <div style={{ position: "relative", height: `clamp(36px, 3.6vw, 55px)`, overflow: "hidden", marginTop: "4px" }}>
             <AnimatePresence mode="popLayout">
               {slideState === "input"
                 ? <MorphWord key="my"   word="MY"   color={W.text} fontSize={FS_MEDIUM} delay={0.05} />
@@ -384,7 +385,7 @@ const DiagnosticTool = () => {
 
           {/* ── FORMULA — always black ── */}
           <div style={{ marginTop: "6px" }}>
-            <span style={{ fontFamily: BC, fontSize: FS_MEDIUM, fontWeight: 900, letterSpacing: "-0.025em", lineHeight: 0.88, display: "block", color: W.text }}>
+            <span style={{ fontFamily: BC, fontSize: FS_MEDIUM, fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, display: "block", color: W.text }}>
               FORMULA
             </span>
           </div>
@@ -438,7 +439,7 @@ const DiagnosticTool = () => {
                   {/* Text */}
                   <div style={{ flex: 1, padding: "24px 20px 20px 28px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: p.hex, marginBottom: "6px" }}>{p.system}</div>
-                    <div style={{ fontFamily: BC, fontSize: "28px", fontWeight: 800, letterSpacing: "-0.01em", color: R.text, lineHeight: 1, marginBottom: "6px" }}>{p.name}</div>
+                    <div style={{ fontFamily: BN, fontSize: "28px", fontWeight: 800, letterSpacing: "-0.01em", color: R.text, lineHeight: 1, marginBottom: "6px" }}>{p.name}</div>
                     <div style={{ fontSize: "11px", color: R.textMid, lineHeight: "1.4", marginBottom: "12px" }}>{p.tagline}</div>
                     <div style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "3px 10px", borderRadius: "999px", fontSize: "10px", fontWeight: 600, background: `rgba(${p.rgb},0.1)`, border: `1px solid rgba(${p.rgb},0.22)`, color: p.hex }}>
                       {confLabel}
@@ -469,7 +470,7 @@ const DiagnosticTool = () => {
                     DAILY DOSE{displayName ? ` FOR ${displayName.toUpperCase()}` : ""}
                   </div>
                   <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "16px" }}>
-                    <span style={{ fontFamily: BC, fontSize: "60px", fontWeight: 900, lineHeight: 1, color: R.text, letterSpacing: "-0.02em" }}>
+                    <span style={{ fontFamily: BN, fontSize: "60px", fontWeight: 900, lineHeight: 1, color: R.text, letterSpacing: "-0.02em" }}>
                       <AnimatedNumber value={sachets} />
                     </span>
                     <div>
@@ -487,7 +488,7 @@ const DiagnosticTool = () => {
                     ] as { val: string; unit: string; sub: string }[]).map((s, i) => (
                       <div key={i} style={{ padding: "12px 14px", background: R.surf, borderLeft: i > 0 ? `1px solid ${R.border}` : undefined }}>
                         <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
-                          <span style={{ fontFamily: BC, fontSize: "30px", fontWeight: 900, color: R.text, lineHeight: 1 }}>{s.val}</span>
+                          <span style={{ fontFamily: BN, fontSize: "30px", fontWeight: 900, color: R.text, lineHeight: 1 }}>{s.val}</span>
                           <span style={{ fontSize: "11px", fontWeight: 600, color: R.textMid, marginLeft: "1px" }}>{s.unit}</span>
                         </div>
                         <div style={{ fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.12em", color: R.textLow, marginTop: "3px" }}>{s.sub}</div>
@@ -531,7 +532,7 @@ const DiagnosticTool = () => {
                         {cell ? (
                           <>
                             <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: p.hex, marginBottom: "4px" }}>{cell.label}</div>
-                            <div style={{ fontFamily: BC, fontSize: "24px", fontWeight: 900, color: R.text, lineHeight: 1 }}>{cell.wk}</div>
+                            <div style={{ fontFamily: BN, fontSize: "24px", fontWeight: 900, color: R.text, lineHeight: 1 }}>{cell.wk}</div>
                           </>
                         ) : (
                           <div style={{ fontSize: "10px", fontStyle: "italic", color: R.textLow, lineHeight: "1.5" }}>Daily use required. Seniors may take longer.</div>
@@ -541,20 +542,30 @@ const DiagnosticTool = () => {
                   </div>
                 </div>
 
-                {/* ── Also consider + CTA ── */}
+                {/* ── Also consider (up to 2 products) + CTA ── */}
                 <div style={{ marginTop: "auto" }}>
-                  {rec.secondary.length > 0 && (
-                    <div style={{ padding: "12px 28px", background: `rgba(${PRODUCTS[rec.secondary[0]].rgb},0.07)`, borderTop: `1px solid rgba(${PRODUCTS[rec.secondary[0]].rgb},0.18)`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: PRODUCTS[rec.secondary[0]].hex, flexShrink: 0 }} />
-                        <div>
-                          <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: PRODUCTS[rec.secondary[0]].hex, opacity: 0.6 }}>Also Consider</div>
-                          <div style={{ fontFamily: BC, fontSize: "17px", fontWeight: 800, color: PRODUCTS[rec.secondary[0]].hex, lineHeight: 1 }}>{PRODUCTS[rec.secondary[0]].name}</div>
+                  {rec.secondary.slice(0, 2).map((secKey, idx) => {
+                    const sp = PRODUCTS[secKey];
+                    return (
+                      <div key={secKey} style={{
+                        padding: "12px 28px",
+                        background: `rgba(${sp.rgb},0.07)`,
+                        borderTop: `1px solid rgba(${sp.rgb},0.18)`,
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: sp.hex, flexShrink: 0 }} />
+                          <div>
+                            <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: sp.hex, opacity: 0.6 }}>
+                              {idx === 0 ? "Also Consider" : "Or Consider"}
+                            </div>
+                            <div style={{ fontFamily: BN, fontSize: "17px", fontWeight: 800, color: sp.hex, lineHeight: 1 }}>{sp.name}</div>
+                          </div>
                         </div>
+                        <img src={sp.image} alt={sp.name} style={{ width: "44px", height: "44px", objectFit: "contain", opacity: 0.9 }} />
                       </div>
-                      <img src={PRODUCTS[rec.secondary[0]].image} alt="" style={{ width: "36px", height: "36px", objectFit: "contain", opacity: 0.85 }} />
-                    </div>
-                  )}
+                    );
+                  })}
                   <a href={p.url} target="_blank" rel="noopener noreferrer"
                     style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 28px", background: `rgba(${p.rgb},0.1)`, borderTop: `1px solid rgba(${p.rgb},0.2)`, textDecoration: "none" }}>
                     <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: p.hex }}>View on Amazon India</span>
