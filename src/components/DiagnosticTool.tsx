@@ -17,13 +17,13 @@ const C = {
   textDim:  "#3d4f63",
 } as const;
 
-// White middle panel tokens
+// Middle panel tokens — grey bg, black text
 const W = {
-  bg:      "#ffffff",
+  bg:      "#c8c8c8",
   text:    "#000000",
   textMid: "rgba(0,0,0,0.45)",
   textLow: "rgba(0,0,0,0.28)",
-  border:  "rgba(0,0,0,0.1)",
+  border:  "rgba(0,0,0,0.12)",
 } as const;
 
 const R = {
@@ -333,18 +333,14 @@ const DiagnosticTool = () => {
           </div>
         </div>
 
-        {/* ══════ CENTRE — HEADLINE (white bg, black text, text morphs in place) ══════ */}
-        <motion.div
+        {/* ══════ CENTRE — HEADLINE (grey bg, black text, text morphs in place, never moves) ══════ */}
+        <div
           style={{
             background: W.bg,
             display: "flex",
             flexDirection: "column",
-            paddingBottom: "44px",
-            paddingLeft: "48px",
-            paddingRight: "40px",
+            padding: "clamp(80px, 9vh, 140px) 40px 44px 48px",
           }}
-          animate={{ paddingTop: prefersReducedMotion ? 44 : (slideState === "input" ? 160 : 44) }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* "Formula for [Name]" label — result only */}
           <AnimatePresence>
@@ -376,12 +372,12 @@ const DiagnosticTool = () => {
             </AnimatePresence>
           </div>
 
-          {/* ── Word 2: MY → YOUR ── */}
-          <div style={{ position: "relative", height: `clamp(68px, 6.8vw, 104px)`, overflow: "hidden", marginTop: "4px" }}>
+          {/* ── Word 2: MY → YOUR  (same size as FORMULA) ── */}
+          <div style={{ position: "relative", height: `clamp(50px, 5vw, 76px)`, overflow: "hidden", marginTop: "4px" }}>
             <AnimatePresence mode="popLayout">
               {slideState === "input"
-                ? <MorphWord key="my"   word="MY"   color={W.text} fontSize={FS_LARGE} delay={0.05} />
-                : <MorphWord key="your" word="YOUR" color={W.text} fontSize={FS_LARGE} delay={0.17} />
+                ? <MorphWord key="my"   word="MY"   color={W.text} fontSize={FS_MEDIUM} delay={0.05} />
+                : <MorphWord key="your" word="YOUR" color={W.text} fontSize={FS_MEDIUM} delay={0.17} />
               }
             </AnimatePresence>
           </div>
@@ -418,7 +414,7 @@ const DiagnosticTool = () => {
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
         {/* ══════ RIGHT — REC PANEL (slides in from right) ══════ */}
         <div style={{ position: "relative", overflow: "hidden", background: "#0c1824" }}>
@@ -437,23 +433,34 @@ const DiagnosticTool = () => {
           >
             {rec && (
               <>
-                {/* ── Product header ── */}
-                <div style={{ padding: "28px 28px 20px", borderBottom: `1px solid ${R.border}`, display: "flex", alignItems: "flex-start", gap: "14px", flexShrink: 0 }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: p.hex, marginBottom: "5px" }}>{p.system}</div>
-                    <div style={{ fontFamily: BC, fontSize: "30px", fontWeight: 800, letterSpacing: "-0.01em", color: R.text, lineHeight: 1, marginBottom: "6px" }}>{p.name}</div>
-                    <div style={{ fontSize: "11px", color: R.textMid, lineHeight: "1.4", marginBottom: "10px" }}>{p.tagline}</div>
+                {/* ── Product header: text left, BIG cropped tin right ── */}
+                <div style={{ borderBottom: `1px solid ${R.border}`, display: "flex", alignItems: "stretch", flexShrink: 0, overflow: "hidden" }}>
+                  {/* Text */}
+                  <div style={{ flex: 1, padding: "24px 20px 20px 28px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: p.hex, marginBottom: "6px" }}>{p.system}</div>
+                    <div style={{ fontFamily: BC, fontSize: "28px", fontWeight: 800, letterSpacing: "-0.01em", color: R.text, lineHeight: 1, marginBottom: "6px" }}>{p.name}</div>
+                    <div style={{ fontSize: "11px", color: R.textMid, lineHeight: "1.4", marginBottom: "12px" }}>{p.tagline}</div>
                     <div style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "3px 10px", borderRadius: "999px", fontSize: "10px", fontWeight: 600, background: `rgba(${p.rgb},0.1)`, border: `1px solid rgba(${p.rgb},0.22)`, color: p.hex }}>
                       {confLabel}
                     </div>
                   </div>
-                  <motion.img
-                    key={rec.primary} src={p.image} alt={p.name}
-                    style={{ width: "74px", height: "74px", objectFit: "contain", flexShrink: 0, filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.5))" }}
-                    initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  />
+                  {/* BIG tin — overflow:hidden crops the transparent padding */}
+                  <div style={{ width: "140px", flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${p.rgb},0.06)` }}>
+                    <motion.img
+                      key={rec.primary} src={p.image} alt={p.name}
+                      style={{
+                        width: "200px",
+                        height: "200px",
+                        objectFit: "contain",
+                        filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.6))",
+                        transform: "scale(1.25)",
+                        transformOrigin: "center center",
+                      }}
+                      initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.1 }}
+                      animate={{ opacity: 1, scale: 1.25 }}
+                      transition={{ delay: 0.45, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  </div>
                 </div>
 
                 {/* ── DAILY DOSE — top position, big display ── */}
