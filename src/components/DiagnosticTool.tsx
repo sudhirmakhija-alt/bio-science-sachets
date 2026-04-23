@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ArrowRight, RotateCcw } from "lucide-react";
-import omegaProduct from "@/assets/BLP_Omega_Balance_Catalog.png";
-import organProduct from "@/assets/BLP_Organ_Balance_Catalog.png";
-import gutProduct   from "@/assets/BLP_Gut_Balance_Catalog.png";
+import omegaProduct from "@/assets/BLP_Omega_Balance.png";
+import organProduct from "@/assets/BLP_Organ_Balance.png";
+import gutProduct   from "@/assets/BLP_Gut_Balance.png";
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const C = {
@@ -223,7 +223,7 @@ const DiagnosticTool = () => {
   return (
     <section
       id="find-your-formula"
-      style={{ background: "#0e1114", overflow: "hidden" }}
+      style={{ background: "#0e1114", overflow: "hidden", scrollMarginTop: "72px" }}
     >
       {/* ── Three-column grid: [FORM | HEADLINE | REC] — form and rec equal width ── */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", alignItems: "stretch" }}>
@@ -446,19 +446,19 @@ const DiagnosticTool = () => {
                     </div>
                   </div>
                   {/* BIG tin — overflow:hidden crops the transparent padding */}
-                  <div style={{ width: "140px", flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${p.rgb},0.08)` }}>
+                  <div style={{ width: "148px", flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${p.rgb},0.08)` }}>
                     <motion.img
                       key={rec.primary} src={p.image} alt={p.name}
                       style={{
-                        width: "200px",
-                        height: "200px",
+                        width: "220px",
+                        height: "220px",
                         objectFit: "contain",
-                        filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.6))",
-                        transform: "scale(1.25)",
+                        filter: "drop-shadow(0 10px 28px rgba(0,0,0,0.55))",
+                        transform: "scale(1.18)",
                         transformOrigin: "center center",
                       }}
-                      initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.1 }}
-                      animate={{ opacity: 1, scale: 1.25 }}
+                      initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1.18 }}
                       transition={{ delay: 0.45, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
                     />
                   </div>
