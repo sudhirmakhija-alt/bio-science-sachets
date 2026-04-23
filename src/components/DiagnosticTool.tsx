@@ -142,40 +142,20 @@ const AnimatedNumber = ({ value, duration = 500 }: { value: number; duration?: n
   return <>{Number.isInteger(display) ? display.toString() : display.toFixed(1)}</>;
 };
 
-// ── Morphing word: blurs out old, blurs in new ─────────────────────────────
-const MorphWord = ({
-  word,
-  color,
+// ── Shared inline style for all headline words ────────────────────────────
+const wordStyle = (fontSize: string, color: string): React.CSSProperties => ({
+  fontFamily: BC,
   fontSize,
-  delay = 0,
-}: {
-  word: string;
-  color: string;
-  fontSize: string;
-  delay?: number;
-}) => (
-  <motion.span
-    key={word}
-    initial={{ opacity: 0, filter: "blur(10px)", y: "18%" }}
-    animate={{ opacity: 1, filter: "blur(0px)", y: "0%" }}
-    exit={{ opacity: 0, filter: "blur(10px)", y: "-18%" }}
-    transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1], delay }}
-    style={{
-      fontFamily: BC,
-      fontSize,
-      fontWeight: 900,
-      letterSpacing: "-0.02em",
-      lineHeight: 1,
-      color,
-      display: "block",
-      position: "absolute",
-      top: 0,
-      left: 0,
-    }}
-  >
-    {word}
-  </motion.span>
-);
+  fontWeight: 900,
+  letterSpacing: "-0.02em",
+  lineHeight: 1,
+  color,
+  display: "block",
+  position: "absolute",
+  top: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+});
 
 // ══════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
@@ -363,23 +343,53 @@ const DiagnosticTool = () => {
             )}
           </AnimatePresence>
 
-          {/* ── Word 1: FIND → FOUND ── */}
+          {/* ── Word 1: FIND fades out → FOUND wipes in left-to-right (pack colour) ── */}
           <div style={{ position: "relative", height: `clamp(52px, 5.2vw, 80px)`, overflow: "hidden" }}>
             <AnimatePresence mode="popLayout">
-              {slideState === "input"
-                ? <MorphWord key="find"  word="FIND"  color={W.text} fontSize={FS_LARGE} delay={0} />
-                : <MorphWord key="found" word="FOUND" color={p.hex}  fontSize={FS_LARGE} delay={0.1} />
-              }
+              {slideState === "input" ? (
+                <motion.span
+                  key="find"
+                  exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(4px)", transition: { duration: 0.18, ease: "easeIn" } }}
+                  style={wordStyle(FS_LARGE, W.text)}
+                >
+                  FIND
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="found"
+                  initial={prefersReducedMotion ? { opacity: 0 } : { clipPath: "inset(0 100% 0 0)" }}
+                  animate={prefersReducedMotion ? { opacity: 1 } : { clipPath: "inset(0 0% 0 0)" }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.62, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+                  style={wordStyle(FS_LARGE, p.hex)}
+                >
+                  FOUND
+                </motion.span>
+              )}
             </AnimatePresence>
           </div>
 
-          {/* ── Word 2: MY → YOUR  (same size as FORMULA) ── */}
+          {/* ── Word 2: MY fades out → YOUR fades in (blur dissolve, no movement) ── */}
           <div style={{ position: "relative", height: `clamp(36px, 3.6vw, 55px)`, overflow: "hidden", marginTop: "4px" }}>
             <AnimatePresence mode="popLayout">
-              {slideState === "input"
-                ? <MorphWord key="my"   word="MY"   color={W.text} fontSize={FS_MEDIUM} delay={0.05} />
-                : <MorphWord key="your" word="YOUR" color={W.text} fontSize={FS_MEDIUM} delay={0.17} />
-              }
+              {slideState === "input" ? (
+                <motion.span
+                  key="my"
+                  exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(6px)", transition: { duration: 0.2, delay: 0.04 } }}
+                  style={wordStyle(FS_MEDIUM, W.text)}
+                >
+                  MY
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="your"
+                  initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(8px)" }}
+                  animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, filter: "blur(0px)" }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: 0.38 }}
+                  style={wordStyle(FS_MEDIUM, W.text)}
+                >
+                  YOUR
+                </motion.span>
+              )}
             </AnimatePresence>
           </div>
 
