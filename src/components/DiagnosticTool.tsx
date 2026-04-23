@@ -17,6 +17,15 @@ const C = {
   textDim:  "#3d4f63",
 } as const;
 
+// White middle panel tokens
+const W = {
+  bg:      "#ffffff",
+  text:    "#000000",
+  textMid: "rgba(0,0,0,0.45)",
+  textLow: "rgba(0,0,0,0.28)",
+  border:  "rgba(0,0,0,0.1)",
+} as const;
+
 const R = {
   text:    "#e8eef4",
   textMid: "rgba(232,238,244,0.55)",
@@ -215,8 +224,8 @@ const DiagnosticTool = () => {
       id="find-your-formula"
       style={{ background: "#06090c", overflow: "hidden" }}
     >
-      {/* ── Two-column grid: [FORM | HEADLINE+REC] ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "44% 56%", alignItems: "stretch" }}>
+      {/* ── Three-column grid: [FORM | HEADLINE | REC] — form and rec equal width ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", alignItems: "stretch" }}>
 
         {/* ══════ LEFT — FORM ══════ */}
         <div
@@ -324,116 +333,107 @@ const DiagnosticTool = () => {
           </div>
         </div>
 
-        {/* ══════ RIGHT — HEADLINE (fixed) + REC PANEL (slides in) ══════ */}
-        <div style={{ position: "relative", overflow: "hidden", display: "flex", background: "#000000" }}>
-
-          {/* ── HEADLINE PANEL — always visible, text morphs in place ── */}
-          <motion.div
-            style={{
-              width: "42%",
-              flexShrink: 0,
-              display: "flex",
-              flexDirection: "column",
-              paddingBottom: "44px",
-              paddingLeft: "52px",
-              paddingRight: "28px",
-            }}
-            animate={{ paddingTop: prefersReducedMotion ? 44 : (slideState === "input" ? 160 : 44) }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {/* "Formula for [Name]" label — result only */}
-            <AnimatePresence>
-              {slideState === "result" && (
-                <motion.span
-                  initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  transition={{ delay: 0.55, duration: 0.25 }}
-                  style={{
-                    display: "block",
-                    fontSize: "9px",
-                    fontWeight: 700,
-                    letterSpacing: "0.22em",
-                    textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.22)",
-                    marginBottom: "20px",
-                  }}>
-                  {displayName ? `Formula for ${displayName}` : "Found Your Formula"}
-                </motion.span>
-              )}
-            </AnimatePresence>
-
-            {/* ── Word 1: FIND → FOUND ── */}
-            <div style={{ position: "relative", height: `clamp(68px, 6.8vw, 104px)`, overflow: "hidden" }}>
-              <AnimatePresence mode="popLayout">
-                {slideState === "input"
-                  ? <MorphWord key="find"  word="FIND"  color="#ffffff"    fontSize={FS_LARGE} delay={0} />
-                  : <MorphWord key="found" word="FOUND" color={p.foundHex} fontSize={FS_LARGE} delay={0.1} />
-                }
-              </AnimatePresence>
-            </div>
-
-            {/* ── Word 2: MY → YOUR ── */}
-            <div style={{ position: "relative", height: `clamp(68px, 6.8vw, 104px)`, overflow: "hidden", marginTop: "4px" }}>
-              <AnimatePresence mode="popLayout">
-                {slideState === "input"
-                  ? <MorphWord key="my"   word="MY"   color="#ffffff" fontSize={FS_LARGE} delay={0.05} />
-                  : <MorphWord key="your" word="YOUR" color="#ffffff" fontSize={FS_LARGE} delay={0.17} />
-                }
-              </AnimatePresence>
-            </div>
-
-            {/* ── FORMULA — stays, subtle colour pulse ── */}
-            <div style={{ marginTop: "6px" }}>
+        {/* ══════ CENTRE — HEADLINE (white bg, black text, text morphs in place) ══════ */}
+        <motion.div
+          style={{
+            background: W.bg,
+            display: "flex",
+            flexDirection: "column",
+            paddingBottom: "44px",
+            paddingLeft: "48px",
+            paddingRight: "40px",
+          }}
+          animate={{ paddingTop: prefersReducedMotion ? 44 : (slideState === "input" ? 160 : 44) }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
+          {/* "Formula for [Name]" label — result only */}
+          <AnimatePresence>
+            {slideState === "result" && (
               <motion.span
-                animate={{ color: slideState === "result" ? "rgba(255,255,255,0.75)" : "#ffffff" }}
-                transition={{ duration: 0.5 }}
-                style={{ fontFamily: BC, fontSize: FS_MEDIUM, fontWeight: 900, letterSpacing: "-0.025em", lineHeight: 0.88, display: "block" }}>
-                FORMULA
+                initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                transition={{ delay: 0.55, duration: 0.25 }}
+                style={{
+                  display: "block",
+                  fontSize: "9px",
+                  fontWeight: 700,
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  color: W.textLow,
+                  marginBottom: "20px",
+                }}>
+                {displayName ? `Formula for ${displayName}` : "Found Your Formula"}
               </motion.span>
-            </div>
+            )}
+          </AnimatePresence>
 
-            {/* Spacer pushes bottom content down */}
-            <div style={{ flex: 1 }} />
-
-            {/* Bottom summary + start over — result only */}
-            <AnimatePresence>
-              {slideState === "result" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }}
-                  transition={{ delay: 0.6, duration: 0.3 }}>
-                  <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "16px", marginBottom: "14px" }}>
-                    <div style={{ fontSize: "12px", color: C.textBody, lineHeight: "1.7" }}>
-                      {displayName && <span style={{ color: C.textHi, fontWeight: 600 }}>{displayName} · </span>}
-                      {age && <span>{age.charAt(0).toUpperCase() + age.slice(1)} · </span>}
-                      <span>{weight}kg</span>
-                      {symptoms.size > 0 && <span> · {symptoms.size} symptom{symptoms.size > 1 ? "s" : ""} analysed</span>}
-                    </div>
-                  </div>
-                  <button onClick={handleReset}
-                    style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.2)", background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                    <RotateCcw style={{ width: "11px", height: "11px" }} />
-                    Start over
-                  </button>
-                </motion.div>
-              )}
+          {/* ── Word 1: FIND → FOUND ── */}
+          <div style={{ position: "relative", height: `clamp(68px, 6.8vw, 104px)`, overflow: "hidden" }}>
+            <AnimatePresence mode="popLayout">
+              {slideState === "input"
+                ? <MorphWord key="find"  word="FIND"  color={W.text}  fontSize={FS_LARGE} delay={0} />
+                : <MorphWord key="found" word="FOUND" color={p.hex}   fontSize={FS_LARGE} delay={0.1} />
+              }
             </AnimatePresence>
-          </motion.div>
+          </div>
 
-          {/* ── REC PANEL — slides in from the right ── */}
+          {/* ── Word 2: MY → YOUR ── */}
+          <div style={{ position: "relative", height: `clamp(68px, 6.8vw, 104px)`, overflow: "hidden", marginTop: "4px" }}>
+            <AnimatePresence mode="popLayout">
+              {slideState === "input"
+                ? <MorphWord key="my"   word="MY"   color={W.text} fontSize={FS_LARGE} delay={0.05} />
+                : <MorphWord key="your" word="YOUR" color={W.text} fontSize={FS_LARGE} delay={0.17} />
+              }
+            </AnimatePresence>
+          </div>
+
+          {/* ── FORMULA — always black ── */}
+          <div style={{ marginTop: "6px" }}>
+            <span style={{ fontFamily: BC, fontSize: FS_MEDIUM, fontWeight: 900, letterSpacing: "-0.025em", lineHeight: 0.88, display: "block", color: W.text }}>
+              FORMULA
+            </span>
+          </div>
+
+          {/* Spacer */}
+          <div style={{ flex: 1 }} />
+
+          {/* Bottom summary + start over — result only */}
+          <AnimatePresence>
+            {slideState === "result" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }}
+                transition={{ delay: 0.6, duration: 0.3 }}>
+                <div style={{ borderTop: `1px solid ${W.border}`, paddingTop: "16px", marginBottom: "14px" }}>
+                  <div style={{ fontSize: "12px", color: W.textMid, lineHeight: "1.7" }}>
+                    {displayName && <span style={{ color: W.text, fontWeight: 600 }}>{displayName} · </span>}
+                    {age && <span>{age.charAt(0).toUpperCase() + age.slice(1)} · </span>}
+                    <span>{weight}kg</span>
+                    {symptoms.size > 0 && <span> · {symptoms.size} symptom{symptoms.size > 1 ? "s" : ""} analysed</span>}
+                  </div>
+                </div>
+                <button onClick={handleReset}
+                  style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: W.textLow, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                  <RotateCcw style={{ width: "11px", height: "11px" }} />
+                  Start over
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* ══════ RIGHT — REC PANEL (slides in from right) ══════ */}
+        <div style={{ position: "relative", overflow: "hidden", background: "#0c1824" }}>
           <motion.div
             style={{
-              width: "58%",
-              flexShrink: 0,
+              position: "absolute",
+              inset: 0,
               background: "#0c1824",
               display: "flex",
               flexDirection: "column",
               overflowY: "auto",
             }}
-            animate={{ x: prefersReducedMotion ? (slideState === "input" ? "100%" : "0%") : undefined }}
             initial={{ x: "100%" }}
-            {...(!prefersReducedMotion && {
-              animate: { x: slideState === "input" ? "100%" : "0%" },
-              transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
-            })}
+            animate={{ x: slideState === "input" ? "100%" : "0%" }}
+            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           >
             {rec && (
               <>
@@ -557,12 +557,12 @@ const DiagnosticTool = () => {
               </>
             )}
           </motion.div>
+        </div>{/* end right col */}
 
-        </div>{/* end right panel */}
       </div>{/* end grid */}
 
-      {/* Disclaimer */}
-      <div style={{ maxWidth: "56%", marginLeft: "44%", padding: "14px 28px" }}>
+      {/* Disclaimer — sits under the rec panel (right third) */}
+      <div style={{ maxWidth: "33.333%", marginLeft: "66.666%", padding: "14px 28px" }}>
         <p style={{ fontSize: "10px", lineHeight: "1.6", color: C.textDim }}>
           Always follow the product label and consult your vet, especially for puppies, seniors, or dogs on medication. This tool is not a substitute for veterinary guidance.
         </p>
