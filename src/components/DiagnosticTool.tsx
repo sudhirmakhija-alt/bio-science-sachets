@@ -7,31 +7,31 @@ import gutProduct   from "@/assets/BLP_Gut_Balance_Catalog.png";
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const C = {
-  formBg:   "#111d2a",
-  borderLo: "#111a24",
-  borderMd: "#1c2d3f",
-  borderHi: "#2d4460",
+  formBg:   "#161a1e",   // dark grey — science-section card shade
+  borderLo: "#1e2226",
+  borderMd: "#272d33",
+  borderHi: "#3a4550",
   textHi:   "#dfe3ea",
-  textBody: "#95a3b8",
-  textMeta: "#6a7a90",
-  textDim:  "#3d4f63",
+  textBody: "#8a96a4",
+  textMeta: "#5e6b78",
+  textDim:  "#3a444e",
 } as const;
 
-// Middle panel tokens — grey bg, black text
+// Middle panel tokens — dark grey card (matches science section language)
 const W = {
-  bg:      "#c8c8c8",
-  text:    "#000000",
-  textMid: "rgba(0,0,0,0.45)",
-  textLow: "rgba(0,0,0,0.28)",
-  border:  "rgba(0,0,0,0.12)",
+  bg:      "#1c1f22",
+  text:    "#e8eef4",
+  textMid: "rgba(232,238,244,0.50)",
+  textLow: "rgba(232,238,244,0.26)",
+  border:  "rgba(255,255,255,0.08)",
 } as const;
 
 const R = {
   text:    "#e8eef4",
-  textMid: "rgba(232,238,244,0.55)",
-  textLow: "rgba(232,238,244,0.28)",
-  border:  "rgba(255,255,255,0.07)",
-  surf:    "rgba(255,255,255,0.04)",
+  textMid: "rgba(232,238,244,0.52)",
+  textLow: "rgba(232,238,244,0.26)",
+  border:  "rgba(255,255,255,0.08)",
+  surf:    "rgba(255,255,255,0.05)",
 } as const;
 
 const BC = "'Barlow Condensed', sans-serif"; // shorthand
@@ -222,7 +222,7 @@ const DiagnosticTool = () => {
   return (
     <section
       id="find-your-formula"
-      style={{ background: "#06090c", overflow: "hidden" }}
+      style={{ background: "#0e1114", overflow: "hidden" }}
     >
       {/* ── Three-column grid: [FORM | HEADLINE | REC] — form and rec equal width ── */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", alignItems: "stretch" }}>
@@ -366,8 +366,8 @@ const DiagnosticTool = () => {
           <div style={{ position: "relative", height: `clamp(68px, 6.8vw, 104px)`, overflow: "hidden" }}>
             <AnimatePresence mode="popLayout">
               {slideState === "input"
-                ? <MorphWord key="find"  word="FIND"  color={W.text}  fontSize={FS_LARGE} delay={0} />
-                : <MorphWord key="found" word="FOUND" color={p.hex}   fontSize={FS_LARGE} delay={0.1} />
+                ? <MorphWord key="find"  word="FIND"  color={W.text}      fontSize={FS_LARGE} delay={0} />
+                : <MorphWord key="found" word="FOUND" color={p.foundHex} fontSize={FS_LARGE} delay={0.1} />
               }
             </AnimatePresence>
           </div>
@@ -417,12 +417,12 @@ const DiagnosticTool = () => {
         </div>
 
         {/* ══════ RIGHT — REC PANEL (slides in from right) ══════ */}
-        <div style={{ position: "relative", overflow: "hidden", background: "#0c1824" }}>
+        <div style={{ position: "relative", overflow: "hidden", background: "#12161a" }}>
           <motion.div
             style={{
               position: "absolute",
               inset: 0,
-              background: "#0c1824",
+              background: "#12161a",
               display: "flex",
               flexDirection: "column",
               overflowY: "auto",
@@ -445,7 +445,7 @@ const DiagnosticTool = () => {
                     </div>
                   </div>
                   {/* BIG tin — overflow:hidden crops the transparent padding */}
-                  <div style={{ width: "140px", flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${p.rgb},0.06)` }}>
+                  <div style={{ width: "140px", flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${p.rgb},0.08)` }}>
                     <motion.img
                       key={rec.primary} src={p.image} alt={p.name}
                       style={{
