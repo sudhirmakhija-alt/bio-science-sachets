@@ -1,24 +1,34 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RotateCcw } from "lucide-react";
 import omegaProduct from "@/assets/BLP_Omega_Balance_Catalog.png";
 import organProduct from "@/assets/BLP_Organ_Balance_Catalog.png";
-import gutProduct from "@/assets/BLP_Gut_Balance_Catalog.png";
+import gutProduct   from "@/assets/BLP_Gut_Balance_Catalog.png";
 
-// ── Colour tokens — contrast-verified against bg #06090c ──────────────────
+// ── Colour tokens ──────────────────────────────────────────────────────────
 const C = {
-  bg:       "#06090c",
-  surf1:    "#0c1219",
+  formBg:   "#111d2a",   // grey-dark: the input panel
+  findBg:   "#000000",   // pure black: the find headline
+  foundBg:  "#08111a",   // dark navy: the found headline
+  recBg:    "#0c1824",   // recommendation panel
   borderLo: "#111a24",
   borderMd: "#1c2d3f",
-  borderHi: "#283d55",
-  textHi:   "#dfe3ea",   // ~15:1 — headings, product names
-  textBody: "#95a3b8",   //  ~8:1 — body copy
-  textMeta: "#6a7a90",   //  ~5:1 — labels, hints (ALL-CAPS small)
-  textDim:  "#3d4f63",   //  ~2:1 — decorative only
+  textHi:   "#dfe3ea",
+  textBody: "#95a3b8",
+  textMeta: "#6a7a90",
+  textDim:  "#3d4f63",
 } as const;
 
-// ── Dosing data ────────────────────────────────────────────────────────────
+// Tokens for recommendation panel (white-on-dark)
+const R = {
+  text:    "#e8eef4",
+  textMid: "rgba(232,238,244,0.55)",
+  textLow: "rgba(232,238,244,0.28)",
+  border:  "rgba(255,255,255,0.07)",
+  surf:    "rgba(255,255,255,0.04)",
+} as const;
+
+// ── Dosing ─────────────────────────────────────────────────────────────────
 const WEIGHT_RANGES = [
   { min: 1,  max: 5,  sachets: 0.5 },
   { min: 6,  max: 10, sachets: 1   },
@@ -28,61 +38,59 @@ const WEIGHT_RANGES = [
   { min: 41, max: 60, sachets: 3   },
 ];
 const SIZE_LABELS = ["Toy", "Small", "Medium", "Large", "Giant"];
+const calcSachets = (w: number) =>
+  (WEIGHT_RANGES.find((r) => w >= r.min && w <= r.max) ?? WEIGHT_RANGES[WEIGHT_RANGES.length - 1]).sachets;
 
-function calcSachets(w: number) {
-  return (WEIGHT_RANGES.find((r) => w >= r.min && w <= r.max) ?? WEIGHT_RANGES[WEIGHT_RANGES.length - 1]).sachets;
-}
-
-// ── Types ──────────────────────────────────────────────────────────────────
-type AgeGroup   = "puppy" | "adult" | "senior";
+// ── Onset timeline (varies by product + age) ──────────────────────────────
+type AgeGroup = "puppy" | "adult" | "senior";
 type ProductKey = "omega" | "organ" | "gut";
 type SymptomKey =
   | "stiffJoints" | "dullCoat"    | "lowAlertness"    | "lowEnergy"
   | "weakImmunity"| "looseStools" | "sensitiveStomach" | "itchySkin"
   | "poorAppetite"| "gasBloating";
 
+const ONSET: Record<ProductKey, Record<AgeGroup, [string, string]>> = {
+  omega: { puppy: ["2–3 wk", "4–6 wk"], adult: ["3–4 wk", "6–8 wk"], senior: ["4–6 wk", "8–10 wk"] },
+  organ: { puppy: ["2–3 wk", "4–5 wk"], adult: ["3–4 wk", "5–6 wk"], senior: ["4–6 wk", "7–8 wk"] },
+  gut:   { puppy: ["1–2 wk", "3–4 wk"], adult: ["2–3 wk", "4–5 wk"], senior: ["3–4 wk", "5–6 wk"] },
+};
+
 // ── Symptom data ───────────────────────────────────────────────────────────
-interface SymptomData {
-  label:      string;
-  scores:     Partial<Record<ProductKey, number>>;
-  ingredient: string;
-  benefit:    string;
-}
+interface SymptomData { label: string; scores: Partial<Record<ProductKey, number>>; ingredient: string; benefit: string; }
 
 const SYMPTOMS: Record<SymptomKey, SymptomData> = {
-  stiffJoints:      { label: "Stiff Joints",       scores: { omega: 3 },           ingredient: "Green-Lipped Mussel",    benefit: "joint mobility"      },
-  dullCoat:         { label: "Dull Coat",           scores: { omega: 3 },           ingredient: "omega-3 fatty acids",    benefit: "skin & coat health"  },
-  lowAlertness:     { label: "Low Alertness",       scores: { omega: 2, organ: 1 }, ingredient: "DHA + B vitamins",       benefit: "brain function"      },
-  lowEnergy:        { label: "Low Energy",          scores: { organ: 3 },           ingredient: "organ peptides",         benefit: "vitality & energy"   },
-  weakImmunity:     { label: "Weak Immunity",       scores: { organ: 3 },           ingredient: "organ micronutrients",   benefit: "immune support"      },
-  looseStools:      { label: "Loose Stools",        scores: { gut: 3 },             ingredient: "prebiotics & probiotics", benefit: "stool consistency"  },
-  sensitiveStomach: { label: "Sensitive Stomach",   scores: { gut: 3 },             ingredient: "gut lining support",     benefit: "digestive comfort"   },
-  itchySkin:        { label: "Itchy Skin",          scores: { omega: 2, gut: 1 },   ingredient: "EPA/DHA + gut flora",    benefit: "skin barrier health" },
-  poorAppetite:     { label: "Poor Appetite",       scores: { organ: 3 },           ingredient: "organ peptides",         benefit: "appetite & digestion" },
-  gasBloating:      { label: "Gas & Bloating",      scores: { gut: 3 },             ingredient: "digestive enzymes",      benefit: "gut motility"         },
+  stiffJoints:      { label: "Stiff Joints",     scores: { omega: 3 },           ingredient: "Green-Lipped Mussel",     benefit: "joint mobility"       },
+  dullCoat:         { label: "Dull Coat",         scores: { omega: 3 },           ingredient: "omega-3 fatty acids",     benefit: "skin & coat health"   },
+  lowAlertness:     { label: "Low Alertness",     scores: { omega: 2, organ: 1 }, ingredient: "DHA + B vitamins",        benefit: "brain function"       },
+  lowEnergy:        { label: "Low Energy",        scores: { organ: 3 },           ingredient: "organ peptides",          benefit: "vitality & energy"    },
+  weakImmunity:     { label: "Weak Immunity",     scores: { organ: 3 },           ingredient: "organ micronutrients",    benefit: "immune support"       },
+  looseStools:      { label: "Loose Stools",      scores: { gut: 3 },             ingredient: "prebiotics & probiotics", benefit: "stool consistency"    },
+  sensitiveStomach: { label: "Sensitive Stomach", scores: { gut: 3 },             ingredient: "gut lining support",      benefit: "digestive comfort"    },
+  itchySkin:        { label: "Itchy Skin",        scores: { omega: 2, gut: 1 },   ingredient: "EPA/DHA + gut flora",     benefit: "skin barrier health"  },
+  poorAppetite:     { label: "Poor Appetite",     scores: { organ: 3 },           ingredient: "organ peptides",          benefit: "appetite & digestion" },
+  gasBloating:      { label: "Gas & Bloating",    scores: { gut: 3 },             ingredient: "digestive enzymes",       benefit: "gut motility"         },
 };
 
 // ── Product definitions ────────────────────────────────────────────────────
-interface ProductDef { name: string; system: string; tagline: string; image: string; url: string; hex: string; rgb: string; }
-
+interface ProductDef { name: string; system: string; tagline: string; image: string; url: string; hex: string; foundHex: string; rgb: string; }
 const PRODUCTS: Record<ProductKey, ProductDef> = {
-  omega: { name: "Omega Balance+", system: "OMEGA SYSTEM", tagline: "Marine-derived omega topper with green-lipped mussel", image: omegaProduct, url: "https://amazon.in/biologica", hex: "#A8D8F0", rgb: "168, 216, 240" },
-  organ: { name: "Organ Balance+", system: "ORGAN SYSTEM", tagline: "Dehydrated organ-based daily vitality topper",          image: organProduct, url: "https://amazon.in/biologica", hex: "#F0A8B8", rgb: "240, 168, 184" },
-  gut:   { name: "Gut Balance+",   system: "GUT SYSTEM",   tagline: "100% vegetarian gut support and digestion topper",      image: gutProduct,   url: "https://amazon.in/biologica", hex: "#A0E0B0", rgb: "160, 224, 176" },
+  omega: { name: "Omega Balance+", system: "OMEGA SYSTEM", tagline: "Marine-derived omega topper with green-lipped mussel", image: omegaProduct, url: "https://amazon.in/biologica", hex: "#A8D8F0", foundHex: "#0dd6c8", rgb: "168,216,240" },
+  organ: { name: "Organ Balance+", system: "ORGAN SYSTEM", tagline: "Dehydrated organ-based daily vitality topper",          image: organProduct, url: "https://amazon.in/biologica", hex: "#F0A8B8", foundHex: "#f28030", rgb: "240,168,184" },
+  gut:   { name: "Gut Balance+",   system: "GUT SYSTEM",   tagline: "100% vegetarian gut support and digestion topper",      image: gutProduct,   url: "https://amazon.in/biologica", hex: "#A0E0B0", foundHex: "#5ece2a", rgb: "160,224,176" },
 };
 
 // ── Recommendation engine ──────────────────────────────────────────────────
 interface MatchedSymptom { key: SymptomKey; product: ProductKey; ingredient: string; benefit: string; }
-interface Recommendation  { primary: ProductKey; primaryScore: number; secondary: ProductKey[]; matched: MatchedSymptom[]; }
+interface Recommendation { primary: ProductKey; primaryScore: number; secondary: ProductKey[]; matched: MatchedSymptom[]; }
 
 function computeRec(selected: SymptomKey[], age: AgeGroup | null): Recommendation | null {
   if (!selected.length) return null;
   const scores: Record<ProductKey, number> = { omega: 0, organ: 0, gut: 0 };
   for (const sk of selected) {
-    for (const [pk, s] of Object.entries(SYMPTOMS[sk].scores) as [ProductKey, number][]) { scores[pk] += s; }
+    for (const [pk, s] of Object.entries(SYMPTOMS[sk].scores) as [ProductKey, number][]) scores[pk] += s;
   }
   if (age === "senior") { scores.omega += 2; scores.organ += 1; }
-  if (age === "puppy")  { scores.organ  += 1; }
+  if (age === "puppy")  { scores.organ += 1; }
   const ranked = (Object.entries(scores) as [ProductKey, number][]).filter(([, s]) => s > 0).sort(([, a], [, b]) => b - a);
   if (!ranked.length) return null;
   const [[primary, primaryScore], ...rest] = ranked;
@@ -99,447 +107,424 @@ function chipStyle(sk: SymptomKey, selected: boolean): React.CSSProperties {
   const top = (Object.entries(SYMPTOMS[sk].scores) as [ProductKey, number][]).sort(([, a], [, b]) => b - a)[0]?.[0];
   if (!top) return {};
   const p = PRODUCTS[top];
-  return { background: `rgba(${p.rgb}, 0.16)`, borderColor: `rgba(${p.rgb}, 0.5)`, color: p.hex };
+  return { background: `rgba(${p.rgb},0.16)`, borderColor: `rgba(${p.rgb},0.5)`, color: p.hex };
 }
 
-// ── Animated sachet count ─────────────────────────────────────────────────
+// ── Animated number ────────────────────────────────────────────────────────
 const AnimatedNumber = ({ value, duration = 500 }: { value: number; duration?: number }) => {
   const prefersReducedMotion = useReducedMotion();
   const [display, setDisplay] = useState(value);
-  const rafRef    = useRef<number | null>(null);
-  const startRef  = useRef<number | null>(null);
-  const fromRef   = useRef(value);
-
+  const rafRef = useRef<number | null>(null);
+  const startRef = useRef<number | null>(null);
   useEffect(() => {
     if (prefersReducedMotion) { setDisplay(value); return; }
-    fromRef.current = display;
-    startRef.current = null;
     const from = display, to = value;
+    startRef.current = null;
     const step = (ts: number) => {
       if (!startRef.current) startRef.current = ts;
       const t = Math.min((ts - startRef.current) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setDisplay(from + (to - from) * eased);
+      setDisplay(from + (to - from) * (1 - Math.pow(1 - t, 3)));
       if (t < 1) rafRef.current = requestAnimationFrame(step);
     };
     rafRef.current = requestAnimationFrame(step);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, prefersReducedMotion]);
-
-  const fmt = Number.isInteger(display) ? display.toString() : display.toFixed(1);
-  return <>{fmt}</>;
+  return <>{Number.isInteger(display) ? display.toString() : display.toFixed(1)}</>;
 };
 
-// ── Shared label ──────────────────────────────────────────────────────────
-const Label = ({ children }: { children: React.ReactNode }) => (
-  <span className="block text-[10px] font-semibold tracking-[0.2em] uppercase mb-3" style={{ color: C.textMeta }}>
-    {children}
-  </span>
-);
-
-// ── Segment button ────────────────────────────────────────────────────────
-const SegBtn = ({ label, sub, active, onClick }: { label: string; sub?: string; active: boolean; onClick: () => void }) => (
-  <button onClick={onClick} className="flex-1 py-2.5 px-2 text-center rounded border transition-all duration-200"
-    style={{ background: active ? "rgba(255,255,255,0.06)" : C.surf1, borderColor: active ? C.borderHi : C.borderMd, color: active ? C.textHi : C.textMeta }}>
-    <div className="text-xs font-semibold">{label}</div>
-    {sub && <div className="text-[10px] mt-0.5" style={{ color: active ? C.textBody : C.textDim }}>{sub}</div>}
-  </button>
-);
-
-// ── Symptom chip ──────────────────────────────────────────────────────────
-const Chip = ({ sk, selected, onClick }: { sk: SymptomKey; selected: boolean; onClick: () => void }) => (
-  <button onClick={onClick} className="px-3 py-3 text-left text-xs font-medium rounded border transition-all duration-150"
-    style={selected ? { borderWidth: "1px", ...chipStyle(sk, true) } : { background: C.surf1, borderColor: C.borderMd, color: C.textMeta, borderWidth: "1px" }}>
-    {SYMPTOMS[sk].label}
-  </button>
-);
-
-// ── Scan line ─────────────────────────────────────────────────────────────
-const ScanLine = ({ scanKey, accentRgb }: { scanKey: string; accentRgb: string }) => (
-  <motion.div key={scanKey} className="absolute left-0 right-0 h-px pointer-events-none" style={{ zIndex: 20, background: `linear-gradient(90deg, transparent 0%, rgba(${accentRgb}, 0.08) 10%, rgba(${accentRgb}, 0.5) 50%, rgba(${accentRgb}, 0.08) 90%, transparent 100%)` }}
-    initial={{ top: "0%", opacity: 0 }} animate={{ top: "100%", opacity: [0, 1, 1, 0] }} transition={{ duration: 0.75, ease: "linear", times: [0, 0.04, 0.94, 1] }} />
-);
-
-// ── Dormant panel ─────────────────────────────────────────────────────────
-const DormantPanel = ({ dogName }: { dogName: string }) => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}
-    className="h-full flex flex-col items-center justify-center text-center" style={{ minHeight: "420px" }}>
-    <div className="relative mb-8">
-      <motion.div className="w-16 h-16 rounded-full border" style={{ borderColor: C.borderMd }}
-        animate={{ scale: [1, 1.2, 1], opacity: [1, 0.3, 1] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }} />
-      <motion.div className="absolute inset-0 rounded-full border" style={{ borderColor: C.borderLo }}
-        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="w-2 h-2 rounded-full" style={{ background: C.borderHi }} />
-      </div>
-    </div>
-    <span className="block text-[9px] font-semibold tracking-[0.25em] uppercase mb-3" style={{ color: C.textDim }}>AWAITING INPUT</span>
-    <p className="text-sm leading-relaxed max-w-[210px]" style={{ color: C.textMeta }}>
-      {dogName ? `Select ${dogName}'s symptoms to generate a formula` : "Select symptoms to generate a personalised formula"}
-    </p>
-    <div className="mt-10 flex gap-4">
-      {(["omega", "organ", "gut"] as ProductKey[]).map((pk) => (
-        <div key={pk} className="flex items-center gap-1.5">
-          <div className="w-1 h-1 rounded-full" style={{ background: C.textDim }} />
-          <span className="text-[9px] tracking-widest uppercase" style={{ color: C.textDim }}>{pk}</span>
-        </div>
-      ))}
-    </div>
-  </motion.div>
-);
-
-// ── Active recommendation + dosing panel ───────────────────────────────────
-const ActivePanel = ({
-  rec, dogName, weight, scanKey, prefersReducedMotion,
-}: {
-  rec: Recommendation; dogName: string; weight: number; scanKey: string; prefersReducedMotion: boolean | null;
-}) => {
-  const p        = PRODUCTS[rec.primary];
-  const name     = dogName || null;
-  const sachets  = calcSachets(weight);
-  const sachetLabel = Number.isInteger(sachets) ? sachets.toString() : sachets.toFixed(1);
-  const primaryMatches = rec.matched.filter((m) => m.product === rec.primary).length;
-  const confLabel = primaryMatches === rec.matched.length
-    ? `All ${rec.matched.length} symptom${rec.matched.length > 1 ? "s" : ""} point here`
-    : `${primaryMatches} of ${rec.matched.length} symptoms point here`;
-
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
-      className="relative h-full flex flex-col" style={{ minHeight: "420px" }}>
-      {!prefersReducedMotion && <ScanLine scanKey={scanKey} accentRgb={p.rgb} />}
-
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        transition={{ delay: prefersReducedMotion ? 0 : 0.42, duration: 0.35 }}
-        className="flex flex-col flex-1">
-
-        {/* ── Formula identity ─────────────────────────────────────────── */}
-        <div className="flex items-start gap-6 mb-5">
-
-          {/* Text — left column */}
-          <div className="flex-1 min-w-0">
-            <Label>RECOMMENDED FORMULA</Label>
-            <h3 className="text-2xl font-black leading-tight mb-2" style={{ fontFamily: "Barlow, sans-serif", color: C.textHi }}>
-              {name ? `${name}'s Formula` : "Your Formula"}
-            </h3>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-1.5 h-1.5 rounded-full" style={{ background: p.hex }} />
-              <span className="text-xs" style={{ color: C.textMeta }}>{confLabel}</span>
-            </div>
-            <div className="text-[10px] font-semibold tracking-[0.2em] uppercase mb-1" style={{ color: p.hex, opacity: 0.7 }}>
-              {p.system}
-            </div>
-            <div className="text-base font-bold leading-snug" style={{ color: p.hex }}>{p.name}</div>
-            <div className="text-xs mt-1 leading-snug" style={{ color: C.textBody }}>{p.tagline}</div>
-          </div>
-
-          {/* Tin — right, larger, more hero */}
-          <motion.img key={rec.primary} src={p.image} alt={p.name} className="flex-shrink-0 object-contain"
-            style={{ height: "160px", filter: "drop-shadow(0 16px 32px rgba(0,0,0,0.65))" }}
-            initial={prefersReducedMotion ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReducedMotion ? 0 : 0.52, duration: 0.55, ease: [0.16, 1, 0.3, 1] }} />
-        </div>
-
-        {/* ── Divider ───────────────────────────────────────────────────── */}
-        <div className="mb-5" style={{ height: "1px", background: C.borderMd }} />
-
-        {/* ── Daily dose ────────────────────────────────────────────────── */}
-        <div className="mb-5">
-          <Label>DAILY DOSE</Label>
-
-          {/* Prescription-style count */}
-          <div className="flex items-end gap-3 mb-4">
-            <span className="text-[52px] font-black leading-none" style={{ color: C.textHi, fontFamily: "Barlow, sans-serif" }}>
-              <AnimatedNumber value={sachets} />
-            </span>
-            <div className="pb-1.5">
-              <div className="text-[15px] font-semibold leading-tight" style={{ color: C.textBody }}>
-                sachet{sachetLabel !== "1" ? "s" : ""}
-              </div>
-              <div className="text-xs leading-tight mt-0.5" style={{ color: C.textMeta }}>per day · with food</div>
-            </div>
-          </div>
-
-          {/* Supply stats strip */}
-          <div className="grid grid-cols-3 rounded-lg overflow-hidden" style={{ border: `1px solid ${C.borderMd}` }}>
-            {([
-              { val: `${weight}kg`,                      sub: "dog weight"  },
-              { val: `${Math.floor(30 / sachets)} days`, sub: "per box"     },
-              { val: "30 sachets",                       sub: "box size"    },
-            ] as { val: string; sub: string }[]).map((s, i) => (
-              <div key={i} className={`px-3 py-2.5${i > 0 ? " border-l" : ""}`}
-                style={{ background: C.surf1, borderColor: C.borderMd }}>
-                <div className="text-sm font-bold leading-none" style={{ color: C.textBody, fontFamily: "Barlow, sans-serif" }}>
-                  {s.val}
-                </div>
-                <div className="text-[10px] uppercase tracking-wider mt-1" style={{ color: C.textMeta }}>
-                  {s.sub}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {rec.secondary.length > 0 && (
-            <p className="text-xs mt-2" style={{ color: C.textDim }}>Same dose applies to each recommended product</p>
-          )}
-        </div>
-
-        {/* ── Divider ───────────────────────────────────────────────────── */}
-        <div className="mb-4" style={{ height: "1px", background: C.borderMd }} />
-
-        {/* ── Why [Name] needs this — two-column table ──────────────────── */}
-        <div className="flex-1 mb-4">
-          <Label>{name ? `WHY ${name.toUpperCase()} NEEDS THIS` : "FORMULA REASONING"}</Label>
-
-          <AnimatePresence mode="sync" initial={false}>
-            {rec.matched.map((m) => {
-              const mp = PRODUCTS[m.product];
-              return (
-                <motion.div key={m.key}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden">
-                  <div className="flex gap-4 py-2.5" style={{ borderBottom: `1px solid ${C.borderLo}` }}>
-
-                    {/* Left column: symptom — tinted to product colour */}
-                    <div className="w-[38%] flex-shrink-0 flex items-start gap-2">
-                      <div className="w-1 h-1 rounded-full mt-[5px] flex-shrink-0" style={{ background: mp.hex }} />
-                      <span className="text-[13px] font-medium leading-snug" style={{ color: mp.hex, opacity: 0.7 }}>
-                        {SYMPTOMS[m.key].label}
-                      </span>
-                    </div>
-
-                    {/* Right column: ingredient (full product colour, bolder) + benefit */}
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13px] font-semibold leading-snug" style={{ color: mp.hex }}>
-                        {m.ingredient}
-                      </div>
-                      <div className="text-[11px] mt-0.5" style={{ color: C.textMeta }}>
-                        {m.benefit}
-                      </div>
-                    </div>
-
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
-
-        {/* ── Also consider ─────────────────────────────────────────────── */}
-        <AnimatePresence>
-          {rec.secondary.length > 0 && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }} className="mb-4">
-              <Label>ALSO CONSIDER</Label>
-              <div className="flex gap-2 flex-wrap">
-                {rec.secondary.map((sk) => {
-                  const sp = PRODUCTS[sk];
-                  return (
-                    <a key={sk} href={sp.url} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-3 py-1.5 rounded text-xs font-medium transition-all duration-150"
-                      style={{ background: `rgba(${sp.rgb}, 0.08)`, border: `1px solid rgba(${sp.rgb}, 0.2)`, color: sp.hex }}>
-                      <img src={sp.image} alt={sp.name} className="w-5 h-5 object-contain flex-shrink-0" />
-                      {sp.name}
-                    </a>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* ── CTA ───────────────────────────────────────────────────────── */}
-        <div className="mt-auto space-y-3">
-          <a href={p.url} target="_blank" rel="noopener noreferrer"
-            className="btn-press w-full flex items-center justify-center gap-2 py-3.5 rounded text-[13px] font-semibold tracking-wide transition-all duration-150"
-            style={{ background: `rgba(${p.rgb}, 0.1)`, border: `1px solid rgba(${p.rgb}, 0.3)`, color: p.hex }}>
-            View on Amazon India
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
-          <p className="text-xs leading-relaxed" style={{ color: C.textMeta }}>
-            Always follow the product label and consult your vet, especially for puppies, seniors, or dogs on medication.
-          </p>
-        </div>
-
-      </motion.div>
-    </motion.div>
-  );
-};
-
-// ── Main component ─────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════
+// MAIN COMPONENT
+// ══════════════════════════════════════════════════════════════════
 const DiagnosticTool = () => {
   const prefersReducedMotion = useReducedMotion();
 
-  const [dogName,    setDogName]    = useState("");
-  const [age,        setAge]        = useState<AgeGroup | null>(null);
-  const [weight,     setWeight]     = useState(12);
-  const [weightInput, setWeightInput] = useState("12");
-  const [symptoms,   setSymptoms]   = useState<Set<SymptomKey>>(new Set());
+  // Form state
+  const [dogName,      setDogName]      = useState("");
+  const [age,          setAge]          = useState<AgeGroup | null>(null);
+  const [weight,       setWeight]       = useState(12);
+  const [weightInput,  setWeightInput]  = useState("12");
+  const [symptoms,     setSymptoms]     = useState<Set<SymptomKey>>(new Set());
+  const [slideState,   setSlideState]   = useState<"input" | "result">("input");
 
-  const scanCounter = useRef(0);
-  const [scanKey, setScanKey] = useState("0");
+  const toggleSymptom = (sk: SymptomKey) => setSymptoms((prev) => { const next = new Set(prev); next.has(sk) ? next.delete(sk) : next.add(sk); return next; });
 
-  const toggleSymptom = (sk: SymptomKey) => {
-    setSymptoms((prev) => {
-      const next = new Set(prev);
-      next.has(sk) ? next.delete(sk) : next.add(sk);
-      scanCounter.current += 1;
-      setScanKey(String(scanCounter.current));
-      return next;
-    });
-  };
+  const handleSlider      = (e: React.ChangeEvent<HTMLInputElement>) => { const v = parseInt(e.target.value, 10); setWeight(v); setWeightInput(String(v)); };
+  const handleWeightInput = (e: React.ChangeEvent<HTMLInputElement>) => { const raw = e.target.value.replace(/[^0-9]/g, ""); setWeightInput(raw); const n = parseInt(raw, 10); if (!isNaN(n)) setWeight(Math.min(60, Math.max(1, n))); };
+  const handleWeightBlur  = () => { const n = parseInt(weightInput, 10); const c = isNaN(n) ? 12 : Math.min(60, Math.max(1, n)); setWeight(c); setWeightInput(String(c)); };
 
-  // Weight handlers
-  const handleSlider = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = parseInt(e.target.value, 10);
-    setWeight(v);
-    setWeightInput(String(v));
-  };
-  const handleWeightInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/[^0-9]/g, "");
-    setWeightInput(raw);
-    const n = parseInt(raw, 10);
-    if (!isNaN(n)) setWeight(Math.min(60, Math.max(1, n)));
-  };
-  const handleWeightBlur = () => {
-    const n = parseInt(weightInput, 10);
-    const c = isNaN(n) ? 12 : Math.min(60, Math.max(1, n));
-    setWeight(c);
-    setWeightInput(String(c));
-  };
+  const rec          = useMemo(() => computeRec([...symptoms] as SymptomKey[], age), [symptoms, age]);
+  const displayName  = dogName.trim();
+  const canFind      = symptoms.size > 0;
 
-  const rec = useMemo(
-    () => computeRec([...symptoms] as SymptomKey[], age),
-    [symptoms, age]
-  );
+  const handleFind  = () => { if (rec) setSlideState("result"); };
+  const handleReset = () => setSlideState("input");
 
-  const displayName = dogName.trim();
+  // Derived rec data
+  const p            = rec ? PRODUCTS[rec.primary] : PRODUCTS.omega;
+  const sachets      = calcSachets(weight);
+  const sachetLabel  = Number.isInteger(sachets) ? sachets.toString() : sachets.toFixed(1);
+  const ageKey       = age ?? "adult";
+  const [firstWk, fullWk] = rec ? ONSET[rec.primary][ageKey] : ["3–4 wk", "6–8 wk"];
+  const primaryCount = rec ? rec.matched.filter((m) => m.product === rec.primary).length : 0;
+  const confLabel    = rec
+    ? primaryCount === rec.matched.length
+      ? `All ${rec.matched.length} symptom${rec.matched.length > 1 ? "s" : ""} point here`
+      : `${primaryCount} of ${rec.matched.length} symptoms point here`
+    : "";
+
+  const PANEL_HEIGHT = 660;
 
   return (
-    <section id="find-your-formula" className="relative overflow-hidden" style={{ background: C.bg }}>
-
+    <section
+      id="find-your-formula"
+      style={{ background: "#06090c", overflow: "hidden" }}
+    >
       {/* Dot-grid texture */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
+      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: "radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px)", backgroundSize: "28px 28px" }} />
 
-      {/* Section header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 pt-20 pb-10 px-6 text-center max-w-[1400px] mx-auto">
-        <span className="block text-[10px] font-semibold tracking-[0.25em] uppercase mb-3" style={{ color: C.textMeta }}>
-          Personalised Diagnostic
-        </span>
-        <h2 className="text-3xl md:text-4xl font-black" style={{ fontFamily: "Barlow, sans-serif", color: C.textHi }}>
-          {displayName ? `Find ${displayName}'s formula` : "Find Your Dog's Formula"}
-        </h2>
-        <p className="text-sm mt-3 max-w-sm mx-auto leading-relaxed" style={{ color: C.textBody }}>
-          Answer a few questions — get the right formula and exact daily dose in one place.
-        </p>
-      </motion.div>
+      {/* ── Sliding strip: 4 panels wide, shows 2 at a time ── */}
+      <motion.div
+        animate={{ x: slideState === "result" ? "-50%" : "0%" }}
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", width: "200%", position: "relative" }}
+      >
 
-      {/* Panel */}
-      <div className="relative z-10 max-w-[1400px] mx-auto px-4 md:px-8 pb-24">
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="grid lg:grid-cols-[5fr_6fr] rounded-2xl overflow-hidden" style={{ border: `1px solid ${C.borderMd}` }}>
-
-          {/* ── Left: inputs ── */}
-          <div className="p-8 lg:p-12 space-y-8 border-b lg:border-b-0 lg:border-r" style={{ borderColor: C.borderMd }}>
-
-            {/* Dog name */}
-            <div>
-              <Label>DOG'S NAME</Label>
-              <input type="text" value={dogName} onChange={(e) => setDogName(e.target.value)}
-                placeholder="e.g. Buddy" maxLength={24}
-                className="w-full bg-transparent text-sm outline-none pb-2.5 border-b transition-colors duration-200 placeholder:text-[#3d4f63]"
-                style={{ color: C.textHi, caretColor: C.textHi, borderColor: C.borderMd }}
-                onFocus={(e) => (e.target.style.borderColor = C.borderHi)}
-                onBlur={(e)  => (e.target.style.borderColor = C.borderMd)} />
-            </div>
-
-            {/* Age */}
-            <div>
-              <Label>AGE GROUP</Label>
-              <div className="flex gap-2">
-                {(["puppy", "adult", "senior"] as AgeGroup[]).map((a) => (
-                  <SegBtn key={a} label={a.charAt(0).toUpperCase() + a.slice(1)}
-                    sub={a === "puppy" ? "0–1 yr" : a === "adult" ? "1–7 yr" : "7+ yr"}
-                    active={age === a} onClick={() => setAge(age === a ? null : a)} />
-                ))}
-              </div>
-            </div>
-
-            {/* Weight */}
-            <div>
-              <Label>BODY WEIGHT</Label>
-              <div className="flex items-baseline gap-2 mb-4">
-                <input type="text" inputMode="numeric" value={weightInput}
-                  onChange={handleWeightInput} onBlur={handleWeightBlur} onFocus={(e) => e.target.select()}
-                  aria-label="Dog weight in kg"
-                  className="text-[28px] font-black bg-transparent outline-none w-14 text-center border-b transition-colors duration-150"
-                  style={{ fontFamily: "Barlow, sans-serif", color: C.textHi, borderColor: C.borderMd, caretColor: C.textHi }}
-                  onFocus={(e) => { e.target.select(); (e.target as HTMLInputElement).style.borderColor = C.borderHi; }}
-                  onBlur={(e)  => { handleWeightBlur(); (e.target as HTMLInputElement).style.borderColor = C.borderMd; }} />
-                <span className="text-lg font-bold" style={{ color: C.textBody }}>kg</span>
-              </div>
-              <input type="range" min={1} max={60} step={1} value={weight} onChange={handleSlider}
-                className="dosing-range w-full" aria-label="Dog weight slider" />
-              <div className="flex justify-between mt-2.5 px-0.5">
-                {SIZE_LABELS.map((s, i) => (
-                  <span key={s} className={`text-[10px] ${i === 0 ? "text-left" : i === SIZE_LABELS.length - 1 ? "text-right" : "text-center"}`}
-                    style={{ color: C.textDim }}>
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Symptoms */}
-            <div>
-              <div className="flex items-center justify-between mb-2.5">
-                <Label>PRESENTING SYMPTOMS</Label>
-                {symptoms.size > 0 && (
-                  <button onClick={() => { setSymptoms(new Set()); scanCounter.current += 1; setScanKey(String(scanCounter.current)); }}
-                    className="text-[9px] font-semibold tracking-widest uppercase transition-colors duration-150 mb-2.5"
-                    style={{ color: C.textMeta }}>
-                    CLEAR
-                  </button>
-                )}
-              </div>
-              <div className="grid grid-cols-2 gap-1.5">
-                {(Object.keys(SYMPTOMS) as SymptomKey[]).map((sk) => (
-                  <Chip key={sk} sk={sk} selected={symptoms.has(sk)} onClick={() => toggleSymptom(sk)} />
-                ))}
-              </div>
-              <AnimatePresence>
-                {symptoms.size > 0 && (
-                  <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25 }} className="mt-3.5 text-xs" style={{ color: C.textMeta }}>
-                    {symptoms.size} symptom{symptoms.size > 1 ? "s" : ""} selected
-                    {age ? ` · ${age}` : ""}
-                    {" · generating formula →"}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </div>
-
+        {/* ══════════════ PANEL 1 — FORM (grey-dark) ══════════════ */}
+        <div
+          style={{
+            background: C.formBg,
+            height: PANEL_HEIGHT,
+            padding: "40px 44px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0",
+            overflow: "hidden",
+          }}
+        >
+          {/* Dog name */}
+          <div style={{ marginBottom: "20px" }}>
+            <span className="block text-[9px] font-semibold tracking-[0.22em] uppercase mb-2" style={{ color: C.textMeta }}>DOG'S NAME</span>
+            <input
+              type="text" value={dogName} onChange={(e) => setDogName(e.target.value)}
+              placeholder="e.g. Buddy" maxLength={24}
+              className="w-full bg-transparent text-lg font-medium outline-none pb-2 border-b placeholder:opacity-25 transition-colors duration-200"
+              style={{ color: C.textHi, caretColor: C.textHi, borderColor: C.borderMd }}
+              onFocus={(e) => (e.target.style.borderColor = C.borderHi)}
+              onBlur={(e)  => (e.target.style.borderColor = C.borderMd)}
+            />
           </div>
 
-          {/* ── Right: recommendation + dosing ── */}
-          <div className="p-8 lg:p-12 relative overflow-hidden" style={{ minHeight: "560px" }}>
-            <AnimatePresence mode="wait">
-              {!rec ? (
-                <DormantPanel key="dormant" dogName={displayName} />
-              ) : (
-                <ActivePanel key={rec.primary} rec={rec} dogName={displayName} weight={weight}
-                  scanKey={scanKey} prefersReducedMotion={prefersReducedMotion} />
+          {/* Age group */}
+          <div style={{ marginBottom: "20px" }}>
+            <span className="block text-[9px] font-semibold tracking-[0.22em] uppercase mb-2" style={{ color: C.textMeta }}>AGE GROUP</span>
+            <div className="flex gap-2">
+              {(["puppy", "adult", "senior"] as AgeGroup[]).map((a) => (
+                <button key={a} onClick={() => setAge(age === a ? null : a)}
+                  className="flex-1 py-2.5 text-center rounded border transition-all duration-200"
+                  style={{ background: age === a ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)", borderColor: age === a ? C.borderHi : C.borderMd, color: age === a ? C.textHi : C.textMeta }}>
+                  <div className="text-xs font-semibold">{a.charAt(0).toUpperCase() + a.slice(1)}</div>
+                  <div className="text-[9px] mt-0.5" style={{ color: age === a ? C.textBody : C.textDim }}>{a === "puppy" ? "0–1 yr" : a === "adult" ? "1–7 yr" : "7+ yr"}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Weight */}
+          <div style={{ marginBottom: "20px" }}>
+            <span className="block text-[9px] font-semibold tracking-[0.22em] uppercase mb-2" style={{ color: C.textMeta }}>BODY WEIGHT</span>
+            <div className="flex items-baseline gap-2 mb-3">
+              <input type="text" inputMode="numeric" value={weightInput}
+                onChange={handleWeightInput} onBlur={handleWeightBlur} onFocus={(e) => e.target.select()}
+                className="text-3xl font-black bg-transparent outline-none w-14 text-center border-b transition-colors duration-150"
+                style={{ fontFamily: "Barlow Condensed, sans-serif", color: C.textHi, borderColor: C.borderMd }}
+                onFocus={(e) => { e.target.select(); (e.target as HTMLInputElement).style.borderColor = C.borderHi; }}
+                onBlur={(e)  => { handleWeightBlur(); (e.target as HTMLInputElement).style.borderColor = C.borderMd; }}
+              />
+              <span className="text-base font-bold" style={{ color: C.textBody }}>kg</span>
+            </div>
+            <input type="range" min={1} max={60} step={1} value={weight} onChange={handleSlider} className="dosing-range w-full" />
+            <div className="flex justify-between mt-2">
+              {SIZE_LABELS.map((s, i) => (
+                <span key={s} className={`text-[9px] ${i === 0 ? "text-left" : i === SIZE_LABELS.length - 1 ? "text-right" : "text-center"}`} style={{ color: C.textDim }}>{s}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Symptoms */}
+          <div style={{ flex: 1 }}>
+            <div className="flex items-center justify-between mb-2">
+              <span className="block text-[9px] font-semibold tracking-[0.22em] uppercase" style={{ color: C.textMeta }}>PRESENTING SYMPTOMS</span>
+              {symptoms.size > 0 && (
+                <button onClick={() => setSymptoms(new Set())} className="text-[9px] font-semibold tracking-widest uppercase transition-colors duration-150" style={{ color: C.textMeta }}>CLEAR</button>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {(Object.keys(SYMPTOMS) as SymptomKey[]).map((sk) => {
+                const sel = symptoms.has(sk);
+                return (
+                  <button key={sk} onClick={() => toggleSymptom(sk)}
+                    className="px-2.5 py-2 text-left text-[11px] font-medium rounded border transition-all duration-150"
+                    style={sel ? { borderWidth: "1px", ...chipStyle(sk, true) } : { background: "rgba(255,255,255,0.02)", borderColor: C.borderMd, color: C.textMeta, borderWidth: "1px" }}>
+                    {SYMPTOMS[sk].label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Status + Find button */}
+          <div style={{ marginTop: "16px", flexShrink: 0 }}>
+            <AnimatePresence>
+              {symptoms.size > 0 && (
+                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
+                  className="text-[10px] mb-3" style={{ color: C.textMeta }}>
+                  {symptoms.size} symptom{symptoms.size > 1 ? "s" : ""} selected{age ? ` · ${age}` : ""}
+                </motion.p>
               )}
             </AnimatePresence>
+            <button
+              onClick={handleFind}
+              disabled={!canFind}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded font-semibold text-sm tracking-wide transition-all duration-200"
+              style={{
+                background: canFind ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)",
+                border: `1px solid ${canFind ? C.borderHi : C.borderMd}`,
+                color: canFind ? C.textHi : C.textDim,
+                cursor: canFind ? "pointer" : "default",
+              }}>
+              Find My Formula
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* ══════════════ PANEL 2 — FIND HEADLINE (pure black) ══════════════ */}
+        <div
+          style={{
+            background: C.findBg,
+            height: PANEL_HEIGHT,
+            padding: "44px 52px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ lineHeight: "0.88" }}>
+            <span
+              className="block font-black uppercase"
+              style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "clamp(70px, 7vw, 110px)", letterSpacing: "-0.02em", color: "#fff", marginBottom: "0" }}>
+              Find
+            </span>
+            <span
+              className="block font-black uppercase"
+              style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "clamp(70px, 7vw, 110px)", letterSpacing: "-0.02em", color: "#fff" }}>
+              My
+            </span>
+            <span
+              className="block font-black uppercase"
+              style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "clamp(52px, 5.5vw, 84px)", letterSpacing: "-0.02em", color: "#fff", marginTop: "4px" }}>
+              Formula
+            </span>
+          </div>
+        </div>
+
+        {/* ══════════════ PANEL 3 — FOUND HEADLINE (dark navy) ══════════════ */}
+        <div
+          style={{
+            background: C.foundBg,
+            height: PANEL_HEIGHT,
+            padding: "44px 52px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            {displayName && (
+              <span className="block text-[10px] font-semibold tracking-[0.22em] uppercase mb-4" style={{ color: "rgba(255,255,255,0.22)" }}>
+                Formula for {displayName}
+              </span>
+            )}
+            <div style={{ lineHeight: "0.88" }}>
+              <motion.span
+                className="block font-black uppercase"
+                style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "clamp(70px, 7vw, 110px)", letterSpacing: "-0.02em", color: p.foundHex }}
+                animate={{ color: p.foundHex }}
+                transition={{ duration: 0.4 }}>
+                Found
+              </motion.span>
+              <span
+                className="block font-black uppercase"
+                style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "clamp(70px, 7vw, 110px)", letterSpacing: "-0.02em", color: "#fff" }}>
+                Your
+              </span>
+              <span
+                className="block font-black uppercase"
+                style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "clamp(52px, 5.5vw, 84px)", letterSpacing: "-0.02em", color: "#fff", marginTop: "4px" }}>
+                Formula
+              </span>
+            </div>
           </div>
 
-        </motion.div>
+          <div>
+            <div style={{ borderTop: `1px solid ${C.borderMd}`, paddingTop: "20px", marginBottom: "16px" }}>
+              <div className="text-sm" style={{ color: C.textBody, lineHeight: "1.6" }}>
+                {displayName && <span style={{ color: C.textHi, fontWeight: "600" }}>{displayName} · </span>}
+                {age && <span>{age.charAt(0).toUpperCase() + age.slice(1)} · </span>}
+                <span>{weight}kg</span>
+                {symptoms.size > 0 && <span> · {symptoms.size} symptom{symptoms.size > 1 ? "s" : ""} analysed</span>}
+              </div>
+            </div>
+            <button onClick={handleReset}
+              className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150"
+              style={{ color: "rgba(255,255,255,0.2)" }}>
+              <RotateCcw className="w-3 h-3" />
+              Start over
+            </button>
+          </div>
+        </div>
+
+        {/* ══════════════ PANEL 4 — RECOMMENDATION (dark) ══════════════ */}
+        <div
+          style={{
+            background: C.recBg,
+            height: PANEL_HEIGHT,
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+          }}
+        >
+          {rec ? (
+            <>
+              {/* Product top */}
+              <div style={{ padding: "22px 28px 18px", borderBottom: `1px solid ${R.border}`, display: "flex", alignItems: "flex-start", gap: "16px", flexShrink: 0 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="text-[9px] font-bold tracking-[0.2em] uppercase mb-1" style={{ color: p.hex }}>{p.system}</div>
+                  <div className="font-extrabold leading-none mb-1.5" style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "28px", letterSpacing: "-0.01em", color: R.text }}>{p.name}</div>
+                  <div className="text-xs leading-snug" style={{ color: R.textMid }}>{p.tagline}</div>
+                  <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full text-[10px] font-semibold" style={{ background: `rgba(${p.rgb},0.1)`, border: `1px solid rgba(${p.rgb},0.22)`, color: p.hex }}>
+                    {confLabel}
+                  </div>
+                </div>
+                <motion.img
+                  key={rec.primary} src={p.image} alt={p.name}
+                  style={{ width: "80px", height: "80px", objectFit: "contain", flexShrink: 0, filter: "drop-shadow(0 6px 20px rgba(0,0,0,0.5))" }}
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </div>
+
+              {/* Dose */}
+              <div style={{ padding: "14px 28px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
+                <div className="text-[8px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: R.textLow }}>
+                  DAILY DOSE{displayName ? ` FOR ${displayName.toUpperCase()}` : ""}
+                </div>
+                <div className="flex items-baseline gap-2 mb-2.5">
+                  <span style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "44px", fontWeight: 800, lineHeight: 1, color: R.text, letterSpacing: "-0.02em" }}>
+                    <AnimatedNumber value={sachets} />
+                  </span>
+                  <div>
+                    <div className="text-sm font-semibold" style={{ color: R.textMid }}>sachet{sachetLabel !== "1" ? "s" : ""}</div>
+                    <div className="text-[10px]" style={{ color: R.textLow }}>per day · with food</div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 rounded-md overflow-hidden" style={{ border: `1px solid ${R.border}` }}>
+                  {([
+                    { val: `${weight}kg`,                      sub: "dog weight" },
+                    { val: `${Math.floor(30 / sachets)} days`, sub: "per box"    },
+                    { val: "30 sachets",                       sub: "box size"   },
+                  ] as { val: string; sub: string }[]).map((s, i) => (
+                    <div key={i} className={`px-3 py-2${i > 0 ? " border-l" : ""}`} style={{ background: R.surf, borderColor: R.border }}>
+                      <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "13px", fontWeight: 700, color: R.text }}>{s.val}</div>
+                      <div className="text-[8px] uppercase tracking-wider mt-0.5" style={{ color: R.textLow }}>{s.sub}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ingredient connections */}
+              <div style={{ padding: "14px 28px 10px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
+                <div className="text-[8px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: R.textLow }}>INGREDIENT CONNECTIONS</div>
+                {rec.matched.map((m) => {
+                  const mp = PRODUCTS[m.product];
+                  return (
+                    <div key={m.key} className="flex gap-2 py-1.5" style={{ borderBottom: `1px solid ${R.border}` }}>
+                      <div style={{ width: "110px", flexShrink: 0 }}>
+                        <span className="text-[11px] font-medium" style={{ color: m.product === rec.primary ? R.textMid : mp.hex }}>{SYMPTOMS[m.key].label}</span>
+                      </div>
+                      <div className="text-[11px]" style={{ color: R.textLow }}>→</div>
+                      <div style={{ flex: 1 }}>
+                        <div className="text-[11px] font-semibold" style={{ color: mp.hex }}>{m.ingredient}</div>
+                        <div className="text-[10px]" style={{ color: R.textLow }}>{m.benefit}{m.product !== rec.primary ? ` · ${PRODUCTS[m.product].name}` : ""}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Timeline */}
+              <div style={{ padding: "12px 28px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
+                <div className="text-[8px] font-bold tracking-[0.22em] uppercase mb-2" style={{ color: R.textLow }}>
+                  EXPECTED ONSET — {ageKey.toUpperCase()} DOG
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { sub: "First changes", wk: firstWk },
+                    { sub: "Full effect",   wk: fullWk  },
+                    { sub: null,            wk: null    },
+                  ].map((cell, i) => (
+                    <div key={i} className="rounded" style={{ background: R.surf, padding: "9px 10px" }}>
+                      {cell.wk ? (
+                        <>
+                          <div className="text-[8px] font-bold tracking-[0.14em] uppercase mb-1" style={{ color: p.hex }}>{cell.sub}</div>
+                          <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "22px", fontWeight: 800, color: R.text, lineHeight: 1 }}>{cell.wk}</div>
+                        </>
+                      ) : (
+                        <div className="text-[10px] italic" style={{ color: R.textLow }}>Daily use required. Seniors may take longer.</div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Also consider + CTA */}
+              <div style={{ marginTop: "auto" }}>
+                {rec.secondary.length > 0 && (
+                  <div style={{ padding: "11px 28px", background: `rgba(${PRODUCTS[rec.secondary[0]].rgb},0.07)`, borderTop: `1px solid rgba(${PRODUCTS[rec.secondary[0]].rgb},0.18)`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: PRODUCTS[rec.secondary[0]].hex }} />
+                      <div>
+                        <div className="text-[8px] font-bold tracking-[0.16em] uppercase" style={{ color: PRODUCTS[rec.secondary[0]].hex, opacity: 0.6 }}>Also Consider</div>
+                        <div style={{ fontFamily: "Barlow Condensed, sans-serif", fontSize: "17px", fontWeight: 800, color: PRODUCTS[rec.secondary[0]].hex, lineHeight: 1 }}>{PRODUCTS[rec.secondary[0]].name}</div>
+                      </div>
+                    </div>
+                    <img src={PRODUCTS[rec.secondary[0]].image} alt="" style={{ width: "36px", height: "36px", objectFit: "contain", opacity: 0.85 }} />
+                  </div>
+                )}
+                <a href={p.url} target="_blank" rel="noopener noreferrer"
+                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 28px", background: `rgba(${p.rgb},0.1)`, borderTop: `1px solid rgba(${p.rgb},0.2)` }}>
+                  <span className="text-[11px] font-bold tracking-[0.08em] uppercase" style={{ color: p.hex }}>View on Amazon India</span>
+                  <ArrowRight className="w-3.5 h-3.5" style={{ color: p.hex, opacity: 0.6 }} />
+                </a>
+              </div>
+            </>
+          ) : (
+            /* Fallback if somehow rec is null in result state */
+            <div className="h-full flex items-center justify-center">
+              <p className="text-sm" style={{ color: R.textLow }}>Select symptoms to generate your formula</p>
+            </div>
+          )}
+        </div>
+
+      </motion.div>
+
+      {/* Vet disclaimer — sits below the strip, always visible */}
+      <div className="max-w-[50%] ml-[50%] px-10 py-4">
+        <p className="text-[10px] leading-relaxed" style={{ color: C.textDim }}>
+          Always follow the product label and consult your vet, especially for puppies, seniors, or dogs on medication. This tool is not a substitute for veterinary guidance.
+        </p>
       </div>
     </section>
   );
