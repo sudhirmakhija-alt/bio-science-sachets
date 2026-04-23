@@ -367,8 +367,8 @@ const DiagnosticTool = () => {
           <div style={{ position: "relative", height: `clamp(52px, 5.2vw, 80px)`, overflow: "hidden" }}>
             <AnimatePresence mode="popLayout">
               {slideState === "input"
-                ? <MorphWord key="find"  word="FIND"  color={W.text}      fontSize={FS_LARGE} delay={0} />
-                : <MorphWord key="found" word="FOUND" color={p.foundHex} fontSize={FS_LARGE} delay={0.1} />
+                ? <MorphWord key="find"  word="FIND"  color={W.text} fontSize={FS_LARGE} delay={0} />
+                : <MorphWord key="found" word="FOUND" color={p.hex}  fontSize={FS_LARGE} delay={0.1} />
               }
             </AnimatePresence>
           </div>
@@ -581,7 +581,7 @@ const DiagnosticTool = () => {
 
       {/* Disclaimer — sits under the rec panel (right third) */}
       <div style={{ maxWidth: "33.333%", marginLeft: "66.666%", padding: "14px 28px" }}>
-        <p style={{ fontSize: "10px", lineHeight: "1.6", color: C.textDim }}>
+        <p style={{ fontSize: "10px", lineHeight: "1.6", color: "rgba(255,255,255,0.38)" }}>
           Always follow the product label and consult your vet, especially for puppies, seniors, or dogs on medication. This tool is not a substitute for veterinary guidance.
         </p>
       </div>
