@@ -323,26 +323,6 @@ const DiagnosticTool = () => {
             padding: "clamp(80px, 9vh, 140px) 40px 44px 48px",
           }}
         >
-          {/* "Formula for [Name]" label — result only */}
-          <AnimatePresence>
-            {slideState === "result" && (
-              <motion.span
-                initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                transition={{ delay: 0.55, duration: 0.25 }}
-                style={{
-                  display: "block",
-                  fontSize: "9px",
-                  fontWeight: 700,
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase",
-                  color: W.textLow,
-                  marginBottom: "20px",
-                }}>
-                {displayName ? `Formula for ${displayName}` : "Found Your Formula"}
-              </motion.span>
-            )}
-          </AnimatePresence>
-
           {/* ── Word 1: FIND fades out → FOUND wipes in left-to-right (pack colour) ── */}
           <div style={{ position: "relative", height: `clamp(52px, 5.2vw, 80px)`, overflow: "hidden" }}>
             <AnimatePresence mode="popLayout">
@@ -398,6 +378,20 @@ const DiagnosticTool = () => {
             <span style={{ fontFamily: BC, fontSize: FS_MEDIUM, fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, display: "block", color: W.text }}>
               FORMULA
             </span>
+          </div>
+
+          {/* "Formula for [Name]" — sits below FORMULA, never shifts the word stack */}
+          <div style={{ marginTop: "14px", minHeight: "16px" }}>
+            <AnimatePresence>
+              {slideState === "result" && (
+                <motion.span
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  transition={{ delay: 0.55, duration: 0.25 }}
+                  style={{ display: "block", fontSize: "9px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: W.textLow }}>
+                  {displayName ? `Formula for ${displayName}` : "Found Your Formula"}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Spacer */}
