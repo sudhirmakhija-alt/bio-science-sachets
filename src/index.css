@@ -271,3 +271,55 @@
   -webkit-animation-play-state: paused;
           animation-play-state: paused;
 }
+
+/* ── DiagnosticTool responsive layout ─────────────────────────────────── */
+.dt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: stretch;
+}
+
+.dt-form {
+  padding: 44px;
+}
+
+.dt-center {
+  padding: clamp(80px, 9vh, 140px) 40px 44px 48px;
+}
+
+.dt-disclaimer {
+  max-width: 33.333%;
+  margin-left: 66.666%;
+  padding: 14px 28px;
+}
+
+/* Tablet (768px–1023px) — single column, moderate padding */
+@media (max-width: 1023px) {
+  .dt-grid {
+    grid-template-columns: 1fr;
+  }
+  .dt-form {
+    padding: 32px 28px;
+  }
+  .dt-center {
+    padding: 44px 28px 36px;
+  }
+  .dt-disclaimer {
+    max-width: 100%;
+    margin-left: 0;
+    padding: 14px 28px;
+  }
+}
+
+/* Phone (<640px) — tighter padding */
+@media (max-width: 639px) {
+  .dt-form {
+    padding: 24px 20px;
+  }
+  .dt-center {
+    padding: 36px 20px 28px;
+  }
+  .dt-disclaimer {
+    padding: 12px 20px;
+  }
+}

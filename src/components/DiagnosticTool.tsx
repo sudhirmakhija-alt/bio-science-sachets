@@ -7,7 +7,7 @@ import gutProduct   from "@/assets/BLP_Gut_Balance.png";
 
 // ── Colour tokens ──────────────────────────────────────────────────────────
 const C = {
-  formBg:   "#161a1e",   // dark grey — science-section card shade
+  formBg:   "#161a1e",
   borderLo: "#1e2226",
   borderMd: "#272d33",
   borderHi: "#3a4550",
@@ -17,7 +17,6 @@ const C = {
   textDim:  "#3a444e",
 } as const;
 
-// Middle panel tokens — dark grey card (matches science section language)
 const W = {
   bg:      "#1c1f22",
   text:    "#e8eef4",
@@ -34,8 +33,8 @@ const R = {
   surf:    "rgba(255,255,255,0.05)",
 } as const;
 
-const BC = "'Barlow', sans-serif";           // matches site heading font
-const BN = "'Barlow Condensed', sans-serif"; // condensed — numbers & data only
+const BC = "'Barlow', sans-serif";
+const BN = "'Barlow Condensed', sans-serif";
 
 // ── Dosing ─────────────────────────────────────────────────────────────────
 const WEIGHT_RANGES = [
@@ -51,7 +50,7 @@ const calcSachets = (w: number) =>
   (WEIGHT_RANGES.find((r) => w >= r.min && w <= r.max) ?? WEIGHT_RANGES[WEIGHT_RANGES.length - 1]).sachets;
 
 // ── Types ──────────────────────────────────────────────────────────────────
-type AgeGroup  = "puppy" | "adult" | "senior";
+type AgeGroup   = "puppy" | "adult" | "senior";
 type ProductKey = "omega" | "organ" | "gut";
 type SymptomKey =
   | "stiffJoints" | "dullCoat"    | "lowAlertness"     | "lowEnergy"
@@ -111,19 +110,27 @@ function computeRec(selected: SymptomKey[], age: AgeGroup | null): Recommendatio
   return { primary, primaryScore, secondary, matched };
 }
 
+// Returns full chip style — unified for selected + unselected, with spotlight glow
 function chipStyle(sk: SymptomKey, selected: boolean): React.CSSProperties {
-  if (!selected) return {};
-  const top = (Object.entries(SYMPTOMS[sk].scores) as [ProductKey, number][]).sort(([, a], [, b]) => b - a)[0]?.[0];
-  if (!top) return {};
-  const p = PRODUCTS[top];
-  return { background: `rgba(${p.rgb},0.16)`, borderColor: `rgba(${p.rgb},0.5)`, color: p.hex };
+  const top = (Object.entries(SYMPTOMS[sk].scores) as [ProductKey, number][])
+    .sort(([, a], [, b]) => b - a)[0]?.[0];
+  const prod = top ? PRODUCTS[top] : null;
+  const glowRgb = prod ? prod.rgb : "255,255,255";
+  return {
+    backgroundColor:      selected && prod ? `rgba(${prod.rgb},0.14)` : "rgba(255,255,255,0.02)",
+    backgroundImage:      `radial-gradient(160px 160px at calc(var(--cursor-x, -9999) * 1px) calc(var(--cursor-y, -9999) * 1px), rgba(${glowRgb},0.11), transparent)`,
+    backgroundAttachment: "fixed",
+    borderWidth:          "1px",
+    borderColor:          selected && prod ? `rgba(${prod.rgb},0.5)` : "rgba(255,255,255,0.12)",
+    color:                selected && prod ? prod.hex : "rgba(232,238,244,0.55)",
+  };
 }
 
 // ── Animated number ────────────────────────────────────────────────────────
 const AnimatedNumber = ({ value, duration = 500 }: { value: number; duration?: number }) => {
   const prefersReducedMotion = useReducedMotion();
-  const [display, setDisplay] = useState(value);
-  const rafRef  = useRef<number | null>(null);
+  const [display, setDisplay]   = useState(value);
+  const rafRef   = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
   useEffect(() => {
     if (prefersReducedMotion) { setDisplay(value); return; }
@@ -142,7 +149,7 @@ const AnimatedNumber = ({ value, duration = 500 }: { value: number; duration?: n
   return <>{Number.isInteger(display) ? display.toString() : display.toFixed(1)}</>;
 };
 
-// ── Shared inline style for all headline words ────────────────────────────
+// ── Shared inline style for headline words (position:absolute so they never shift layout)
 const wordStyle = (fontSize: string, color: string): React.CSSProperties => ({
   fontFamily: BC,
   fontSize,
@@ -169,6 +176,9 @@ const DiagnosticTool = () => {
   const [weightInput, setWeightInput] = useState("12");
   const [symptoms,    setSymptoms]    = useState<Set<SymptomKey>>(new Set());
   const [slideState,  setSlideState]  = useState<"input" | "result">("input");
+  const [isMobile,    setIsMobile]    = useState(() =>
+    typeof window !== "undefined" && window.innerWidth < 1024
+  );
 
   const toggleSymptom = (sk: SymptomKey) =>
     setSymptoms((prev) => { const next = new Set(prev); next.has(sk) ? next.delete(sk) : next.add(sk); return next; });
@@ -184,6 +194,23 @@ const DiagnosticTool = () => {
   const handleFind  = () => { if (rec) setSlideState("result"); };
   const handleReset = () => setSlideState("input");
 
+  // Track global cursor position for spotlight effects — no re-renders, pure CSS vars
+  useEffect(() => {
+    const handler = (e: PointerEvent) => {
+      document.documentElement.style.setProperty("--cursor-x", String(e.clientX));
+      document.documentElement.style.setProperty("--cursor-y", String(e.clientY));
+    };
+    document.addEventListener("pointermove", handler);
+    return () => document.removeEventListener("pointermove", handler);
+  }, []);
+
+  // Responsive breakpoint tracker
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   const p            = rec ? PRODUCTS[rec.primary] : PRODUCTS.omega;
   const sachets      = calcSachets(weight);
   const sachetLabel  = Number.isInteger(sachets) ? sachets.toString() : sachets.toFixed(1);
@@ -196,27 +223,164 @@ const DiagnosticTool = () => {
       : `${primaryCount} of ${rec.matched.length} symptoms point here`
     : "";
 
-  // Headline font size tokens — calibrated for non-condensed Barlow 900
-  const FS_LARGE  = "clamp(52px, 5.2vw, 80px)";   // FIND / FOUND
-  const FS_MEDIUM = "clamp(36px, 3.6vw, 55px)";   // MY / YOUR / FORMULA (same size)
+  // Headline font size tokens
+  const FS_LARGE  = "clamp(52px, 5.2vw, 80px)";
+  const FS_MEDIUM = "clamp(36px, 3.6vw, 55px)";
+
+  // Word 2 result: "BUDDY'S" or "YOUR"
+  const word2ResultText = displayName ? `${displayName.toUpperCase()}'S` : "YOUR";
+  const word2ResultFS =
+    displayName && displayName.length > 8 ? "clamp(22px, 2.2vw, 34px)" :
+    displayName && displayName.length > 5 ? "clamp(28px, 2.8vw, 44px)" :
+    FS_MEDIUM;
+
+  // Age button spotlight
+  const ageButtonStyle = (selected: boolean): React.CSSProperties => ({
+    backgroundImage:      `radial-gradient(180px 180px at calc(var(--cursor-x, -9999) * 1px) calc(var(--cursor-y, -9999) * 1px), rgba(255,255,255,0.07), transparent)`,
+    backgroundAttachment: "fixed",
+    backgroundColor:      selected ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)",
+    borderColor:          selected ? C.borderHi : "rgba(255,255,255,0.12)",
+    color:                selected ? C.textHi : "rgba(232,238,244,0.55)",
+  });
+
+  // ── Extracted rec panel content (shared by desktop slide + mobile fade) ──
+  const recPanelContent = rec ? (
+    <>
+      {/* Product header */}
+      <div style={{ borderBottom: `1px solid ${R.border}`, display: "flex", alignItems: "stretch", flexShrink: 0 }}>
+        <div style={{ flex: 1, padding: "24px 20px 22px 28px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: p.hex, marginBottom: "7px" }}>{p.system}</div>
+          <div style={{ fontFamily: BN, fontSize: "30px", fontWeight: 800, letterSpacing: "-0.01em", color: R.text, lineHeight: 1, marginBottom: "7px" }}>{p.name}</div>
+          <div style={{ fontSize: "12px", color: R.textMid, lineHeight: "1.5", marginBottom: "14px" }}>{p.tagline}</div>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "4px 11px", borderRadius: "999px", fontSize: "11px", fontWeight: 600, background: `rgba(${p.rgb},0.1)`, border: `1px solid rgba(${p.rgb},0.22)`, color: p.hex }}>
+            {confLabel}
+          </div>
+        </div>
+        {/* Tin — 20% smaller than previous 112px = 90px */}
+        <div style={{ width: "120px", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${p.rgb},0.07)`, padding: "14px 12px" }}>
+          <motion.img
+            key={rec.primary} src={p.image} alt={p.name}
+            style={{ width: "90px", height: "auto", objectFit: "contain", filter: "drop-shadow(0 8px 20px rgba(0,0,0,0.5))" }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </div>
+      </div>
+
+      {/* Daily dose */}
+      <div style={{ padding: "22px 28px 20px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
+        <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: R.textMid, marginBottom: "12px" }}>
+          DAILY DOSE{displayName ? ` FOR ${displayName.toUpperCase()}` : ""}
+        </div>
+        <div style={{ display: "flex", alignItems: "baseline", gap: "12px", marginBottom: "18px" }}>
+          <span style={{ fontFamily: BN, fontSize: "64px", fontWeight: 900, lineHeight: 1, color: R.text, letterSpacing: "-0.02em" }}>
+            <AnimatedNumber value={sachets} />
+          </span>
+          <div style={{ paddingBottom: "4px" }}>
+            <div style={{ fontSize: "17px", fontWeight: 600, color: R.text, lineHeight: 1.1 }}>sachet{sachetLabel !== "1" ? "s" : ""}</div>
+            <div style={{ fontSize: "12px", color: R.textMid, marginTop: "3px" }}>per day · with food</div>
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", borderRadius: "6px", overflow: "hidden", border: `1px solid ${R.border}` }}>
+          {([
+            { val: weight.toString(), unit: "kg",      sub: "body weight" },
+            { val: String(Math.floor(30 / sachets)),   unit: "days",     sub: "per box"   },
+            { val: "30",              unit: "sachets", sub: "box size"   },
+          ] as { val: string; unit: string; sub: string }[]).map((s, i) => (
+            <div key={i} style={{ padding: "13px 14px", background: R.surf, borderLeft: i > 0 ? `1px solid ${R.border}` : undefined }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
+                <span style={{ fontFamily: BN, fontSize: "28px", fontWeight: 900, color: R.text, lineHeight: 1 }}>{s.val}</span>
+                <span style={{ fontSize: "12px", fontWeight: 600, color: R.textMid, marginLeft: "2px" }}>{s.unit}</span>
+              </div>
+              <div style={{ fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.10em", color: R.textMid, marginTop: "4px" }}>{s.sub}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Ingredient connections */}
+      <div style={{ padding: "16px 28px 12px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
+        <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: R.textMid, marginBottom: "10px" }}>INGREDIENT CONNECTIONS</div>
+        {rec.matched.map((m) => {
+          const mp = PRODUCTS[m.product];
+          return (
+            <div key={m.key} style={{ display: "flex", gap: "10px", padding: "7px 0", borderBottom: `1px solid ${R.border}` }}>
+              <div style={{ width: "114px", flexShrink: 0 }}>
+                <span style={{ fontSize: "12px", fontWeight: 500, color: m.product === rec.primary ? R.textMid : mp.hex }}>{SYMPTOMS[m.key].label}</span>
+              </div>
+              <span style={{ fontSize: "12px", color: R.textMid }}>→</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: "12px", fontWeight: 600, color: mp.hex }}>{m.ingredient}</div>
+                <div style={{ fontSize: "11px", color: R.textMid, marginTop: "1px" }}>{m.benefit}{m.product !== rec.primary ? ` · ${PRODUCTS[m.product].name}` : ""}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Expected onset */}
+      <div style={{ padding: "16px 28px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
+        <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: R.textMid, marginBottom: "10px" }}>
+          EXPECTED ONSET — {ageKey.toUpperCase()} DOG
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
+          {[
+            { label: "FIRST CHANGES", wk: firstWk },
+            { label: "FULL EFFECT",   wk: fullWk  },
+            null,
+          ].map((cell, i) => (
+            <div key={i} style={{ background: R.surf, borderRadius: "5px", padding: "11px 12px" }}>
+              {cell ? (
+                <>
+                  <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: p.hex, marginBottom: "6px" }}>{cell.label}</div>
+                  <div style={{ fontFamily: BN, fontSize: "26px", fontWeight: 900, color: R.text, lineHeight: 1, letterSpacing: "0.06em" }}>{cell.wk}</div>
+                </>
+              ) : (
+                <div style={{ fontSize: "11px", fontStyle: "italic", color: R.textMid, lineHeight: "1.6" }}>Daily use required. Seniors may take longer.</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Also consider + CTA */}
+      <div style={{ marginTop: "auto" }}>
+        {rec.secondary.slice(0, 2).map((secKey, idx) => {
+          const sp = PRODUCTS[secKey];
+          return (
+            <div key={secKey} style={{ padding: "12px 28px", background: `rgba(${sp.rgb},0.07)`, borderTop: `1px solid rgba(${sp.rgb},0.18)`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: sp.hex, flexShrink: 0 }} />
+                <div>
+                  <div style={{ fontSize: "9px", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: sp.hex, opacity: 0.7 }}>
+                    {idx === 0 ? "Also Consider" : "Or Consider"}
+                  </div>
+                  <div style={{ fontFamily: BN, fontSize: "18px", fontWeight: 800, color: sp.hex, lineHeight: 1 }}>{sp.name}</div>
+                </div>
+              </div>
+              <img src={sp.image} alt={sp.name} style={{ width: "44px", height: "44px", objectFit: "contain", opacity: 0.9 }} />
+            </div>
+          );
+        })}
+        <a href={p.url} target="_blank" rel="noopener noreferrer"
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 28px", background: `rgba(${p.rgb},0.1)`, borderTop: `1px solid rgba(${p.rgb},0.2)`, textDecoration: "none" }}>
+          <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: p.hex }}>View on Amazon India</span>
+          <ArrowRight style={{ width: "14px", height: "14px", color: p.hex, opacity: 0.6 }} />
+        </a>
+      </div>
+    </>
+  ) : null;
 
   return (
-    <section
-      id="find-your-formula"
-      style={{ background: "#0e1114", overflow: "hidden", scrollMarginTop: "72px" }}
-    >
-      {/* ── Three-column grid: [FORM | HEADLINE | REC] — form and rec equal width ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", alignItems: "stretch" }}>
+    <section id="find-your-formula" style={{ background: "#0e1114", overflow: "hidden", scrollMarginTop: "72px" }}>
+
+      {/* ── Three-column grid — responsive via .dt-grid class ── */}
+      <div className="dt-grid">
 
         {/* ══════ LEFT — FORM ══════ */}
-        <div
-          style={{
-            background: C.formBg,
-            padding: "44px",
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
+        <div className="dt-form" style={{ background: C.formBg, display: "flex", flexDirection: "column" }}>
+
           {/* Dog name */}
           <div style={{ marginBottom: "20px" }}>
             <span className="block text-[9px] font-semibold tracking-[0.22em] uppercase mb-2" style={{ color: C.textMeta }}>DOG'S NAME</span>
@@ -237,9 +401,11 @@ const DiagnosticTool = () => {
               {(["puppy", "adult", "senior"] as AgeGroup[]).map((a) => (
                 <button key={a} onClick={() => setAge(age === a ? null : a)}
                   className="flex-1 py-2.5 text-center rounded border transition-all duration-200"
-                  style={{ background: age === a ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)", borderColor: age === a ? C.borderHi : C.borderMd, color: age === a ? C.textHi : C.textMeta }}>
+                  style={ageButtonStyle(age === a)}>
                   <div className="text-xs font-semibold">{a.charAt(0).toUpperCase() + a.slice(1)}</div>
-                  <div className="text-[9px] mt-0.5" style={{ color: age === a ? C.textBody : C.textDim }}>{a === "puppy" ? "0–1 yr" : a === "adult" ? "1–7 yr" : "7+ yr"}</div>
+                  <div className="text-[10px] mt-0.5" style={{ color: age === a ? C.textBody : "rgba(232,238,244,0.32)" }}>
+                    {a === "puppy" ? "0–1 yr" : a === "adult" ? "1–7 yr" : "7+ yr"}
+                  </div>
                 </button>
               ))}
             </div>
@@ -279,8 +445,8 @@ const DiagnosticTool = () => {
                 const sel = symptoms.has(sk);
                 return (
                   <button key={sk} onClick={() => toggleSymptom(sk)}
-                    className="px-2.5 py-2 text-left text-[11px] font-medium rounded border transition-all duration-150"
-                    style={sel ? { borderWidth: "1px", ...chipStyle(sk, true) } : { background: "rgba(255,255,255,0.02)", borderColor: C.borderMd, color: C.textMeta, borderWidth: "1px" }}>
+                    className="px-2.5 py-2 text-left text-[12px] font-medium rounded border transition-all duration-150"
+                    style={chipStyle(sk, sel)}>
                     {SYMPTOMS[sk].label}
                   </button>
                 );
@@ -299,8 +465,7 @@ const DiagnosticTool = () => {
               )}
             </AnimatePresence>
             <button
-              onClick={handleFind}
-              disabled={!canFind}
+              onClick={handleFind} disabled={!canFind}
               className="w-full flex items-center justify-center gap-2 py-3 rounded font-semibold text-sm tracking-wide transition-all duration-200"
               style={{
                 background: canFind ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.02)",
@@ -312,283 +477,167 @@ const DiagnosticTool = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-        </div>
+        </div>{/* end form */}
 
-        {/* ══════ CENTRE — HEADLINE (grey bg, black text, text morphs in place, never moves) ══════ */}
-        <div
-          style={{
-            background: W.bg,
-            display: "flex",
-            flexDirection: "column",
-            padding: "clamp(80px, 9vh, 140px) 40px 44px 48px",
-          }}
-        >
-          {/* ── Word 1: FIND fades out → FOUND wipes in left-to-right (pack colour) ── */}
-          <div style={{ position: "relative", height: `clamp(52px, 5.2vw, 80px)`, overflow: "hidden" }}>
-            <AnimatePresence mode="popLayout">
-              {slideState === "input" ? (
-                <motion.span
-                  key="find"
-                  exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(4px)", transition: { duration: 0.18, ease: "easeIn" } }}
-                  style={wordStyle(FS_LARGE, W.text)}
-                >
-                  FIND
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="found"
-                  initial={prefersReducedMotion ? { opacity: 0 } : { clipPath: "inset(0 100% 0 0)" }}
-                  animate={prefersReducedMotion ? { opacity: 1 } : { clipPath: "inset(0 0% 0 0)" }}
-                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.62, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-                  style={wordStyle(FS_LARGE, p.hex)}
-                >
-                  FOUND
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </div>
+        {/* ══════ CENTRE — HEADLINE ══════ */}
+        <div className="dt-center" style={{ background: W.bg, display: "flex", flexDirection: "column", position: "relative" }}>
 
-          {/* ── Word 2: MY fades out → YOUR fades in (blur dissolve, no movement) ── */}
-          <div style={{ position: "relative", height: `clamp(36px, 3.6vw, 55px)`, overflow: "hidden", marginTop: "4px" }}>
-            <AnimatePresence mode="popLayout">
-              {slideState === "input" ? (
-                <motion.span
-                  key="my"
-                  exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(6px)", transition: { duration: 0.2, delay: 0.04 } }}
-                  style={wordStyle(FS_MEDIUM, W.text)}
-                >
-                  MY
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="your"
-                  initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, filter: "blur(8px)" }}
-                  animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, filter: "blur(0px)" }}
-                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: 0.38 }}
-                  style={wordStyle(FS_MEDIUM, W.text)}
-                >
-                  YOUR
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </div>
+          {/* ── Product-colour bloom — fades in with transition ── */}
+          <motion.div
+            aria-hidden
+            style={{
+              position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
+              background: `radial-gradient(ellipse 110% 55% at -8% 38%, ${p.hex}28 0%, transparent 62%)`,
+            }}
+            animate={{ opacity: slideState === "result" ? 1 : 0 }}
+            transition={prefersReducedMotion ? { duration: 0 } : {
+              duration: 1.1,
+              ease: [0.16, 1, 0.3, 1],
+              delay: slideState === "result" ? 0.05 : 0.2,
+            }}
+          />
 
-          {/* ── FORMULA — always black ── */}
-          <div style={{ marginTop: "6px" }}>
-            <span style={{ fontFamily: BC, fontSize: FS_MEDIUM, fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, display: "block", color: W.text }}>
-              FORMULA
-            </span>
-          </div>
+          {/* Content above bloom glow */}
+          <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", flex: 1 }}>
 
-          {/* "Formula for [Name]" — sits below FORMULA, never shifts the word stack */}
-          <div style={{ marginTop: "14px", minHeight: "16px" }}>
+            {/* Word 1: FIND → FOUND (clip-path wipe, both always in DOM) */}
+            <div style={{ position: "relative", height: `clamp(52px, 5.2vw, 80px)`, overflow: "hidden" }}>
+              <motion.span
+                animate={prefersReducedMotion
+                  ? { opacity: slideState === "result" ? 0 : 1 }
+                  : { opacity: slideState === "result" ? 0 : 1, filter: slideState === "result" ? "blur(4px)" : "blur(0px)" }}
+                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.18, ease: "easeIn" }}
+                style={wordStyle(FS_LARGE, W.text)}
+              >FIND</motion.span>
+
+              <motion.span
+                animate={prefersReducedMotion
+                  ? { opacity: slideState === "result" ? 1 : 0 }
+                  : { clipPath: slideState === "result" ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)" }}
+                transition={prefersReducedMotion ? { duration: 0 } : {
+                  duration: 0.62, ease: [0.16, 1, 0.3, 1], delay: slideState === "result" ? 0.08 : 0,
+                }}
+                style={wordStyle(FS_LARGE, p.hex)}
+              >FOUND</motion.span>
+            </div>
+
+            {/* Word 2: MY → BUDDY'S / YOUR */}
+            <div style={{ position: "relative", height: `clamp(36px, 3.6vw, 55px)`, overflow: "hidden", marginTop: "4px" }}>
+              <motion.span
+                animate={prefersReducedMotion
+                  ? { opacity: slideState === "result" ? 0 : 1 }
+                  : { opacity: slideState === "result" ? 0 : 1, filter: slideState === "result" ? "blur(6px)" : "blur(0px)" }}
+                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.2, delay: slideState === "result" ? 0.04 : 0 }}
+                style={wordStyle(FS_MEDIUM, W.text)}
+              >MY</motion.span>
+
+              {/* Dog name — glows when it appears */}
+              <motion.span
+                animate={prefersReducedMotion
+                  ? { opacity: slideState === "result" ? 1 : 0 }
+                  : { opacity: slideState === "result" ? 1 : 0, filter: slideState === "result" ? "blur(0px)" : "blur(8px)" }}
+                transition={prefersReducedMotion ? { duration: 0 } : {
+                  duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: slideState === "result" ? 0.38 : 0,
+                }}
+                style={{
+                  ...wordStyle(word2ResultFS, W.text),
+                  textShadow: slideState === "result"
+                    ? `0 0 32px ${p.hex}99, 0 0 60px ${p.hex}44`
+                    : "none",
+                  transition: "text-shadow 0.6s ease 0.5s",
+                }}
+              >{word2ResultText}</motion.span>
+            </div>
+
+            {/* FORMULA — static */}
+            <div style={{ marginTop: "6px" }}>
+              <span style={{ fontFamily: BC, fontSize: FS_MEDIUM, fontWeight: 900, letterSpacing: "-0.02em", lineHeight: 1, display: "block", color: W.text }}>
+                FORMULA
+              </span>
+            </div>
+
+            {/* Recommendation sub-label */}
+            <div style={{ marginTop: "14px", minHeight: "16px" }}>
+              <AnimatePresence>
+                {slideState === "result" && (
+                  <motion.span
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    transition={{ delay: 0.55, duration: 0.25 }}
+                    style={{ display: "block", fontSize: "9px", fontWeight: 700, letterSpacing: "0.20em", textTransform: "uppercase", color: W.textMid }}>
+                    HERE'S BIOLOGICA'S RECOMMENDATION
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <div style={{ flex: 1 }} />
+
+            {/* Bottom summary + start over */}
             <AnimatePresence>
               {slideState === "result" && (
-                <motion.span
-                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                  transition={{ delay: 0.55, duration: 0.25 }}
-                  style={{ display: "block", fontSize: "9px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: W.textLow }}>
-                  {displayName ? `Formula for ${displayName}` : "Found Your Formula"}
-                </motion.span>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }}
+                  transition={{ delay: 0.6, duration: 0.3 }}>
+                  <div style={{ borderTop: `1px solid ${W.border}`, paddingTop: "16px", marginBottom: "14px" }}>
+                    <div style={{ fontSize: "12px", color: W.textMid, lineHeight: "1.7" }}>
+                      {displayName && <span style={{ color: W.text, fontWeight: 600 }}>{displayName} · </span>}
+                      {age && <span>{age.charAt(0).toUpperCase() + age.slice(1)} · </span>}
+                      <span>{weight}kg</span>
+                      {symptoms.size > 0 && <span> · {symptoms.size} symptom{symptoms.size > 1 ? "s" : ""} analysed</span>}
+                    </div>
+                  </div>
+                  <button onClick={handleReset}
+                    style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: W.textLow, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+                    <RotateCcw style={{ width: "11px", height: "11px" }} />
+                    Start over
+                  </button>
+                </motion.div>
               )}
             </AnimatePresence>
-          </div>
 
-          {/* Spacer */}
-          <div style={{ flex: 1 }} />
+          </div>{/* end content wrapper */}
+        </div>{/* end centre */}
 
-          {/* Bottom summary + start over — result only */}
+        {/* ══════ RIGHT — REC PANEL ══════ */}
+        {isMobile ? (
+          /* Mobile: normal flow, AnimatePresence mount/unmount */
           <AnimatePresence>
             {slideState === "result" && (
               <motion.div
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }}
-                transition={{ delay: 0.6, duration: 0.3 }}>
-                <div style={{ borderTop: `1px solid ${W.border}`, paddingTop: "16px", marginBottom: "14px" }}>
-                  <div style={{ fontSize: "12px", color: W.textMid, lineHeight: "1.7" }}>
-                    {displayName && <span style={{ color: W.text, fontWeight: 600 }}>{displayName} · </span>}
-                    {age && <span>{age.charAt(0).toUpperCase() + age.slice(1)} · </span>}
-                    <span>{weight}kg</span>
-                    {symptoms.size > 0 && <span> · {symptoms.size} symptom{symptoms.size > 1 ? "s" : ""} analysed</span>}
-                  </div>
-                </div>
-                <button onClick={handleReset}
-                  style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: W.textLow, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-                  <RotateCcw style={{ width: "11px", height: "11px" }} />
-                  Start over
-                </button>
+                key="mobile-rec"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 16 }}
+                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                style={{ background: "#12161a", display: "flex", flexDirection: "column" }}
+              >
+                {recPanelContent}
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        ) : (
+          /* Desktop: absolute fill + slide in from right */
+          <div style={{ position: "relative", overflow: "hidden", background: "#12161a" }}>
+            <motion.div
+              style={{ position: "absolute", inset: 0, background: "#12161a", display: "flex", flexDirection: "column", overflowY: "auto" }}
+              initial={{ x: "100%" }}
+              animate={{ x: slideState === "input" ? "100%" : "0%" }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {recPanelContent}
+            </motion.div>
+          </div>
+        )}
 
-        {/* ══════ RIGHT — REC PANEL (slides in from right) ══════ */}
-        <div style={{ position: "relative", overflow: "hidden", background: "#12161a" }}>
-          <motion.div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "#12161a",
-              display: "flex",
-              flexDirection: "column",
-              overflowY: "auto",
-            }}
-            initial={{ x: "100%" }}
-            animate={{ x: slideState === "input" ? "100%" : "0%" }}
-            transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {rec && (
-              <>
-                {/* ── Product header: text left, BIG cropped tin right ── */}
-                <div style={{ borderBottom: `1px solid ${R.border}`, display: "flex", alignItems: "stretch", flexShrink: 0, overflow: "hidden" }}>
-                  {/* Text */}
-                  <div style={{ flex: 1, padding: "24px 20px 20px 28px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                    <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: p.hex, marginBottom: "6px" }}>{p.system}</div>
-                    <div style={{ fontFamily: BN, fontSize: "28px", fontWeight: 800, letterSpacing: "-0.01em", color: R.text, lineHeight: 1, marginBottom: "6px" }}>{p.name}</div>
-                    <div style={{ fontSize: "11px", color: R.textMid, lineHeight: "1.4", marginBottom: "12px" }}>{p.tagline}</div>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: "5px", padding: "3px 10px", borderRadius: "999px", fontSize: "10px", fontWeight: 600, background: `rgba(${p.rgb},0.1)`, border: `1px solid rgba(${p.rgb},0.22)`, color: p.hex }}>
-                      {confLabel}
-                    </div>
-                  </div>
-                  {/* BIG tin — overflow:hidden crops the transparent padding */}
-                  <div style={{ width: "148px", flexShrink: 0, overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center", background: `rgba(${p.rgb},0.08)` }}>
-                    <motion.img
-                      key={rec.primary} src={p.image} alt={p.name}
-                      style={{
-                        width: "220px",
-                        height: "220px",
-                        objectFit: "contain",
-                        filter: "drop-shadow(0 10px 28px rgba(0,0,0,0.55))",
-                        transform: "scale(1.18)",
-                        transformOrigin: "center center",
-                      }}
-                      initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.05 }}
-                      animate={{ opacity: 1, scale: 1.18 }}
-                      transition={{ delay: 0.45, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                    />
-                  </div>
-                </div>
+      </div>{/* end dt-grid */}
 
-                {/* ── DAILY DOSE — top position, big display ── */}
-                <div style={{ padding: "20px 28px 18px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
-                  <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: R.textLow, marginBottom: "10px" }}>
-                    DAILY DOSE{displayName ? ` FOR ${displayName.toUpperCase()}` : ""}
-                  </div>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "10px", marginBottom: "16px" }}>
-                    <span style={{ fontFamily: BN, fontSize: "60px", fontWeight: 900, lineHeight: 1, color: R.text, letterSpacing: "-0.02em" }}>
-                      <AnimatedNumber value={sachets} />
-                    </span>
-                    <div>
-                      <div style={{ fontSize: "15px", fontWeight: 600, color: R.textMid }}>sachet{sachetLabel !== "1" ? "s" : ""}</div>
-                      <div style={{ fontSize: "11px", color: R.textLow }}>per day · with food</div>
-                    </div>
-                  </div>
-
-                  {/* Metrics row — pack size BIGGER */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", borderRadius: "6px", overflow: "hidden", border: `1px solid ${R.border}` }}>
-                    {([
-                      { val: weight.toString(), unit: "kg",      sub: "dog weight" },
-                      { val: String(Math.floor(30 / sachets)),   unit: "days", sub: "per box" },
-                      { val: "30",              unit: "sachets", sub: "box size"   },
-                    ] as { val: string; unit: string; sub: string }[]).map((s, i) => (
-                      <div key={i} style={{ padding: "12px 14px", background: R.surf, borderLeft: i > 0 ? `1px solid ${R.border}` : undefined }}>
-                        <div style={{ display: "flex", alignItems: "baseline", gap: "3px" }}>
-                          <span style={{ fontFamily: BN, fontSize: "30px", fontWeight: 900, color: R.text, lineHeight: 1 }}>{s.val}</span>
-                          <span style={{ fontSize: "11px", fontWeight: 600, color: R.textMid, marginLeft: "1px" }}>{s.unit}</span>
-                        </div>
-                        <div style={{ fontSize: "8px", textTransform: "uppercase", letterSpacing: "0.12em", color: R.textLow, marginTop: "3px" }}>{s.sub}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* ── Ingredient connections ── */}
-                <div style={{ padding: "14px 28px 10px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
-                  <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: R.textLow, marginBottom: "8px" }}>INGREDIENT CONNECTIONS</div>
-                  {rec.matched.map((m) => {
-                    const mp = PRODUCTS[m.product];
-                    return (
-                      <div key={m.key} style={{ display: "flex", gap: "8px", padding: "6px 0", borderBottom: `1px solid ${R.border}` }}>
-                        <div style={{ width: "110px", flexShrink: 0 }}>
-                          <span style={{ fontSize: "11px", fontWeight: 500, color: m.product === rec.primary ? R.textMid : mp.hex }}>{SYMPTOMS[m.key].label}</span>
-                        </div>
-                        <span style={{ fontSize: "11px", color: R.textLow }}>→</span>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: "11px", fontWeight: 600, color: mp.hex }}>{m.ingredient}</div>
-                          <div style={{ fontSize: "10px", color: R.textLow }}>{m.benefit}{m.product !== rec.primary ? ` · ${PRODUCTS[m.product].name}` : ""}</div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* ── Expected onset ── */}
-                <div style={{ padding: "14px 28px", borderBottom: `1px solid ${R.border}`, flexShrink: 0 }}>
-                  <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: R.textLow, marginBottom: "8px" }}>
-                    EXPECTED ONSET — {ageKey.toUpperCase()} DOG
-                  </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "8px" }}>
-                    {[
-                      { label: "FIRST CHANGES", wk: firstWk },
-                      { label: "FULL EFFECT",   wk: fullWk  },
-                      null,
-                    ].map((cell, i) => (
-                      <div key={i} style={{ background: R.surf, borderRadius: "5px", padding: "10px 12px" }}>
-                        {cell ? (
-                          <>
-                            <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: p.hex, marginBottom: "4px" }}>{cell.label}</div>
-                            <div style={{ fontFamily: BN, fontSize: "24px", fontWeight: 900, color: R.text, lineHeight: 1 }}>{cell.wk}</div>
-                          </>
-                        ) : (
-                          <div style={{ fontSize: "10px", fontStyle: "italic", color: R.textLow, lineHeight: "1.5" }}>Daily use required. Seniors may take longer.</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* ── Also consider (up to 2 products) + CTA ── */}
-                <div style={{ marginTop: "auto" }}>
-                  {rec.secondary.slice(0, 2).map((secKey, idx) => {
-                    const sp = PRODUCTS[secKey];
-                    return (
-                      <div key={secKey} style={{
-                        padding: "12px 28px",
-                        background: `rgba(${sp.rgb},0.07)`,
-                        borderTop: `1px solid rgba(${sp.rgb},0.18)`,
-                        display: "flex", alignItems: "center", justifyContent: "space-between",
-                      }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: sp.hex, flexShrink: 0 }} />
-                          <div>
-                            <div style={{ fontSize: "8px", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: sp.hex, opacity: 0.6 }}>
-                              {idx === 0 ? "Also Consider" : "Or Consider"}
-                            </div>
-                            <div style={{ fontFamily: BN, fontSize: "17px", fontWeight: 800, color: sp.hex, lineHeight: 1 }}>{sp.name}</div>
-                          </div>
-                        </div>
-                        <img src={sp.image} alt={sp.name} style={{ width: "44px", height: "44px", objectFit: "contain", opacity: 0.9 }} />
-                      </div>
-                    );
-                  })}
-                  <a href={p.url} target="_blank" rel="noopener noreferrer"
-                    style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 28px", background: `rgba(${p.rgb},0.1)`, borderTop: `1px solid rgba(${p.rgb},0.2)`, textDecoration: "none" }}>
-                    <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: p.hex }}>View on Amazon India</span>
-                    <ArrowRight style={{ width: "14px", height: "14px", color: p.hex, opacity: 0.6 }} />
-                  </a>
-                </div>
-              </>
-            )}
-          </motion.div>
-        </div>{/* end right col */}
-
-      </div>{/* end grid */}
-
-      {/* Disclaimer — sits under the rec panel (right third) */}
-      <div style={{ maxWidth: "33.333%", marginLeft: "66.666%", padding: "14px 28px" }}>
+      {/* Disclaimer */}
+      <div className="dt-disclaimer">
         <p style={{ fontSize: "10px", lineHeight: "1.6", color: "rgba(255,255,255,0.38)" }}>
           Always follow the product label and consult your vet, especially for puppies, seniors, or dogs on medication. This tool is not a substitute for veterinary guidance.
         </p>
       </div>
+
     </section>
   );
 };
